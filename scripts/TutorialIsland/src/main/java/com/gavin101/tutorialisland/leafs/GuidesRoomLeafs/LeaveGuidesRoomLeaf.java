@@ -1,0 +1,32 @@
+package com.gavin101.tutorialisland.leafs.GuidesRoomLeafs;
+
+import com.gavin101.tutorialisland.Constants;
+import net.eternalclient.api.accessors.GameObjects;
+import net.eternalclient.api.accessors.PlayerSettings;
+import net.eternalclient.api.events.EntityInteractEvent;
+import net.eternalclient.api.frameworks.tree.Leaf;
+import net.eternalclient.api.utilities.Log;
+import net.eternalclient.api.utilities.ReactionGenerator;
+import net.eternalclient.api.utilities.math.Calculations;
+import net.eternalclient.api.wrappers.interactives.GameObject;
+
+public class LeaveGuidesRoomLeaf extends Leaf {
+    @Override
+    public boolean isValid() {
+        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 10;
+    }
+
+    @Override
+    public int onLoop() {
+        Log.info("Leaving guides room");
+        GameObject door = GameObjects.closest("Door");
+        // No canReach(Surrounding) check because it's always False for some reason.
+        if (door != null) {
+            Log.debug("Clicking 'open' on door.");
+            new EntityInteractEvent(door, "Open").setEventCompleteCondition(
+                    () -> PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 20, Calculations.random(2000, 5000)
+            ).execute();
+        }
+        return ReactionGenerator.getPredictable();
+    }
+}
