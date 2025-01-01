@@ -27,7 +27,7 @@ public class CowCombat {
 
     public static final Map<Skill, Integer> COW_LEVEL_GOALS = Map.of(
             Skill.ATTACK, 20,
-            Skill.STRENGTH, 50,
+            Skill.STRENGTH, 20,
             Skill.DEFENCE, 20
     );
 

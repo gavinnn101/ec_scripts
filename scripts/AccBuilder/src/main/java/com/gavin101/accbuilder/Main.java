@@ -4,14 +4,17 @@ package com.gavin101.accbuilder;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
 import com.gavin101.accbuilder.branches.combat.common.FightMonsterBranch;
 import com.gavin101.accbuilder.branches.combat.cows.FightCowsBranch;
+import com.gavin101.accbuilder.branches.fishing.bait.BaitFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.shrimp.FishShrimpBranch;
 import com.gavin101.accbuilder.branches.fishing.common.StartFishingBranch;
+import com.gavin101.accbuilder.constants.BaitFishing;
 import com.gavin101.accbuilder.constants.ChickenCombat;
 import com.gavin101.accbuilder.constants.CowCombat;
 import com.gavin101.accbuilder.constants.ShrimpFishing;
 import com.gavin101.accbuilder.leafs.combat.EatFoodLeaf;
 import com.gavin101.accbuilder.leafs.combat.FightMonsterLeaf;
 import com.gavin101.accbuilder.leafs.combat.LootItemsLeaf;
+import com.gavin101.accbuilder.leafs.common.EndScriptLeaf;
 import com.gavin101.accbuilder.leafs.common.GoToAreaLeaf;
 import com.gavin101.accbuilder.leafs.combat.SetAttackStyleLeaf;
 import com.gavin101.accbuilder.leafs.common.GetLoadoutLeaf;
@@ -90,7 +93,16 @@ public class Main extends AbstractScript implements Painter {
                                 new LootItemsLeaf(CowCombat.COW_LOOT, 3),
                                 new FightMonsterLeaf("Cow")
                         )
-                )
+                ),
+                new BaitFishingBranch().addLeafs(
+                        new GetLoadoutLeaf(BaitFishing.BAIT_FISHING_EQUIPMENT, BaitFishing.BAIT_FISHING_INVENTORY),
+                        new GoToAreaLeaf(BaitFishing.LUMBRIDGE_FISHING_AREA, BaitFishing.BAIT_FISHING_EQUIPMENT, BaitFishing.BAIT_FISHING_INVENTORY),
+                        new StartFishingBranch(BaitFishing.LUMBRIDGE_FISHING_AREA).addLeafs(
+                                new StartFishingLeaf("Bait"),
+                                new GetLoadoutLeaf(new EquipmentLoadout(), BaitFishing.BAIT_FISHING_INVENTORY)
+                        )
+                ),
+                new EndScriptLeaf()
         );
     }
 
