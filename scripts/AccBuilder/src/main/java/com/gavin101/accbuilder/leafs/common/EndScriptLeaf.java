@@ -14,9 +14,9 @@ import net.eternalclient.api.wrappers.skill.Skill;
 public class EndScriptLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        return Skills.getRealLevel(Skill.ATTACK) >= 20
-                && Skills.getRealLevel(Skill.STRENGTH) >= 20
-                && Skills.getRealLevel(Skill.DEFENCE) >= 20
+        return Skills.getRealLevel(Skill.ATTACK) >= 30
+                && Skills.getRealLevel(Skill.STRENGTH) >= 30
+                && Skills.getRealLevel(Skill.DEFENCE) >= 30
                 && Skills.getRealLevel(Skill.FISHING) >= 20;
     }
 

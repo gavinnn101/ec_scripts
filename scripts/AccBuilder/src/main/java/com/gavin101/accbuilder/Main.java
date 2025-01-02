@@ -1,16 +1,14 @@
 package com.gavin101.accbuilder;
 
 
+import com.gavin101.accbuilder.branches.combat.alkharidguards.FightAlkharidGuardsBranch;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
 import com.gavin101.accbuilder.branches.combat.common.FightMonsterBranch;
 import com.gavin101.accbuilder.branches.combat.cows.FightCowsBranch;
 import com.gavin101.accbuilder.branches.fishing.bait.BaitFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.shrimp.FishShrimpBranch;
 import com.gavin101.accbuilder.branches.fishing.common.StartFishingBranch;
-import com.gavin101.accbuilder.constants.BaitFishing;
-import com.gavin101.accbuilder.constants.ChickenCombat;
-import com.gavin101.accbuilder.constants.CowCombat;
-import com.gavin101.accbuilder.constants.ShrimpFishing;
+import com.gavin101.accbuilder.constants.*;
 import com.gavin101.accbuilder.leafs.combat.EatFoodLeaf;
 import com.gavin101.accbuilder.leafs.combat.FightMonsterLeaf;
 import com.gavin101.accbuilder.leafs.combat.LootItemsLeaf;
@@ -21,6 +19,7 @@ import com.gavin101.accbuilder.leafs.common.GetLoadoutLeaf;
 import com.gavin101.accbuilder.leafs.fishing.StartFishingLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.AttackStyle;
+import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.frameworks.tree.Tree;
@@ -75,22 +74,21 @@ public class Main extends AbstractScript implements Painter {
                         )
                 ),
                 new FightChickensBranch().addLeafs(
-                        new GetLoadoutLeaf(ChickenCombat.CHICKEN_EQUIPMENT, ChickenCombat.CHICKEN_INVENTORY),
+                        new GetLoadoutLeaf(Common.getBestCombatEquipment(), ChickenCombat.CHICKEN_INVENTORY),
                         new SetAttackStyleLeaf(),
-                        new GoToAreaLeaf(ChickenCombat.CHICKEN_AREA, ChickenCombat.CHICKEN_EQUIPMENT, ChickenCombat.CHICKEN_INVENTORY),
+                        new GoToAreaLeaf(ChickenCombat.CHICKEN_AREA, Common.getBestCombatEquipment(), ChickenCombat.CHICKEN_INVENTORY),
                         new FightMonsterBranch(ChickenCombat.CHICKEN_AREA).addLeafs(
-                                new EatFoodLeaf(ItemID.TROUT, 5),
                                 new LootItemsLeaf(ChickenCombat.CHICKEN_LOOT, 3),
                                 new FightMonsterLeaf("Chicken")
                         )
                 ),
                 new FightCowsBranch().addLeafs(
-                        new GetLoadoutLeaf(CowCombat.COW_EQUIPMENT, CowCombat.COW_INVENTORY),
+                        new GetLoadoutLeaf(Common.getBestCombatEquipment(), CowCombat.COW_INVENTORY),
                         new SetAttackStyleLeaf(),
-                        new GoToAreaLeaf(CowCombat.COW_AREA, CowCombat.COW_EQUIPMENT, CowCombat.COW_INVENTORY),
+                        new GoToAreaLeaf(CowCombat.COW_AREA, Common.getBestCombatEquipment(), CowCombat.COW_INVENTORY),
                         new FightMonsterBranch(CowCombat.COW_AREA).addLeafs(
-                                new EatFoodLeaf(ItemID.TROUT, 5),
-                                new LootItemsLeaf(CowCombat.COW_LOOT, 3),
+//                                new EatFoodLeaf(ItemID.TROUT, 5),
+//                                new LootItemsLeaf(CowCombat.COW_LOOT, 3),
                                 new FightMonsterLeaf("Cow")
                         )
                 ),
@@ -100,6 +98,15 @@ public class Main extends AbstractScript implements Painter {
                         new StartFishingBranch(BaitFishing.LUMBRIDGE_FISHING_AREA).addLeafs(
                                 new StartFishingLeaf("Bait"),
                                 new GetLoadoutLeaf(new EquipmentLoadout(), BaitFishing.BAIT_FISHING_INVENTORY)
+                        )
+                ),
+                new FightAlkharidGuardsBranch().addLeafs(
+                        new GetLoadoutLeaf(Common.getBestCombatEquipment(), AlkharidGuardsCombat.ALKHARID_GUARD_INVENTORY),
+                        new SetAttackStyleLeaf(),
+                        new GoToAreaLeaf(AlkharidGuardsCombat.ALKHARID_GUARD_AREA, Common.getBestCombatEquipment(), AlkharidGuardsCombat.ALKHARID_GUARD_INVENTORY),
+                        new FightMonsterBranch(AlkharidGuardsCombat.ALKHARID_GUARD_AREA).addLeafs(
+                                new EatFoodLeaf(ItemID.TROUT, 5),
+                                new FightMonsterLeaf("Al Kharid warrior")
                         )
                 ),
                 new EndScriptLeaf()
@@ -119,7 +126,8 @@ public class Main extends AbstractScript implements Painter {
                 add("Current Branch: " + Tree.currentBranch);
                 add("Current Leaf: " + Tree.currentLeaf);
                 add("Current skill: " +currentSkillToTrain.getName());
-                add("Leveling to: " +currentLevelGoal);
+                add("Current skill level: " + Skills.getRealLevel(currentSkillToTrain));
+                add("Current skill level goal: " +currentLevelGoal);
             }}.toArray(new String[0]));
 
     @Override
