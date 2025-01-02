@@ -21,6 +21,7 @@ public class CowCombat {
 
     public static InventoryLoadout COW_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.TROUT, 10)
+            .setEnabled(() -> !Inventory.contains(ItemID.TROUT))
             .setLoadoutStrict(() -> !Inventory.contains(ItemID.TROUT));
 
     public static final RectArea COW_AREA = new RectArea(3194, 3300, 3209, 3285);

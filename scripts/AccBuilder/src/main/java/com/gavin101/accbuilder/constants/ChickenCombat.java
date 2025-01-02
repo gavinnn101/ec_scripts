@@ -19,9 +19,10 @@ public class ChickenCombat {
             .addAmulet(ItemID.AMULET_OF_POWER)
             .setStrict(true);
 
-    public static InventoryLoadout CHICKEN_INVENTORY = new InventoryLoadout()
-            .addReq(ItemID.TROUT, 10)
-            .setLoadoutStrict(() -> !Inventory.contains(ItemID.TROUT));
+    public static InventoryLoadout CHICKEN_INVENTORY = new InventoryLoadout();
+//            .addReq(ItemID.TROUT, 10)
+//            .setEnabled(() -> !Inventory.contains(ItemID.TROUT))
+//            .setLoadoutStrict(() -> !Inventory.contains(ItemID.TROUT));
 
     public static final RectArea CHICKEN_AREA = new RectArea(3172, 3302, 3183, 3289);
 
