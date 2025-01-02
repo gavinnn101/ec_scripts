@@ -28,8 +28,8 @@ public class DrinkFromCauldronLeaf extends Leaf {
             Log.info("Drinking from cauldron.");
             GameObject cauldron = GameObjects.closest("Cauldron");
             if (cauldron != null && cauldron.canReach()) {
-                Log.debug("Interacting with cauldron: 'Drink From'.");
-                new EntityInteractEvent(cauldron, "Drink From").setEventCompleteCondition(
+                Log.debug("Interacting with cauldron: 'Drink-from'.");
+                new EntityInteractEvent(cauldron, "Drink-from").setEventCompleteCondition(
                         Quest.WITCHS_POTION::isFinished, Calculations.random(1000, 2500)
                 ).execute();
             }
