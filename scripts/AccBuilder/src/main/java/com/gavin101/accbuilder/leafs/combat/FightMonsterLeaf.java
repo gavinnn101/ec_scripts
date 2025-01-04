@@ -1,5 +1,6 @@
 package com.gavin101.accbuilder.leafs.combat;
 
+import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.events.EntityInteractEvent;
@@ -8,15 +9,13 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
+import net.eternalclient.api.wrappers.map.Area;
+import net.eternalclient.api.wrappers.walking.Walking;
 
+@RequiredArgsConstructor
 public class FightMonsterLeaf extends Leaf {
     private final String monsterToFight;
-
-
-    public FightMonsterLeaf(String monsterToFight) {
-        this.monsterToFight = monsterToFight;
-    }
-
+    private final Area monsterArea;
 
     @Override
     public boolean isValid() {
@@ -38,7 +37,8 @@ public class FightMonsterLeaf extends Leaf {
                     () -> Players.localPlayer().isInCombat(), Calculations.random(1000, 2500)
             ).execute();
         } else {
-            Log.info("Couldn't find a suitable monster to fight...");
+            Log.info("Couldn't find a suitable monster to fight... Walking to monster area.");
+            Walking.walk(monsterArea.getRandomTile());
         }
         return ReactionGenerator.getNormal();
     }

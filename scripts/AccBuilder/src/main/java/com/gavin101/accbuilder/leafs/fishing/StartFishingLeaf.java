@@ -1,5 +1,7 @@
 package com.gavin101.accbuilder.leafs.fishing;
 
+import com.gavin101.accbuilder.constants.fishing.FlyFishing;
+import com.gavin101.accbuilder.constants.fishing.ShrimpFishing;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.containers.Inventory;
@@ -9,6 +11,8 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
+import net.eternalclient.api.wrappers.map.Area;
+import net.eternalclient.api.wrappers.walking.Walking;
 
 public class StartFishingLeaf extends Leaf {
     private final String interaction;
@@ -26,13 +30,39 @@ public class StartFishingLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Finding fishing spot to interact with.");
-        NPC fishingSpot = NPCs.closest("Fishing spot");
+        NPC fishingSpot = NPCs.closest(getFishingSpotName(interaction));
         if (fishingSpot != null && fishingSpot.canReach()) {
             Log.debug("Clicking fishing spot.");
             new EntityInteractEvent(fishingSpot, interaction).setEventCompleteCondition(
                     () -> Players.localPlayer().isInteractingWith(fishingSpot), Calculations.random(2500, 5000)
             ).execute();
+        } else {
+            Log.info("Walking to fish spot");
+            Area fishArea = getFishingSpotArea();
+            Walking.walk(fishArea.getRandomTile(), () -> fishArea.contains(Players.localPlayer()));
         }
         return ReactionGenerator.getAFK();
+    }
+
+    private String getFishingSpotName(String interaction) {
+        switch (interaction) {
+            default:
+            case "Net":
+            case "Bait":
+                return "Fishing spot";
+            case "Lure":
+                return "Rod Fishing spot";
+        }
+    }
+
+    private Area getFishingSpotArea() {
+        switch (interaction) {
+            default:
+            case "Net":
+            case "Bait":
+                return ShrimpFishing.LUMBRIDGE_FISHING_AREA;
+            case "Lure":
+                return FlyFishing.BARB_FLY_FISHING_AREA;
+        }
     }
 }

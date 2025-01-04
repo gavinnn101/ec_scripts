@@ -1,7 +1,5 @@
-package com.gavin101.accbuilder.constants;
+package com.gavin101.accbuilder.constants.combat;
 
-import net.eternalclient.api.containers.Inventory;
-import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.skill.Skill;

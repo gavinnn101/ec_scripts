@@ -23,6 +23,8 @@ public class GoToAreaLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
+        Log.info("equipment fulfilled: " +equipmentLoadout.isFulfilled());
+        Log.info("Inventory fulfilled: " +inventoryLoadout.isFulfilled());
         return equipmentLoadout.isFulfilled()
                 && inventoryLoadout.isFulfilled()
                 && !area.contains(Players.localPlayer());

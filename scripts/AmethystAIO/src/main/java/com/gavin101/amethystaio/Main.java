@@ -87,9 +87,9 @@ public class Main extends AbstractScript implements Painter {
                 new CacheItemsBranch().addLeafs(
                         new CacheItemsLeaf()
                 ),
-                new TakeBreakBranch().addLeafs(
-                        new TakeBreakLeaf()
-                ),
+//                new TakeBreakBranch().addLeafs(
+//                        new TakeBreakLeaf()
+//                ),
                 new FreeToPlayBranch().addLeafs(
                         new NeedToHopWorldsBranch().addLeafs(
                                 new HopWorldsLeaf(false)
@@ -169,19 +169,19 @@ public class Main extends AbstractScript implements Painter {
                                         new DropOresLeaf()
                                 )
                         )
-                ),
-                new PayToPlayBranch().addLeafs(
-                        new NeedToHopWorldsBranch().addLeafs(
-                                new HopWorldsLeaf(true)
-                        ),
-                        new com.gavin101.amethystaio.branches.PayToPlayBranches.MiningBranches.MineIronBranch().addLeafs(
-                                new GoToMiningAreaLeaf(Constants.MINING_GUILD_IRON_SPOTS, Constants.MINING_GUILD_IRON_AREA),
-                                new ChooseMiningSpotLeaf(Constants.MINING_GUILD_IRON_SPOTS, Constants.MINING_GUILD_IRON_AREA),
-                                new GoToMiningSpotLeaf(),
-                                new MineRockLeaf("Iron rocks"),
-                                new BankIronOreLeaf()
-                        )
                 )
+//                new PayToPlayBranch().addLeafs(
+//                        new NeedToHopWorldsBranch().addLeafs(
+//                                new HopWorldsLeaf(true)
+//                        ),
+//                        new com.gavin101.amethystaio.branches.PayToPlayBranches.MiningBranches.MineIronBranch().addLeafs(
+//                                new GoToMiningAreaLeaf(Constants.MINING_GUILD_IRON_SPOTS, Constants.MINING_GUILD_IRON_AREA),
+//                                new ChooseMiningSpotLeaf(Constants.MINING_GUILD_IRON_SPOTS, Constants.MINING_GUILD_IRON_AREA),
+//                                new GoToMiningSpotLeaf(),
+//                                new MineRockLeaf("Iron rocks"),
+//                                new BankIronOreLeaf()
+//                        )
+//                )
         );
     }
 

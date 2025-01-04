@@ -1,4 +1,4 @@
-package com.gavin101.accbuilder.constants;
+package com.gavin101.accbuilder.constants.combat;
 
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
@@ -8,22 +8,22 @@ import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.util.Map;
 
-public class AlkharidGuardsCombat {
-    public static InventoryLoadout ALKHARID_GUARD_INVENTORY = new InventoryLoadout()
-            .addReq(ItemID.TROUT, 10)
+public class BarbarianCombat {
+    public static InventoryLoadout BARBARIAN_INVENTORY = new InventoryLoadout()
+            .addReq(ItemID.TROUT, 20)
             .setEnabled(() -> !Inventory.contains(ItemID.TROUT))
             .setRefill(100)
             .setLoadoutStrict(() -> !Inventory.contains(ItemID.TROUT));
 
-    public static final RectArea ALKHARID_GUARD_AREA = new RectArea(3281, 3177, 3303, 3159);
+    public static final RectArea BARBARIAN_AREA = new RectArea(3073, 3426, 3087, 3413, 0);
 
-    public static final Map<Skill, Integer> ALKHARID_GUARD_LEVEL_GOALS = Map.of(
+    public static final Map<Skill, Integer> BARBARIAN_LEVEL_GOALS = Map.of(
             Skill.ATTACK, 30,
             Skill.STRENGTH, 30,
             Skill.DEFENCE, 30
     );
 
-    public static final String[] ALKHARID_GUARD_LOOT = {
+    public static final String[] BARBARIAN_LOOT = {
 
     };
 }

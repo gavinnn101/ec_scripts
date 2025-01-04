@@ -1,4 +1,4 @@
-package com.gavin101.accbuilder.constants;
+package com.gavin101.accbuilder.constants.fishing;
 
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
@@ -15,4 +15,5 @@ public class BaitFishing {
             .setRefill(1000)
             .setLoadoutStrict(Inventory::isFull);
     public static final RectArea LUMBRIDGE_FISHING_AREA = new RectArea(3245, 3159, 3239, 3149);
+    public static final int BAIT_FISHING_LEVEL_GOAL = 20;
 }
