@@ -1,11 +1,15 @@
 package com.gavin101.test.leafs;
 
-import com.gavin101.test.Main;
+import com.gavin101.test.accbuilder.Goal;
+import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 
+@RequiredArgsConstructor
 public class TestLeaf extends Leaf {
+    private final Goal goal;
+
     @Override
     public boolean isValid() {
         return true;
@@ -14,8 +18,7 @@ public class TestLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Our test leaf is being executed.");
-        Log.info("Goals: " +Main.accBuilder.getGoals());
-        Log.info("Current goal: " +Main.accBuilder.getCurrentGoal());
+        Log.info("Current goal: " +goal.getGoalDescription());
         return ReactionGenerator.getNormal();
     }
 }
