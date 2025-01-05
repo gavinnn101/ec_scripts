@@ -10,4 +10,4 @@ include("scripts:ProgressiveMiner")
 include("scripts:AccBuilder")
 include("libraries:GLib")
 include("libraries:Events")
-findProject(":libraries:Events")?.name = "Events"
+include("scripts:Test")
