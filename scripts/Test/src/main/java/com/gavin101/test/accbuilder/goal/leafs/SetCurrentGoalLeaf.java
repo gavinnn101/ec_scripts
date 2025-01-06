@@ -1,7 +1,7 @@
-package com.gavin101.test.accbuilder.leafs;
+package com.gavin101.test.accbuilder.goal.leafs;
 
 import com.gavin101.test.accbuilder.AccBuilder;
-import com.gavin101.test.accbuilder.Goal;
+import com.gavin101.test.accbuilder.goal.Goal;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.frameworks.tree.Leaf;
 

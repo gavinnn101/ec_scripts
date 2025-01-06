@@ -2,7 +2,7 @@ package com.gavin101.test;
 
 
 import com.gavin101.test.accbuilder.AccBuilder;
-import com.gavin101.test.accbuilder.AvailableGoals;
+import com.gavin101.test.accbuilder.goal.AvailableGoals;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
@@ -14,7 +14,6 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 
 import java.awt.*;
-import java.text.NumberFormat;
 
 @ScriptManifest(
         name = "Test",
@@ -39,6 +38,7 @@ public class Main extends AbstractScript implements Painter {
                 .addGoal(AvailableGoals.Skills.FISHING(goalFishingLevel));
         goalTree = Main.accBuilder.buildGoalsTree();
         Log.debug("Tree branches: " +goalTree.getBranches());
+
         paint = accBuilder.buildPaint();
     }
 
