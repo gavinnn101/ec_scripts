@@ -23,23 +23,28 @@ public class StartFishingLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
-        return !Players.localPlayer().isAnimating()
-                && !Inventory.isFull();
+        return !Inventory.isFull();
     }
 
     @Override
     public int onLoop() {
         Log.info("Finding fishing spot to interact with.");
-        NPC fishingSpot = NPCs.closest(getFishingSpotName(interaction));
-        if (fishingSpot != null && fishingSpot.canReach()) {
-            Log.debug("Clicking fishing spot.");
-            new EntityInteractEvent(fishingSpot, interaction).setEventCompleteCondition(
-                    () -> Players.localPlayer().isInteractingWith(fishingSpot), Calculations.random(2500, 5000)
-            ).execute();
+        Area fishArea = getFishingSpotArea();
+        NPC fishingSpot = NPCs.closest(i ->
+                i.hasName(getFishingSpotName(interaction))
+                && fishArea.contains(i)
+        );
+        if (fishingSpot != null) {
+            Log.debug("Found non-null fishing spot");
+            if (fishingSpot.canReach()) {
+                Log.debug("Clicking fishing spot.");
+                new EntityInteractEvent(fishingSpot, interaction).setEventCompleteCondition(
+                        () -> Players.localPlayer().isInteractingWith(fishingSpot), Calculations.random(2500, 5000)
+                ).execute();
+            }
         } else {
-            Log.info("Walking to fish spot");
-            Area fishArea = getFishingSpotArea();
-            Walking.walk(fishArea.getRandomTile(), () -> fishArea.contains(Players.localPlayer()));
+            Log.info("Couldn't find a fishing spot, walking to fishing area.");
+            Walking.walk(fishArea.getRandomTile());
         }
         return ReactionGenerator.getAFK();
     }

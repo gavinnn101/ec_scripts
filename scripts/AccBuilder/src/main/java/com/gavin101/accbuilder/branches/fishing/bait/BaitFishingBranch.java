@@ -2,21 +2,25 @@ package com.gavin101.accbuilder.branches.fishing.bait;
 
 import com.gavin101.accbuilder.Main;
 import com.gavin101.accbuilder.constants.fishing.BaitFishing;
-import net.eternalclient.api.accessors.Players;
+import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.wrappers.skill.Skill;
 
+import java.util.Map;
+
 public class BaitFishingBranch extends Branch {
     @Override
     public boolean isValid() {
-        if (Players.localPlayer().isMoving() || Players.localPlayer().isAnimating()) {
-            return false;
-        }
+        for (Map.Entry<Skill, LevelRange> entry : BaitFishing.BAIT_FISHING_LEVEL_RANGES.entrySet()) {
+            Skill skill = entry.getKey();
+            LevelRange range = entry.getValue();
+            int currentLevel = Skills.getRealLevel(skill);
 
-        if (Skills.getRealLevel(Skill.FISHING) < BaitFishing.BAIT_FISHING_LEVEL_GOAL) {
-            Main.setActivity("Bait fishing", Skill.FISHING, BaitFishing.BAIT_FISHING_LEVEL_GOAL);
-            return true;
+            if (currentLevel >= range.getMin() && currentLevel < range.getMax()) {
+                Main.setActivity("Bait fishing", Skill.FISHING, range.getMax());
+                return true;
+            }
         }
         return false;
     }

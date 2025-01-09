@@ -1,8 +1,7 @@
-package com.gavin101.accbuilder.branches.combat.common;
+package com.gavin101.accbuilder.branches.common;
 
 import com.gavin101.accbuilder.Main;
 import net.eternalclient.api.frameworks.tree.Branch;
-import net.eternalclient.api.utilities.Log;
 
 public class LoadoutsFulfilledBranch extends Branch {
     @Override

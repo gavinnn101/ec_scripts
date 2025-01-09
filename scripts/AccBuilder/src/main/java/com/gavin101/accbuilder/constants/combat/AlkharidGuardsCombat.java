@@ -1,5 +1,6 @@
 package com.gavin101.accbuilder.constants.combat;
 
+import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
@@ -17,10 +18,10 @@ public class AlkharidGuardsCombat {
 
     public static final RectArea ALKHARID_GUARD_AREA = new RectArea(3281, 3177, 3303, 3159);
 
-    public static final Map<Skill, Integer> ALKHARID_GUARD_LEVEL_GOALS = Map.of(
-            Skill.ATTACK, 40,
-            Skill.STRENGTH, 40,
-            Skill.DEFENCE, 40
+    public static final Map<Skill, LevelRange> ALKHARID_GUARDS_LEVEL_RANGES = Map.of(
+            Skill.ATTACK,    new LevelRange(30, 40),
+            Skill.STRENGTH,  new LevelRange(30, 40),
+            Skill.DEFENCE,   new LevelRange(30, 40)
     );
 
     public static final String[] ALKHARID_GUARD_LOOT = {

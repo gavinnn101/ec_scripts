@@ -1,5 +1,6 @@
 package com.gavin101.accbuilder.constants.combat;
 
+import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.skill.Skill;
@@ -14,10 +15,10 @@ public class ChickenCombat {
 
     public static final RectArea CHICKEN_AREA = new RectArea(3172, 3302, 3183, 3289);
 
-    public static final Map<Skill, Integer> CHICKEN_LEVEL_GOALS = Map.of(
-            Skill.ATTACK, 10,
-            Skill.STRENGTH, 10,
-            Skill.DEFENCE, 10
+    public static final Map<Skill, LevelRange> CHICKEN_LEVEL_RANGES = Map.of(
+            Skill.ATTACK,    new LevelRange(1, 10),
+            Skill.STRENGTH,  new LevelRange(1, 10),
+            Skill.DEFENCE,   new LevelRange(1, 10)
     );
 
     public static final String[] CHICKEN_LOOT = {

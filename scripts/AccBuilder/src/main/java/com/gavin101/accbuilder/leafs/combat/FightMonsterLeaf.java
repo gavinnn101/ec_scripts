@@ -30,6 +30,7 @@ public class FightMonsterLeaf extends Leaf {
                         && i.getHealthPercent() > 0
                         && !i.isInCombat()
                         && i.canReach()
+                        && monsterArea.contains(i)
         );
         if (monster != null) {
             Log.info("Found valid monster to fight, attacking.");

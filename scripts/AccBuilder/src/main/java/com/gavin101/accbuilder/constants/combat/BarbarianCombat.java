@@ -1,5 +1,6 @@
 package com.gavin101.accbuilder.constants.combat;
 
+import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
@@ -17,10 +18,10 @@ public class BarbarianCombat {
 
     public static final RectArea BARBARIAN_AREA = new RectArea(3073, 3426, 3087, 3413, 0);
 
-    public static final Map<Skill, Integer> BARBARIAN_LEVEL_GOALS = Map.of(
-            Skill.ATTACK, 30,
-            Skill.STRENGTH, 30,
-            Skill.DEFENCE, 30
+    public static final Map<Skill, LevelRange> BARBARIAN_LEVEL_RANGES = Map.of(
+            Skill.ATTACK,    new LevelRange(20, 30),
+            Skill.STRENGTH,  new LevelRange(20, 30),
+            Skill.DEFENCE,   new LevelRange(20, 30)
     );
 
     public static final String[] BARBARIAN_LOOT = {

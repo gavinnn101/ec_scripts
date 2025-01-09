@@ -3,33 +3,31 @@ package com.gavin101.accbuilder.branches.combat.alkharidguards;
 import com.gavin101.GLib.GLib;
 import com.gavin101.accbuilder.Main;
 import com.gavin101.accbuilder.constants.combat.AlkharidGuardsCombat;
-import com.gavin101.accbuilder.constants.fishing.FlyFishing;
-import net.eternalclient.api.accessors.Players;
+import com.gavin101.accbuilder.utility.General;
+import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.frameworks.tree.Branch;
-import net.eternalclient.api.utilities.container.OwnedItems;
-import net.eternalclient.api.wrappers.quest.Quest;
 import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.util.Map;
+
+import static com.gavin101.accbuilder.constants.combat.CowCombat.COW_LEVEL_RANGES;
 
 public class FightAlkharidGuardsBranch extends Branch {
 
     @Override
     public boolean isValid() {
-        if (Players.localPlayer().isMoving()) {
+        if (!General.canStartCombatTier(AlkharidGuardsCombat.ALKHARID_GUARDS_LEVEL_RANGES)) {
             return false;
         }
 
-        if (!Quest.WITCHS_POTION.isFinished()) {
-            return false;
-        }
-
-        for (Map.Entry<Skill, Integer> entry : AlkharidGuardsCombat.ALKHARID_GUARD_LEVEL_GOALS.entrySet()) {
+        for (Map.Entry<Skill, LevelRange> entry : AlkharidGuardsCombat.ALKHARID_GUARDS_LEVEL_RANGES.entrySet()) {
             Skill skill = entry.getKey();
-            int goalLevel = entry.getValue();
-            if (Skills.getRealLevel(skill) < goalLevel) {
-                Main.setActivity("Training " +skill +" on alkharid guards", skill, goalLevel);
+            LevelRange range = entry.getValue();
+            int currentLevel = Skills.getRealLevel(skill);
+
+            if (currentLevel >= range.getMin() && currentLevel < range.getMax()) {
+                Main.setActivity("Training " + skill + " on alkharid guards", skill, range.getMax());
                 Main.attackStyle = GLib.SKILL_TO_ATTACK_STYLE.get(skill);
                 return true;
             }

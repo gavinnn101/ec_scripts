@@ -4,7 +4,8 @@ package com.gavin101.accbuilder;
 import com.gavin101.accbuilder.branches.combat.alkharidguards.FightAlkharidGuardsBranch;
 import com.gavin101.accbuilder.branches.combat.barbarians.FightBarbariansBranch;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
-import com.gavin101.accbuilder.branches.combat.common.LoadoutsFulfilledBranch;
+import com.gavin101.accbuilder.branches.common.IsAfkBranch;
+import com.gavin101.accbuilder.branches.common.LoadoutsFulfilledBranch;
 import com.gavin101.accbuilder.branches.combat.cows.FightCowsBranch;
 import com.gavin101.accbuilder.branches.cooking.CookFoodBranch;
 import com.gavin101.accbuilder.branches.fishing.bait.BaitFishingBranch;
@@ -16,6 +17,9 @@ import com.gavin101.accbuilder.branches.quests.goblindiplomacy.GoblinDiplomacyBr
 import com.gavin101.accbuilder.branches.quests.impcatcher.ImpCatcherBranch;
 import com.gavin101.accbuilder.branches.quests.sheepshearer.SheepShearerBranch;
 import com.gavin101.accbuilder.branches.quests.witchspotion.WitchsPotionBranch;
+import com.gavin101.accbuilder.branches.tiers.TierOneBranch;
+import com.gavin101.accbuilder.branches.tiers.TierThreeBranch;
+import com.gavin101.accbuilder.branches.tiers.TierTwoBranch;
 import com.gavin101.accbuilder.constants.combat.AlkharidGuardsCombat;
 import com.gavin101.accbuilder.constants.combat.BarbarianCombat;
 import com.gavin101.accbuilder.constants.combat.ChickenCombat;
@@ -25,8 +29,10 @@ import com.gavin101.accbuilder.constants.fishing.FlyFishing;
 import com.gavin101.accbuilder.constants.fishing.ShrimpFishing;
 import com.gavin101.accbuilder.constants.quests.*;
 import com.gavin101.accbuilder.leafs.combat.*;
+import com.gavin101.accbuilder.leafs.common.CacheBankLeaf;
 import com.gavin101.accbuilder.leafs.common.EndScriptLeaf;
 import com.gavin101.accbuilder.leafs.common.GetLoadoutLeaf;
+import com.gavin101.accbuilder.leafs.common.RequestMuleLeaf;
 import com.gavin101.accbuilder.leafs.cooking.CookFoodLeaf;
 import com.gavin101.accbuilder.leafs.fishing.StartFishingLeaf;
 import com.gavin101.accbuilder.leafs.quests.cooksassistant.TalkToCookLeaf;
@@ -93,228 +99,291 @@ public class Main extends AbstractScript implements Painter {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
 
+        // Save resources
+        Client.getSettings().setRenderingEnabled(false);
+        Client.getSettings().setFpsLimit(3);
+
         startTimer = new Timer();
         activityTimer = new Timer();
 
         tree.addBranches(
-                new FishShrimpBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .inventoryLoadout(ShrimpFishing.SHRIMP_INVENTORY)
-                                .equipmentLoadout(ShrimpFishing.SHRIMP_EQUIPMENT)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new StartFishingLeaf("Net")
-                        )
-                ),
-                new CooksAssistantBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .inventoryLoadout(CooksAssistant.COOKS_ASSISTANT_INVENTORY)
-                                .equipmentLoadout(CooksAssistant.COOKS_ASSISTANT_EQUIPMENT)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new TalkToCookLeaf()
-                        )
-                ),
-                new CookFoodBranch(ItemID.RAW_SHRIMPS).addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(new EquipmentLoadout())
-                                .inventoryLoadout(
-                                        new InventoryLoadout()
-                                                .addReq(ItemID.RAW_SHRIMPS, () -> Math.min(OwnedItems.count(ItemID.RAW_SHRIMPS), 28))
-                                                .setEnabled(() -> !Inventory.contains(ItemID.RAW_SHRIMPS))
-                                                .setStrict(true)
+                new CacheBankLeaf(),
+                new RequestMuleLeaf(),
+                new TierOneBranch().addShuffledLeafs(
+                        new SheepShearerBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(SheepShearer.SHEEP_SHEARER_EQUIPMENT)
+                                        .inventoryLoadout(SheepShearer.SHEEP_SHEARER_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToFarmerLeaf()
+                                        )
                                 )
-                                .buyRemainder(false)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new CookFoodLeaf("Cooking range", ItemID.RAW_SHRIMPS)
-                        )
-                ),
-                new DoricsQuestBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(DoricsQuest.DORICS_QUEST_EQUIPMENT)
-                                .inventoryLoadout(DoricsQuest.DORICS_QUEST_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new TalkToDoricLeaf()
-                        )
-                ),
-                new FightChickensBranch().addLeafs(
-                        new SetBestCombatEquipmentLeaf(),
-                        GetLoadoutLeaf.builder()
-                                .useBestEquipment(true)
-                                .inventoryLoadout(ChickenCombat.CHICKEN_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new LootItemsLeaf(ChickenCombat.CHICKEN_LOOT, 3),
-                                new SetAttackStyleLeaf(),
-                                new FightMonsterLeaf("Chicken", ChickenCombat.CHICKEN_AREA)
-                        )
-                ),
-                new ImpCatcherBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(ImpCatcher.IMP_CATCHER_EQUIPMENT)
-                                .inventoryLoadout(ImpCatcher.IMP_CATCHER_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new TalkToWizardLeaf()
-                        )
-                ),
-                new BaitFishingBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(BaitFishing.BAIT_FISHING_EQUIPMENT)
-                                .inventoryLoadout(BaitFishing.BAIT_FISHING_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new StartFishingLeaf("Bait")
-                        )
-                ),
-                new SheepShearerBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(SheepShearer.SHEEP_SHEARER_EQUIPMENT)
-                                .inventoryLoadout(SheepShearer.SHEEP_SHEARER_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new TalkToFarmerLeaf()
-                        )
-                ),
-                new CookFoodBranch(ItemID.RAW_SARDINE).addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(new EquipmentLoadout())
-                                .inventoryLoadout(
-                                        new InventoryLoadout()
-                                                .addReq(ItemID.RAW_SARDINE, () -> Math.min(OwnedItems.count(ItemID.RAW_SARDINE), 28))
-                                                .setEnabled(() -> !Inventory.contains(ItemID.RAW_SARDINE))
-                                                .setStrict(true)
+                        ),
+                        new CooksAssistantBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(CooksAssistant.COOKS_ASSISTANT_INVENTORY)
+                                        .equipmentLoadout(CooksAssistant.COOKS_ASSISTANT_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToCookLeaf()
+                                        )
                                 )
-                                .buyRemainder(false)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new CookFoodLeaf("Cooking range", ItemID.RAW_SARDINE)
-                        )
-                ),
-                new CookFoodBranch(ItemID.RAW_HERRING).addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(new EquipmentLoadout())
-                                .inventoryLoadout(
-                                        new InventoryLoadout()
-                                                .addReq(ItemID.RAW_HERRING, () -> Math.min(OwnedItems.count(ItemID.RAW_HERRING), 28))
-                                                .setEnabled(() -> !Inventory.contains(ItemID.RAW_HERRING))
-                                                .setStrict(true)
+                        ),
+                        new FishShrimpBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(ShrimpFishing.SHRIMP_INVENTORY)
+                                        .equipmentLoadout(ShrimpFishing.SHRIMP_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new StartFishingLeaf("Net")
+                                        )
                                 )
-                                .buyRemainder(false)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new CookFoodLeaf("Cooking range", ItemID.RAW_HERRING)
-                        )
-                ),
-                new FightCowsBranch().addLeafs(
-                        new SetBestCombatEquipmentLeaf(),
-                        GetLoadoutLeaf.builder()
-                                .useBestEquipment(true)
-                                .inventoryLoadout(CowCombat.COW_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new SetAttackStyleLeaf(),
-                                new FightMonsterLeaf("Cow", CowCombat.COW_AREA)
-                        )
-                ),
-                new GoblinDiplomacyBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(GoblinDiplomacy.GOBLIN_DIPLOMACY_EQUIPMENT)
-                                .inventoryLoadout(GoblinDiplomacy.GOBLIN_DIPLOMACY_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new MakeArmorLeaf(),
-                                new TalkToGeneralLeaf()
-                        )
-                ),
-                new FlyFishingBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
-                                .inventoryLoadout(FlyFishing.FLY_FISHING_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new StartFishingLeaf("Lure")
-                        )
-                ),
-                new CookFoodBranch(ItemID.RAW_TROUT).addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(new EquipmentLoadout())
-                                .inventoryLoadout(
-                                        new InventoryLoadout()
-                                                .addReq(ItemID.RAW_TROUT, () -> Math.min(OwnedItems.count(ItemID.RAW_TROUT), 28))
-                                                .setEnabled(() -> !Inventory.contains(ItemID.RAW_TROUT))
-                                                .setStrict(true)
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_SHRIMPS,
+                                ShrimpFishing.SHRIMP_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_SHRIMPS, () -> Math.min(OwnedItems.count(ItemID.RAW_SHRIMPS), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_SHRIMPS))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_SHRIMPS)
+                                        )
                                 )
-                                .buyRemainder(false)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new CookFoodLeaf("Cooking range", ItemID.RAW_TROUT)
-                        )
-                ),
-                new CookFoodBranch(ItemID.RAW_SALMON).addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .equipmentLoadout(new EquipmentLoadout())
-                                .inventoryLoadout(
-                                        new InventoryLoadout()
-                                                .addReq(ItemID.RAW_SALMON, () -> Math.min(OwnedItems.count(ItemID.RAW_SALMON), 28))
-                                                .setEnabled(() -> !Inventory.contains(ItemID.RAW_SALMON))
-                                                .setStrict(true)
+                        ),
+                        new FightChickensBranch().addLeafs(
+                                new SetBestCombatEquipmentLeaf(),
+                                GetLoadoutLeaf.builder()
+                                        .useBestEquipment(true)
+                                        .inventoryLoadout(ChickenCombat.CHICKEN_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new LootItemsLeaf(ChickenCombat.CHICKEN_LOOT, 3),
+                                                new SetAttackStyleLeaf(),
+                                                new FightMonsterLeaf("Chicken", ChickenCombat.CHICKEN_AREA)
+                                        )
                                 )
-                                .buyRemainder(false)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new CookFoodLeaf("Cooking range", ItemID.RAW_SALMON)
                         )
                 ),
-                new FightBarbariansBranch().addLeafs(
-                        new SetBestCombatEquipmentLeaf(),
-                        GetLoadoutLeaf.builder()
-                                .useBestEquipment(true)
-                                .inventoryLoadout(BarbarianCombat.BARBARIAN_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new EatFoodLeaf(ItemID.TROUT, 10),
-                                new SetAttackStyleLeaf(),
-                                new FightMonsterLeaf("Barbarian", BarbarianCombat.BARBARIAN_AREA)
+                new TierTwoBranch().addShuffledLeafs(
+                        new DoricsQuestBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(DoricsQuest.DORICS_QUEST_EQUIPMENT)
+                                        .inventoryLoadout(DoricsQuest.DORICS_QUEST_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToDoricLeaf()
+                                        )
+                                )
+                        ),
+                        new ImpCatcherBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(ImpCatcher.IMP_CATCHER_EQUIPMENT)
+                                        .inventoryLoadout(ImpCatcher.IMP_CATCHER_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToWizardLeaf()
+                                        )
+                                )
+                        ),
+                        new BaitFishingBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(BaitFishing.BAIT_FISHING_EQUIPMENT)
+                                        .inventoryLoadout(BaitFishing.BAIT_FISHING_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new StartFishingLeaf("Bait")
+                                        )
+                                )
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_SARDINE,
+                                BaitFishing.BAIT_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_SARDINE, () -> Math.min(OwnedItems.count(ItemID.RAW_SARDINE), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_SARDINE))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_SARDINE)
+                                        )
+                                )
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_HERRING,
+                                BaitFishing.BAIT_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_HERRING, () -> Math.min(OwnedItems.count(ItemID.RAW_HERRING), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_HERRING))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_HERRING)
+                                        )
+                                )
+                        ),
+                        new FightCowsBranch().addLeafs(
+                                new SetBestCombatEquipmentLeaf(),
+                                GetLoadoutLeaf.builder()
+                                        .useBestEquipment(true)
+                                        .inventoryLoadout(CowCombat.COW_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new SetAttackStyleLeaf(),
+                                                new FightMonsterLeaf("Cow", CowCombat.COW_AREA)
+                                        )
+                                )
                         )
                 ),
-                new WitchsPotionBranch().addLeafs(
-                        GetLoadoutLeaf.builder()
-                                .inventoryLoadout(WitchsPotion.WITCHS_POTION_INVENTORY)
-                                .equipmentLoadout(WitchsPotion.WITCHS_POTION_EQUIPMENT)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new TalkToWitchLeaf(),
-                                new BurnMeatLeaf(),
-                                new GetRatTailLeaf(),
-                                new DrinkFromCauldronLeaf()
-                        )
-                ),
-                new FightAlkharidGuardsBranch().addLeafs(
-                        new SetBestCombatEquipmentLeaf(),
-                        GetLoadoutLeaf.builder()
-                                .useBestEquipment(true)
-                                .inventoryLoadout(AlkharidGuardsCombat.ALKHARID_GUARD_INVENTORY)
-                                .buyRemainder(true)
-                                .build(),
-                        new LoadoutsFulfilledBranch().addLeafs(
-                                new EatFoodLeaf(ItemID.TROUT, 10),
-                                new SetAttackStyleLeaf(),
-                                new FightMonsterLeaf("Al Kharid warrior", AlkharidGuardsCombat.ALKHARID_GUARD_AREA)
+                new TierThreeBranch().addShuffledLeafs(
+                        new WitchsPotionBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(WitchsPotion.WITCHS_POTION_INVENTORY)
+                                        .equipmentLoadout(WitchsPotion.WITCHS_POTION_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToWitchLeaf(),
+                                                new BurnMeatLeaf(),
+                                                new GetRatTailLeaf(),
+                                                new DrinkFromCauldronLeaf()
+                                        )
+                                )
+                        ),
+                        new GoblinDiplomacyBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(GoblinDiplomacy.GOBLIN_DIPLOMACY_EQUIPMENT)
+                                        .inventoryLoadout(GoblinDiplomacy.GOBLIN_DIPLOMACY_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new MakeArmorLeaf(),
+                                                new TalkToGeneralLeaf()
+                                        )
+                                )
+                        ),
+                        new FlyFishingBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
+                                        .inventoryLoadout(FlyFishing.FLY_FISHING_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new StartFishingLeaf("Lure")
+                                        )
+                                )
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_TROUT,
+                                FlyFishing.FLY_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_TROUT, () -> Math.min(OwnedItems.count(ItemID.RAW_TROUT), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_TROUT))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_TROUT)
+                                        )
+                                )
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_SALMON,
+                                FlyFishing.FLY_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_SALMON, () -> Math.min(OwnedItems.count(ItemID.RAW_SALMON), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_SALMON))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_SALMON)
+                                        )
+                                )
+                        ),
+                        new FightBarbariansBranch().addLeafs(
+                                new SetBestCombatEquipmentLeaf(),
+                                GetLoadoutLeaf.builder()
+                                        .useBestEquipment(true)
+                                        .inventoryLoadout(BarbarianCombat.BARBARIAN_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new EatFoodLeaf(ItemID.TROUT, 10),
+                                        new IsAfkBranch().addLeafs(
+                                                new SetAttackStyleLeaf(),
+                                                new FightMonsterLeaf("Barbarian", BarbarianCombat.BARBARIAN_AREA)
+                                        )
+                                )
+                        ),
+                        new FightAlkharidGuardsBranch().addLeafs(
+                                new SetBestCombatEquipmentLeaf(),
+                                GetLoadoutLeaf.builder()
+                                        .useBestEquipment(true)
+                                        .inventoryLoadout(AlkharidGuardsCombat.ALKHARID_GUARD_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new EatFoodLeaf(ItemID.TROUT, 10),
+                                        new IsAfkBranch().addLeafs(
+                                                new SetAttackStyleLeaf(),
+                                                new FightMonsterLeaf("Al Kharid warrior", AlkharidGuardsCombat.ALKHARID_GUARD_AREA)
+                                        )
+                                )
                         )
                 ),
                 new EndScriptLeaf()
