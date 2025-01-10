@@ -403,7 +403,7 @@ public class Main extends AbstractScript implements Painter {
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
-                                        new EatFoodLeaf(ItemID.TROUT, Skills.getRealLevel(Skill.HITPOINTS) - 7),
+                                        new EatFoodLeaf(ItemID.TROUT),
                                         new IsAfkBranch().addLeafs(
                                                 new SetAttackStyleLeaf(),
                                                 new FightMonsterLeaf("Barbarian", BarbarianCombat.BARBARIAN_AREA)
@@ -418,7 +418,7 @@ public class Main extends AbstractScript implements Painter {
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
-                                        new EatFoodLeaf(ItemID.TROUT, Skills.getRealLevel(Skill.HITPOINTS) - 7),
+                                        new EatFoodLeaf(ItemID.TROUT),
                                         new IsAfkBranch().addLeafs(
                                                 new SetAttackStyleLeaf(),
                                                 new FightMonsterLeaf("Al Kharid warrior", AlkharidGuardsCombat.ALKHARID_GUARD_AREA)
