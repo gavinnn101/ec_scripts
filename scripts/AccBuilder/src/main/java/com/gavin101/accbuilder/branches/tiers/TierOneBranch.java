@@ -14,7 +14,8 @@ public class TierOneBranch extends Branch {
     @Override
     public boolean isValid() {
         return !Quest.COOKS_ASSISTANT.isFinished()
-                || !Quest.SHEEP_SHEARER.isFinished()
+                || !Quest.DORICS_QUEST.isFinished()
+                || Skills.getRealLevel(Skill.MINING) < 15
                 || Skills.getRealLevel(Skill.FISHING) < 5
                 || OwnedItems.contains(ItemID.RAW_SHRIMPS)
                 || (General.canStartCombatTier(ChickenCombat.CHICKEN_LEVEL_RANGES) && !General.canStartCombatTier(CowCombat.COW_LEVEL_RANGES));

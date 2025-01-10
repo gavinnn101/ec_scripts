@@ -11,6 +11,8 @@ import com.gavin101.accbuilder.branches.cooking.CookFoodBranch;
 import com.gavin101.accbuilder.branches.fishing.bait.BaitFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.flyfishing.FlyFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.shrimp.FishShrimpBranch;
+import com.gavin101.accbuilder.branches.mining.MineIronBranch;
+import com.gavin101.accbuilder.branches.mining.MineTinBranch;
 import com.gavin101.accbuilder.branches.quests.cooksassistant.CooksAssistantBranch;
 import com.gavin101.accbuilder.branches.quests.doricsquest.DoricsQuestBranch;
 import com.gavin101.accbuilder.branches.quests.goblindiplomacy.GoblinDiplomacyBranch;
@@ -27,14 +29,13 @@ import com.gavin101.accbuilder.constants.combat.CowCombat;
 import com.gavin101.accbuilder.constants.fishing.BaitFishing;
 import com.gavin101.accbuilder.constants.fishing.FlyFishing;
 import com.gavin101.accbuilder.constants.fishing.ShrimpFishing;
+import com.gavin101.accbuilder.constants.mining.Mining;
 import com.gavin101.accbuilder.constants.quests.*;
 import com.gavin101.accbuilder.leafs.combat.*;
-import com.gavin101.accbuilder.leafs.common.CacheBankLeaf;
-import com.gavin101.accbuilder.leafs.common.EndScriptLeaf;
-import com.gavin101.accbuilder.leafs.common.GetLoadoutLeaf;
-import com.gavin101.accbuilder.leafs.common.RequestMuleLeaf;
+import com.gavin101.accbuilder.leafs.common.*;
 import com.gavin101.accbuilder.leafs.cooking.CookFoodLeaf;
 import com.gavin101.accbuilder.leafs.fishing.StartFishingLeaf;
+import com.gavin101.accbuilder.leafs.mining.MineRockLeaf;
 import com.gavin101.accbuilder.leafs.quests.cooksassistant.TalkToCookLeaf;
 import com.gavin101.accbuilder.leafs.quests.doricsquest.TalkToDoricLeaf;
 import com.gavin101.accbuilder.leafs.quests.goblindiplomacy.MakeArmorLeaf;
@@ -110,15 +111,15 @@ public class Main extends AbstractScript implements Painter {
                 new CacheBankLeaf(),
                 new RequestMuleLeaf(),
                 new TierOneBranch().addShuffledLeafs(
-                        new SheepShearerBranch().addLeafs(
+                        new DoricsQuestBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(SheepShearer.SHEEP_SHEARER_EQUIPMENT)
-                                        .inventoryLoadout(SheepShearer.SHEEP_SHEARER_INVENTORY)
+                                        .equipmentLoadout(DoricsQuest.DORICS_QUEST_EQUIPMENT)
+                                        .inventoryLoadout(DoricsQuest.DORICS_QUEST_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new TalkToFarmerLeaf()
+                                                new TalkToDoricLeaf()
                                         )
                                 )
                         ),
@@ -131,6 +132,19 @@ public class Main extends AbstractScript implements Painter {
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
                                                 new TalkToCookLeaf()
+                                        )
+                                )
+                        ),
+                        new MineTinBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Mining.MINING_INVENTORY)
+                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToTileLeaf(Mining.LUMBRIDGE_TIN_TILE),
+                                                new MineRockLeaf("Tin rocks")
                                         )
                                 )
                         ),
@@ -183,15 +197,15 @@ public class Main extends AbstractScript implements Painter {
                         )
                 ),
                 new TierTwoBranch().addShuffledLeafs(
-                        new DoricsQuestBranch().addLeafs(
+                        new SheepShearerBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(DoricsQuest.DORICS_QUEST_EQUIPMENT)
-                                        .inventoryLoadout(DoricsQuest.DORICS_QUEST_INVENTORY)
+                                        .equipmentLoadout(SheepShearer.SHEEP_SHEARER_EQUIPMENT)
+                                        .inventoryLoadout(SheepShearer.SHEEP_SHEARER_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new TalkToDoricLeaf()
+                                                new TalkToFarmerLeaf()
                                         )
                                 )
                         ),
@@ -204,6 +218,19 @@ public class Main extends AbstractScript implements Painter {
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
                                                 new TalkToWizardLeaf()
+                                        )
+                                )
+                        ),
+                        new MineIronBranch(31).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Mining.MINING_INVENTORY)
+                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToTileLeaf(Mining.RIMMINGTON_IRON_TILE),
+                                                new MineRockLeaf("Iron rocks")
                                         )
                                 )
                         ),
@@ -303,6 +330,19 @@ public class Main extends AbstractScript implements Painter {
                                         )
                                 )
                         ),
+                        new MineIronBranch(41).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Mining.MINING_INVENTORY)
+                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToTileLeaf(Mining.RIMMINGTON_IRON_TILE),
+                                                new MineRockLeaf("Iron rocks")
+                                        )
+                                )
+                        ),
                         new FlyFishingBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
@@ -363,7 +403,7 @@ public class Main extends AbstractScript implements Painter {
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
-                                        new EatFoodLeaf(ItemID.TROUT, 10),
+                                        new EatFoodLeaf(ItemID.TROUT, Skills.getRealLevel(Skill.HITPOINTS) - 7),
                                         new IsAfkBranch().addLeafs(
                                                 new SetAttackStyleLeaf(),
                                                 new FightMonsterLeaf("Barbarian", BarbarianCombat.BARBARIAN_AREA)
@@ -378,7 +418,7 @@ public class Main extends AbstractScript implements Painter {
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
-                                        new EatFoodLeaf(ItemID.TROUT, 10),
+                                        new EatFoodLeaf(ItemID.TROUT, Skills.getRealLevel(Skill.HITPOINTS) - 7),
                                         new IsAfkBranch().addLeafs(
                                                 new SetAttackStyleLeaf(),
                                                 new FightMonsterLeaf("Al Kharid warrior", AlkharidGuardsCombat.ALKHARID_GUARD_AREA)

@@ -13,8 +13,9 @@ import net.eternalclient.api.wrappers.skill.Skill;
 public class TierTwoBranch extends Branch {
     @Override
     public boolean isValid() {
-        return !Quest.DORICS_QUEST.isFinished()
+        return !Quest.SHEEP_SHEARER.isFinished()
                 || !Quest.IMP_CATCHER.isFinished()
+                || Skills.getRealLevel(Skill.MINING) < 31
                 || Skills.getRealLevel(Skill.FISHING) < 20
                 || OwnedItems.contains(ItemID.RAW_SARDINE)
                 || OwnedItems.contains(ItemID.RAW_HERRING)
