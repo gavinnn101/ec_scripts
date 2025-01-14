@@ -1,5 +1,6 @@
 package com.gavin101.accbuilder.constants.combat;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
@@ -11,9 +12,9 @@ import java.util.Map;
 
 public class BarbarianCombat {
     public static InventoryLoadout BARBARIAN_INVENTORY = new InventoryLoadout()
-            .addReq(ItemID.TROUT, 20)
+            .addReq(ItemID.TROUT, GLib.getRandomInt(10, 21)) // Withdraw between 10-20 trout
             .setEnabled(() -> !Inventory.contains(ItemID.TROUT))
-            .setRefill(100)
+            .setRefill(GLib.getRandomInt(80, 101)) // Buy 80-100 trout if we don't have enough
             .setLoadoutStrict(() -> !Inventory.contains(ItemID.TROUT));
 
     public static final RectArea BARBARIAN_AREA = new RectArea(3073, 3426, 3087, 3413, 0);
@@ -23,8 +24,4 @@ public class BarbarianCombat {
             Skill.STRENGTH,  new LevelRange(20, 30),
             Skill.DEFENCE,   new LevelRange(20, 30)
     );
-
-    public static final String[] BARBARIAN_LOOT = {
-
-    };
 }

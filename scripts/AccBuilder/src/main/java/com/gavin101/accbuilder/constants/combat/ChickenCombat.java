@@ -1,19 +1,17 @@
 package com.gavin101.accbuilder.constants.combat;
 
 import com.gavin101.accbuilder.utility.LevelRange;
+import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
+import net.eternalclient.api.wrappers.map.Area;
 import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.skill.Skill;
 
+import java.util.List;
 import java.util.Map;
 
 public class ChickenCombat {
     public static InventoryLoadout CHICKEN_INVENTORY = new InventoryLoadout();
-//            .addReq(ItemID.TROUT, 10)
-//            .setEnabled(() -> !Inventory.contains(ItemID.TROUT))
-//            .setLoadoutStrict(() -> !Inventory.contains(ItemID.TROUT));
-
-    public static final RectArea CHICKEN_AREA = new RectArea(3172, 3302, 3183, 3289);
 
     public static final Map<Skill, LevelRange> CHICKEN_LEVEL_RANGES = Map.of(
             Skill.ATTACK,    new LevelRange(1, 10),
@@ -21,7 +19,14 @@ public class ChickenCombat {
             Skill.DEFENCE,   new LevelRange(1, 10)
     );
 
-    public static final String[] CHICKEN_LOOT = {
-            "Feathers"
+    public static final int[] CHICKEN_LOOT = {
+            ItemID.FEATHER
     };
+
+    public static final List<Area> CHICKEN_COMBAT_AREAS = List.of(
+            new RectArea(3172, 3302, 3183, 3289), // North of Lumbridge
+            new RectArea(3225, 3301, 3236, 3295), // East of Lumbridge
+            new RectArea(3020, 3282, 3014, 3298)  // South of Falador
+
+    );
 }

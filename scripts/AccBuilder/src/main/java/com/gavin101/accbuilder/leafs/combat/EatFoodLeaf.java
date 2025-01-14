@@ -26,8 +26,8 @@ public class EatFoodLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Eating food: " + ItemComposite.getItem(foodToEatID).getName());
         int originalHp = Skills.getBoostedLevels(Skill.HITPOINTS);
+        Log.info("Eating food: " + ItemComposite.getItem(foodToEatID).getName() +" at hp: " +originalHp);
         new InventoryEvent(foodToEatID, "Eat").setEventCompleteCondition(
                 () -> Skills.getBoostedLevels(Skill.HITPOINTS) > originalHp, Calculations.random(350, 500)
         ).execute();
@@ -35,11 +35,11 @@ public class EatFoodLeaf extends Leaf {
     }
 
     private int getRandomHealthThreshold(int foodToEatID) {
-        int originalHp = Skills.getBoostedLevels(Skill.HITPOINTS);
+        int fullHp = Skills.getRealLevel(Skill.HITPOINTS);
         int foodHealth = foodToHealthMap(foodToEatID);
-        int maxHpToEatAt = (originalHp - foodHealth) + 1;
-        int minHpToEatAt = (maxHpToEatAt - foodHealth);
-        return ThreadLocalRandom.current().nextInt(minHpToEatAt, maxHpToEatAt);
+        int maxHpToEatAt = (fullHp - foodHealth) + 1;
+        int randomVariation = ThreadLocalRandom.current().nextInt(-3, 4);
+        return Math.max(5, Math.min(maxHpToEatAt + randomVariation, maxHpToEatAt));
     }
 
     private int foodToHealthMap(int foodToEatID) {

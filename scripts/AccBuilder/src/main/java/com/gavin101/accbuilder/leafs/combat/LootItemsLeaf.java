@@ -1,7 +1,8 @@
 package com.gavin101.accbuilder.leafs.combat;
 
+import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GroundItems;
-import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.accessors.LocalPlayer;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -10,15 +11,12 @@ import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GroundItem;
 
+@RequiredArgsConstructor
 public class LootItemsLeaf extends Leaf {
-    private final String[] itemsToLoot;
+    private final int[] itemsToLoot;
     private final int maxDistance;
-    private static GroundItem currentLootItem;
 
-    public LootItemsLeaf(String[] itemsToLoot, int maxDistance) {
-        this.itemsToLoot = itemsToLoot;
-        this.maxDistance = maxDistance;
-    }
+    private static GroundItem currentLootItem;
 
     @Override
     public boolean isValid() {
@@ -45,9 +43,9 @@ public class LootItemsLeaf extends Leaf {
 
     public GroundItem findValidLoot() {
         return GroundItems.closest(i ->
-                i.hasName(itemsToLoot)
+                i.hasID(itemsToLoot)
                         && i.hasAction("Take")
-                        && i.distanceTo(Players.localPlayer()) <= maxDistance
+                        && i.distanceTo(LocalPlayer.get()) <= maxDistance
                         && i.canReach()
         );
     }

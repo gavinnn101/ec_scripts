@@ -20,6 +20,9 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
 import net.eternalclient.api.wrappers.map.Area;
+import net.eternalclient.api.wrappers.map.RectArea;
+import net.eternalclient.api.wrappers.map.Tile;
+import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
 import net.eternalclient.api.wrappers.walking.Walking;
 import net.eternalfarm.client.EternalFarmClient;
@@ -27,8 +30,10 @@ import net.eternalfarm.client.entities.EFAccount;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class GLib {
     public static void talkWithNpc(String npcName) {
@@ -133,5 +138,21 @@ public final class GLib {
             }
         }
         return true;
+    }
+
+    public static Area getRandomArea(List<Area> areas) {
+        return areas.get(ThreadLocalRandom.current().nextInt(areas.size()));
+    }
+
+    public static WorldTile getRandomTile(List<WorldTile> tiles) {
+        return tiles.get(ThreadLocalRandom.current().nextInt(tiles.size()));
+    }
+
+    public static String getRandomString(List<String> strings) {
+        return strings.get(ThreadLocalRandom.current().nextInt(strings.size()));
+    }
+
+    public static int getRandomInt(Integer int1, Integer int2) {
+        return ThreadLocalRandom.current().nextInt(int1, int2);
     }
 }

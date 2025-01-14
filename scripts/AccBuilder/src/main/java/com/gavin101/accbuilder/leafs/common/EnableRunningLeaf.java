@@ -1,0 +1,27 @@
+package com.gavin101.accbuilder.leafs.common;
+
+import net.eternalclient.api.events.ToggleRunEvent;
+import net.eternalclient.api.frameworks.tree.Leaf;
+import net.eternalclient.api.utilities.Log;
+import net.eternalclient.api.utilities.ReactionGenerator;
+import net.eternalclient.api.utilities.math.Calculations;
+import net.eternalclient.api.wrappers.walking.Walking;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+public class EnableRunningLeaf extends Leaf {
+    @Override
+    public boolean isValid() {
+        int energyThreshold = ThreadLocalRandom.current().nextInt(15, 30);
+        return Walking.getRunEnergy() >= energyThreshold && !Walking.isRunEnabled();
+    }
+
+    @Override
+    public int onLoop() {
+        Log.info("Enabling running");
+        new ToggleRunEvent(true).setEventCompleteCondition(
+                Walking::isRunEnabled, Calculations.random(250, 350)
+                ).execute();
+        return ReactionGenerator.getPredictable();
+    }
+}

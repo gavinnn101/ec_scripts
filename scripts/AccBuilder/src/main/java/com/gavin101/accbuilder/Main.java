@@ -1,6 +1,7 @@
 package com.gavin101.accbuilder;
 
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.accbuilder.branches.combat.alkharidguards.FightAlkharidGuardsBranch;
 import com.gavin101.accbuilder.branches.combat.barbarians.FightBarbariansBranch;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
@@ -12,7 +13,7 @@ import com.gavin101.accbuilder.branches.fishing.bait.BaitFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.flyfishing.FlyFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.shrimp.FishShrimpBranch;
 import com.gavin101.accbuilder.branches.mining.MineIronBranch;
-import com.gavin101.accbuilder.branches.mining.MineTinBranch;
+import com.gavin101.accbuilder.branches.mining.MineCopperBranch;
 import com.gavin101.accbuilder.branches.quests.cooksassistant.CooksAssistantBranch;
 import com.gavin101.accbuilder.branches.quests.doricsquest.DoricsQuestBranch;
 import com.gavin101.accbuilder.branches.quests.goblindiplomacy.GoblinDiplomacyBranch;
@@ -27,6 +28,7 @@ import com.gavin101.accbuilder.constants.combat.BarbarianCombat;
 import com.gavin101.accbuilder.constants.combat.ChickenCombat;
 import com.gavin101.accbuilder.constants.combat.CowCombat;
 import com.gavin101.accbuilder.constants.fishing.BaitFishing;
+import com.gavin101.accbuilder.constants.fishing.Fishing;
 import com.gavin101.accbuilder.constants.fishing.FlyFishing;
 import com.gavin101.accbuilder.constants.fishing.ShrimpFishing;
 import com.gavin101.accbuilder.constants.mining.Mining;
@@ -108,6 +110,7 @@ public class Main extends AbstractScript implements Painter {
         activityTimer = new Timer();
 
         tree.addBranches(
+                new EnableRunningLeaf(),
                 new CacheBankLeaf(),
                 new RequestMuleLeaf(),
                 new TierOneBranch().addShuffledLeafs(
@@ -135,7 +138,7 @@ public class Main extends AbstractScript implements Painter {
                                         )
                                 )
                         ),
-                        new MineTinBranch().addLeafs(
+                        new MineCopperBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Mining.MINING_INVENTORY)
                                         .equipmentLoadout(Mining.MINING_EQUIPMENT)
@@ -143,8 +146,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new GoToTileLeaf(Mining.LUMBRIDGE_TIN_TILE),
-                                                new MineRockLeaf("Tin rocks")
+                                                new GoToTileLeaf(GLib.getRandomTile(Mining.ROCK_TO_TILES_MAP("Copper rocks"))),
+                                                new MineRockLeaf("Copper rocks")
                                         )
                                 )
                         ),
@@ -156,7 +159,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new StartFishingLeaf("Net")
+                                                new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.SMALL_FISHING_NET))),
+                                                new StartFishingLeaf(Fishing.FishingType.SMALL_FISHING_NET)
                                         )
                                 )
                         ),
@@ -191,7 +195,7 @@ public class Main extends AbstractScript implements Painter {
                                         new IsAfkBranch().addLeafs(
                                                 new LootItemsLeaf(ChickenCombat.CHICKEN_LOOT, 3),
                                                 new SetAttackStyleLeaf(),
-                                                new FightMonsterLeaf("Chicken", ChickenCombat.CHICKEN_AREA)
+                                                new FightMonsterLeaf("Chicken", GLib.getRandomArea(ChickenCombat.CHICKEN_COMBAT_AREAS))
                                         )
                                 )
                         )
@@ -229,7 +233,7 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new GoToTileLeaf(Mining.RIMMINGTON_IRON_TILE),
+                                                new GoToTileLeaf(GLib.getRandomTile(Mining.ROCK_TO_TILES_MAP("Iron rocks"))),
                                                 new MineRockLeaf("Iron rocks")
                                         )
                                 )
@@ -242,7 +246,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new StartFishingLeaf("Bait")
+                                                new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.BAIT_FISHING))),
+                                                new StartFishingLeaf(Fishing.FishingType.BAIT_FISHING)
                                         )
                                 )
                         ),
@@ -294,9 +299,11 @@ public class Main extends AbstractScript implements Painter {
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
+                                        new EatFoodLeaf(ItemID.HERRING),
                                         new IsAfkBranch().addLeafs(
+                                                new LootItemsLeaf(CowCombat.COW_LOOT, 3),
                                                 new SetAttackStyleLeaf(),
-                                                new FightMonsterLeaf("Cow", CowCombat.COW_AREA)
+                                                new FightMonsterLeaf("Cow", GLib.getRandomArea(CowCombat.COW_COMBAT_AREAS))
                                         )
                                 )
                         )
@@ -338,7 +345,7 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new GoToTileLeaf(Mining.RIMMINGTON_IRON_TILE),
+                                                new GoToTileLeaf(GLib.getRandomTile(Mining.ROCK_TO_TILES_MAP("Iron rocks"))),
                                                 new MineRockLeaf("Iron rocks")
                                         )
                                 )
@@ -351,7 +358,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new StartFishingLeaf("Lure")
+                                                new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.FLY_FISHING))),
+                                                new StartFishingLeaf(Fishing.FishingType.FLY_FISHING)
                                         )
                                 )
                         ),
