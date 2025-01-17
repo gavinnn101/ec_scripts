@@ -1,24 +1,26 @@
-package com.gavin101.accbuilder.leafs.common;
+package com.gavin101.GLib.leafs.common;
 
 import com.gavin101.GLib.GLib;
+import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.Players;
-import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
-import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.wrappers.map.Area;
 import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.walking.Walking;
 
+import java.util.function.Supplier;
+
+@RequiredArgsConstructor
 public class RequestMuleLeaf extends Leaf {
     private final Area muleArea = new RectArea(3146, 3507, 3182, 3470);
 
+    private final Supplier<Boolean> validator;
+
     @Override
     public boolean isValid() {
-        // This should probably be replaced by a flag set when we fail to purchase an inventory loadout.
-        // Not sure how to do that yet.
-        return OwnedItems.count(ItemID.COINS_995) < 5000;
+        return validator.get();
     }
 
     @Override

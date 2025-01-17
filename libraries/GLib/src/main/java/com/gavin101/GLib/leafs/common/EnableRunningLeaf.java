@@ -1,4 +1,4 @@
-package com.gavin101.accbuilder.leafs.common;
+package com.gavin101.GLib.leafs.common;
 
 import net.eternalclient.api.events.ToggleRunEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -7,12 +7,10 @@ import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.walking.Walking;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class EnableRunningLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        int energyThreshold = ThreadLocalRandom.current().nextInt(15, 30);
+        int energyThreshold = Calculations.random(15, 30);
         return Walking.getRunEnergy() >= energyThreshold && !Walking.isRunEnabled();
     }
 

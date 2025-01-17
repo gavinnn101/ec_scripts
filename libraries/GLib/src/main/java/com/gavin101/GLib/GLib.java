@@ -35,7 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 public final class GLib {
     public static void talkWithNpc(String npcName) {
@@ -167,19 +166,15 @@ public final class GLib {
     }
 
     public static Area getRandomArea(List<Area> areas) {
-        return areas.get(ThreadLocalRandom.current().nextInt(areas.size()));
+        return areas.get(Calculations.random(areas.size()));
     }
 
     public static WorldTile getRandomTile(List<WorldTile> tiles) {
-        return tiles.get(ThreadLocalRandom.current().nextInt(tiles.size()));
+        return tiles.get(Calculations.random(tiles.size()));
     }
 
     public static String getRandomString(List<String> strings) {
-        return strings.get(ThreadLocalRandom.current().nextInt(strings.size()));
-    }
-
-    public static int getRandomInt(Integer int1, Integer int2) {
-        return ThreadLocalRandom.current().nextInt(int1, int2);
+        return strings.get(Calculations.random(strings.size()));
     }
 
     public static boolean isWidgetValid(Widget widget) {
@@ -196,7 +191,7 @@ public final class GLib {
             Log.debug("Tab isn't open. Opening tab: " +tab.name());
             if (Tabs.open(tab)) {
                 MethodProvider.sleepUntil(
-                        () -> Tabs.isOpen(tab), Calculations.random(1500, 3000)
+                        tab::isOpen, Calculations.random(1500, 3000)
                 );
                 // Above check seems correct but still spam opens tab.
                 // Will add an extra sleep as a potential band-aid.

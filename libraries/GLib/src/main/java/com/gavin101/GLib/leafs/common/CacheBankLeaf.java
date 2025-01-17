@@ -1,4 +1,4 @@
-package com.gavin101.accbuilder.leafs.common;
+package com.gavin101.GLib.leafs.common;
 
 import com.gavin101.events.CacheBankEvent;
 import net.eternalclient.api.containers.bank.Bank;

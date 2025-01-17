@@ -12,8 +12,6 @@ import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.item.ItemComposite;
 import net.eternalclient.api.wrappers.skill.Skill;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 @RequiredArgsConstructor
 public class EatFoodLeaf extends Leaf {
     private final int foodToEatID;
@@ -38,7 +36,7 @@ public class EatFoodLeaf extends Leaf {
         int fullHp = Skills.getRealLevel(Skill.HITPOINTS);
         int foodHealth = foodToHealthMap(foodToEatID);
         int maxHpToEatAt = (fullHp - foodHealth) + 1;
-        int randomVariation = ThreadLocalRandom.current().nextInt(-3, 4);
+        int randomVariation = Calculations.random(-3, 4);
         return Math.max(5, Math.min(maxHpToEatAt + randomVariation, maxHpToEatAt));
     }
 

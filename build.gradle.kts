@@ -1,11 +1,11 @@
-val userHomeDir: String = System.getProperty("user.home");
+val userHomeDir: String = System.getProperty("user.home")
 
 plugins {
     id("java")
 }
 
 subprojects {
-    val projectName: String = name;
+    val projectName: String = name
 
     apply(plugin = "java")
 

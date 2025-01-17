@@ -2,6 +2,7 @@ package com.gavin101.accbuilder;
 
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.GLib.leafs.common.*;
 import com.gavin101.accbuilder.branches.combat.alkharidguards.FightAlkharidGuardsBranch;
 import com.gavin101.accbuilder.branches.combat.barbarians.FightBarbariansBranch;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
@@ -112,7 +113,7 @@ public class Main extends AbstractScript implements Painter {
         tree.addBranches(
                 new EnableRunningLeaf(),
                 new CacheBankLeaf(),
-                new RequestMuleLeaf(),
+                new RequestMuleLeaf(() -> OwnedItems.count(ItemID.COINS_995) < 5000),
                 new TierOneBranch().addShuffledLeafs(
                         new DoricsQuestBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
@@ -445,17 +446,16 @@ public class Main extends AbstractScript implements Painter {
     }
 
     private final CustomPaint paint = new CustomPaint(PaintLocations.TOP_LEFT_PLAY_SCREEN)
-            .setInfoSupplier(() -> new ArrayList<String>()
-            {{
+            .setInfoSupplier(() -> new ArrayList<String>() {{
                 add(getScriptName() + " v" + getScriptVersion());
                 add("Runtime: " + startTimer);
-                add("Current Activity: " +currentActivity);
+                add("Current Activity: " + currentActivity);
                 add("Current Branch: " + Tree.currentBranch);
                 add("Current Leaf: " + Tree.currentLeaf);
-                add("Current skill: " +currentSkillToTrain.getName());
+                add("Current skill: " + currentSkillToTrain.getName());
                 add("Current skill level: " + Skills.getRealLevel(currentSkillToTrain));
-                add("Current skill level goal: " +currentLevelGoal);
-                add("Current skill xp/hr: " +calculateExpPerHour(currentSkillToTrain));
+                add("Current skill level goal: " + currentLevelGoal);
+                add("Current skill xp/hr: " + calculateExpPerHour(currentSkillToTrain));
             }}.toArray(new String[0]));
 
     @Override
@@ -467,7 +467,9 @@ public class Main extends AbstractScript implements Painter {
         long timeRan = activityTimer.elapsed();
         long expGained = SkillTracker.getGainedExperience(skill);
 
-        if (timeRan == 0 || expGained == 0) {return 0;}
+        if (timeRan == 0 || expGained == 0) {
+            return 0;
+        }
 
         double hoursElapsed = timeRan / 3600000.0;
         double expPerHour = expGained / hoursElapsed;
@@ -488,7 +490,7 @@ public class Main extends AbstractScript implements Painter {
             return;
         }
         SkillTracker.deregister();
-        Log.debug("Setting current activity to: " +activity);
+        Log.debug("Setting current activity to: " + activity);
         currentActivity = activity;
         activityLoadoutsFulfilled = false;
         currentSkillToTrain = skill;
