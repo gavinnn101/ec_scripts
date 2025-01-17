@@ -166,15 +166,15 @@ public final class GLib {
     }
 
     public static Area getRandomArea(List<Area> areas) {
-        return areas.get(Calculations.random(areas.size()));
+        return areas.get(Calculations.random(areas.size() - 1));
     }
 
     public static WorldTile getRandomTile(List<WorldTile> tiles) {
-        return tiles.get(Calculations.random(tiles.size()));
+        return tiles.get(Calculations.random(tiles.size() - 1));
     }
 
     public static String getRandomString(List<String> strings) {
-        return strings.get(Calculations.random(strings.size()));
+        return strings.get(Calculations.random(strings.size() - 1));
     }
 
     public static boolean isWidgetValid(Widget widget) {

@@ -61,7 +61,7 @@ public class CookFoodBranch extends Branch {
             case ItemID.RAW_DARK_CRAB:
                 return 90;
             default:
-                // return 0, or throw if no default is acceptable:
+                // Should probably throw exception or something instead..
                 return 0;
         }
     }

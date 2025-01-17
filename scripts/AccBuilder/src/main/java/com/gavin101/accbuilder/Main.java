@@ -24,6 +24,9 @@ import com.gavin101.accbuilder.branches.quests.witchspotion.WitchsPotionBranch;
 import com.gavin101.accbuilder.branches.tiers.TierOneBranch;
 import com.gavin101.accbuilder.branches.tiers.TierThreeBranch;
 import com.gavin101.accbuilder.branches.tiers.TierTwoBranch;
+import com.gavin101.accbuilder.branches.woodcutting.ChopNormalTreesBranch;
+import com.gavin101.accbuilder.branches.woodcutting.ChopOakTreesBranch;
+import com.gavin101.accbuilder.branches.woodcutting.ChopWillowTreesBranch;
 import com.gavin101.accbuilder.constants.combat.AlkharidGuardsCombat;
 import com.gavin101.accbuilder.constants.combat.BarbarianCombat;
 import com.gavin101.accbuilder.constants.combat.ChickenCombat;
@@ -34,6 +37,7 @@ import com.gavin101.accbuilder.constants.fishing.FlyFishing;
 import com.gavin101.accbuilder.constants.fishing.ShrimpFishing;
 import com.gavin101.accbuilder.constants.mining.Mining;
 import com.gavin101.accbuilder.constants.quests.*;
+import com.gavin101.accbuilder.constants.woodcutting.Woodcutting;
 import com.gavin101.accbuilder.leafs.combat.*;
 import com.gavin101.accbuilder.leafs.common.*;
 import com.gavin101.accbuilder.leafs.cooking.CookFoodLeaf;
@@ -49,6 +53,7 @@ import com.gavin101.accbuilder.leafs.quests.witchspotion.BurnMeatLeaf;
 import com.gavin101.accbuilder.leafs.quests.witchspotion.DrinkFromCauldronLeaf;
 import com.gavin101.accbuilder.leafs.quests.witchspotion.GetRatTailLeaf;
 import com.gavin101.accbuilder.leafs.quests.witchspotion.TalkToWitchLeaf;
+import com.gavin101.accbuilder.leafs.woodcutting.ChopTreeLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.AttackStyle;
 import net.eternalclient.api.accessors.Skills;
@@ -139,6 +144,20 @@ public class Main extends AbstractScript implements Painter {
                                         )
                                 )
                         ),
+                        new ChopNormalTreesBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
+                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Tree"))),
+                                                new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new ChopTreeLeaf("Tree")
+                                        )
+                                )
+                        ),
                         new MineCopperBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Mining.MINING_INVENTORY)
@@ -223,6 +242,20 @@ public class Main extends AbstractScript implements Painter {
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
                                                 new TalkToWizardLeaf()
+                                        )
+                                )
+                        ),
+                        new ChopOakTreesBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
+                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Oak tree"))),
+                                                new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new ChopTreeLeaf("Oak tree")
                                         )
                                 )
                         ),
@@ -335,6 +368,20 @@ public class Main extends AbstractScript implements Painter {
                                         new IsAfkBranch().addLeafs(
                                                 new MakeArmorLeaf(),
                                                 new TalkToGeneralLeaf()
+                                        )
+                                )
+                        ),
+                        new ChopWillowTreesBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
+                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Willow tree"))),
+                                                new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new ChopTreeLeaf("Willow tree")
                                         )
                                 )
                         ),

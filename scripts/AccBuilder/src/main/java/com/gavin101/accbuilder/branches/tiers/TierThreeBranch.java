@@ -14,6 +14,7 @@ public class TierThreeBranch extends Branch {
     public boolean isValid() {
         return !Quest.WITCHS_POTION.isFinished()
                 || !Quest.GOBLIN_DIPLOMACY.isFinished()
+                || Skills.getRealLevel(Skill.WOODCUTTING) < 41
                 || Skills.getRealLevel(Skill.MINING) < 41
                 || Skills.getRealLevel(Skill.FISHING) < 40
                 || OwnedItems.contains(ItemID.RAW_SALMON)

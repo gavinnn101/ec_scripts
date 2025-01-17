@@ -15,6 +15,7 @@ public class TierTwoBranch extends Branch {
     public boolean isValid() {
         return !Quest.SHEEP_SHEARER.isFinished()
                 || !Quest.IMP_CATCHER.isFinished()
+                || Skills.getRealLevel(Skill.WOODCUTTING) < 31
                 || Skills.getRealLevel(Skill.MINING) < 31
                 || Skills.getRealLevel(Skill.FISHING) < 20
                 || OwnedItems.contains(ItemID.RAW_SARDINE)

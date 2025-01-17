@@ -1,4 +1,4 @@
-package com.gavin101.accbuilder.leafs.combat;
+package com.gavin101.accbuilder.leafs.common;
 
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GroundItems;

@@ -15,6 +15,7 @@ public class TierOneBranch extends Branch {
     public boolean isValid() {
         return !Quest.COOKS_ASSISTANT.isFinished()
                 || !Quest.DORICS_QUEST.isFinished()
+                || Skills.getRealLevel(Skill.WOODCUTTING) < 15
                 || Skills.getRealLevel(Skill.MINING) < 15
                 || Skills.getRealLevel(Skill.FISHING) < 5
                 || OwnedItems.contains(ItemID.RAW_SHRIMPS)
