@@ -12,14 +12,14 @@ import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.walking.Walking;
 
 public class CombatHelper {
-    private String monsterName;         // Name of the monster to fight.
-    private RectArea monsterArea;       // Area that the monsters are in.
-    private boolean buryBones;          // Whether to bury bones or not.
-    private boolean shouldEatFood;      // Whether to eat food or not.
-    private String foodToEat;           // The name of food to eat.
-    private int eatThresholdPercent;    // % HP threshold to eat at.
-    private boolean lootItems;          // Whether to loot items.
-    private String[] itemsToLoot;       // List of items to loot.
+    private final String monsterName;         // Name of the monster to fight.
+    private final RectArea monsterArea;       // Area that the monsters are in.
+    private final boolean buryBones;          // Whether to bury bones or not.
+    private final boolean shouldEatFood;      // Whether to eat food or not.
+    private final String foodToEat;           // The name of food to eat.
+    private final int eatThresholdPercent;    // % HP threshold to eat at.
+    private final boolean lootItems;          // Whether to loot items.
+    private final String[] itemsToLoot;       // List of items to loot.
 
     public CombatHelper(
             String monsterName,
