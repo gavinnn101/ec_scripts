@@ -1,8 +1,8 @@
 package com.gavin101.test;
 
 
-import com.gavin101.test.accbuilder.AccBuilder;
-import com.gavin101.test.accbuilder.goal.AvailableGoals;
+import com.gavin101.test.branches.TestBranch;
+import com.gavin101.test.leafs.TestLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
@@ -11,9 +11,12 @@ import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
 import net.eternalclient.api.script.ScriptManifest;
 import net.eternalclient.api.utilities.Log;
+import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.paint.CustomPaint;
+import net.eternalclient.api.utilities.paint.PaintLocations;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 @ScriptManifest(
         name = "Test",
@@ -24,28 +27,36 @@ import java.awt.*;
 )
 
 public class Main extends AbstractScript implements Painter {
-    public static AccBuilder accBuilder = new AccBuilder();
-    private Tree goalTree;
-    private CustomPaint paint;
+    private final Tree tree = new Tree();
+    private Timer startTimer;
 
     public void onStart(String[] args) {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
 
-        int goalFishingLevel = 20;
-        Main.accBuilder
-                .addGoal(AvailableGoals.Quests.DORICS_QUEST)
-                .addGoal(AvailableGoals.Skills.FISHING(goalFishingLevel));
-        goalTree = Main.accBuilder.buildGoalsTree();
-        Log.debug("Tree branches: " +goalTree.getBranches());
+        startTimer = new Timer();
 
-        paint = accBuilder.buildPaint();
+        tree.addBranches(
+                new TestBranch().addLeafs(
+                        new TestLeaf()
+                )
+        );
     }
 
     @Override
     public int onLoop() {
-        return goalTree.onLoop();
+        return tree.onLoop();
     }
+
+
+    private final CustomPaint paint = new CustomPaint(PaintLocations.TOP_LEFT_PLAY_SCREEN)
+            .setInfoSupplier(() -> new ArrayList<String>()
+            {{
+                add(getScriptName() + " v" + getScriptVersion());
+                add("Runtime: " + startTimer);
+                add("Current Branch: " + Tree.currentBranch);
+                add("Current Leaf: " + Tree.currentLeaf);
+            }}.toArray(new String[0]));
 
     @Override
     public void onPaint(Graphics2D g) {
