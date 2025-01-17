@@ -1,5 +1,6 @@
 package com.gavin101.tutorialisland.leafs.MinerRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Widgets;
@@ -21,7 +22,7 @@ public class SmithDaggerLeaf extends Leaf {
     public int onLoop() {
         Log.info("Smithing bronze dagger.");
         WidgetChild daggerWidget = Widgets.getWidgetChild(Constants.SMITHING_PARENT_ID, Constants.SMITHING_DAGGER_ID);
-        if (daggerWidget != null && daggerWidget.isVisible()) {
+        if (GLib.isWidgetValid(daggerWidget)) {
             Log.debug("Selecting 'Smith' on dagger widget.");
             new WidgetEvent(daggerWidget, "Smith").setEventCompleteCondition(
                     () -> Inventory.contains("Bronze dagger"), Calculations.random(1500, 3500)

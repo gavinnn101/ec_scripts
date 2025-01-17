@@ -1,7 +1,7 @@
 package com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
-import com.gavin101.tutorialisland.GLib;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.containers.Inventory;
@@ -24,12 +24,11 @@ public class CookShrimpLeaf extends Leaf {
         Log.info("Cooking shrimps on fire");
         GameObject fire = GameObjects.closest("Fire");
         if (fire != null && fire.canReach()) {
-            GLib.openTab(Tab.INVENTORY);
             Log.debug("Using shrimps on fire.");
             new InventoryEvent(Inventory.get("Raw shrimps")).on(fire).setEventCompleteCondition(
                     () -> !Inventory.contains("Raw shrimps"), Calculations.random(2000, 5000)
             ).execute();
             }
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

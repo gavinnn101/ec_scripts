@@ -1,5 +1,6 @@
 package com.gavin101.tutorialisland.leafs.GuidesRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Widgets;
@@ -21,9 +22,7 @@ public class CustomizeCharacterLeaf extends Leaf {
     @Override
     public boolean isValid() {
         Widget customizeCharacterWidget = Widgets.getWidget(Constants.CUSTOMIZE_CHARACTER_PARENT_ID);
-        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 1
-                && customizeCharacterWidget != null
-                && customizeCharacterWidget.isVisible();
+        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 1 && GLib.isWidgetValid(customizeCharacterWidget);
     }
 
     @Override
@@ -31,7 +30,7 @@ public class CustomizeCharacterLeaf extends Leaf {
         Log.info("Customizing character.");
         for (int i : CUSTOMIZATION_WIDGET_IDS) {
             WidgetChild widgetChild = Widgets.getWidgetChild(Constants.CUSTOMIZE_CHARACTER_PARENT_ID, i);
-            if (widgetChild != null && widgetChild.isVisible()) {
+            if (GLib.isWidgetValid(widgetChild)) {
                 int clickAmount = Calculations.random(0, 6);
                 for (int clicks = 0; clickAmount > clicks; clicks++) {
                     new WidgetEvent(widgetChild, "Select").execute();
@@ -41,11 +40,11 @@ public class CustomizeCharacterLeaf extends Leaf {
         }
         Log.info("Confirming character customization screen.");
         WidgetChild confirmCustomizationWidget = Widgets.getWidgetChild(Constants.CUSTOMIZE_CHARACTER_PARENT_ID, Constants.CUSTOMIZE_CHARACTER_CONFIRM_ID);
-        if (confirmCustomizationWidget != null && confirmCustomizationWidget.isVisible()) {
+        if (GLib.isWidgetValid(confirmCustomizationWidget)) {
             Log.debug("Clicking 'Confirm' button on character customization screen.");
             new WidgetEvent(confirmCustomizationWidget, "Confirm").setEventCompleteCondition(
                     () -> !confirmCustomizationWidget.isVisible(), Calculations.random(2000, 3500)).execute();
         }
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

@@ -43,6 +43,6 @@ public class EndScriptLeaf extends Leaf {
             ).execute();
             AbstractScript.setStopped();
         }
-        return ReactionGenerator.getAFK();
+        return ReactionGenerator.getNormal();
     }
 }

@@ -13,34 +13,30 @@ import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
 import net.eternalclient.api.wrappers.walking.Walking;
 
-public class FightRatLeaf extends Leaf {
+public class RangeRatLeaf extends Leaf {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return ((tutorialProgress == 450 || tutorialProgress == 460)
-                || ((tutorialProgress == 480 || tutorialProgress == 490) && Equipment.contains("Shortbow", "Bronze arrow")))
+        return (tutorialProgress == 480 && Equipment.contains("Shortbow", "Bronze arrow"))
+                || tutorialProgress == 490
                 && !Players.localPlayer().isInCombat();
     }
 
     @Override
     public int onLoop() {
-        Log.info("Fighting a rat.");
-        NPC rat = NPCs.closest(g -> g.hasName("Giant rat") && !g.isInCombat()
-                && (g.canReach() || Players.localPlayer().hasLineOfSightTo(g))
+        Log.info("Fighting a rat with range.");
+        NPC rat = NPCs.closest(g -> g.hasName("Giant rat")
+                && Players.localPlayer().hasLineOfSightTo(g)
+                && !g.isInCombat()
         );
         if (rat != null) {
             Log.debug("Interacting with rat 'Attack'.");
             new EntityInteractEvent(rat, "Attack").setEventCompleteCondition(
                     () -> Players.localPlayer().isInCombat(), Calculations.random(1500, 3500)
             ).execute();
-        }
-        // Sometimes we get stuck behind objects trying to range the rat even though we *should* have LOS of it.
-        // So we'll move to a random tile in the area and try again.
-        if (!Players.localPlayer().isInCombat()) {
-            Log.debug("Didn't get in combat with the rat. Moving to a different tile.");
-            Walking.localWalk(Constants.COMBAT_INSTRUCTOR_AREA.getRandomTile(),
-                    () -> Constants.COMBAT_INSTRUCTOR_AREA.contains(Players.localPlayer())
-            );
+        } else if (!Players.localPlayer().isInCombat()) {
+                Log.debug("Didn't find a rat in LOS. Moving to a different tile.");
+                Walking.localWalk(Constants.COMBAT_INSTRUCTOR_AREA.getRandomTile());
         }
         return ReactionGenerator.getNormal();
     }

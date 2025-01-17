@@ -1,7 +1,7 @@
 package com.gavin101.tutorialisland.leafs.CooksRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
-import com.gavin101.tutorialisland.GLib;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
@@ -9,12 +9,13 @@ import net.eternalclient.api.utilities.ReactionGenerator;
 public class TalkToCookLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 140;
+        int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
+        return tutorialProgress == 120 || tutorialProgress == 130 || tutorialProgress == 140;
     }
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Master Chef");
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc("Master Chef", Constants.COOKS_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

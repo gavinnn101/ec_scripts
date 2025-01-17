@@ -1,11 +1,11 @@
 package com.gavin101.tutorialisland;
 
+import com.gavin101.GLib.branches.common.IsAfkBranch;
 import com.gavin101.tutorialisland.branches.*;
 import com.gavin101.tutorialisland.leafs.BankRoomLeafs.*;
 import com.gavin101.tutorialisland.leafs.CombatRoomLeafs.*;
 import com.gavin101.tutorialisland.leafs.CooksRoomLeafs.*;
 import com.gavin101.tutorialisland.leafs.GuidesRoomLeafs.CustomizeCharacterLeaf;
-import com.gavin101.tutorialisland.leafs.GuidesRoomLeafs.LeaveGuidesRoomLeaf;
 import com.gavin101.tutorialisland.leafs.GuidesRoomLeafs.SetDisplayNameLeaf;
 import com.gavin101.tutorialisland.leafs.GuidesRoomLeafs.TalkToGuideLeaf;
 import com.gavin101.tutorialisland.leafs.MageRoomLeafs.AttackChickenLeaf;
@@ -13,11 +13,9 @@ import com.gavin101.tutorialisland.leafs.MageRoomLeafs.OpenMageTabLeaf;
 import com.gavin101.tutorialisland.leafs.MageRoomLeafs.TalkToMageLeaf;
 import com.gavin101.tutorialisland.leafs.MainlandLeafs.EndScriptLeaf;
 import com.gavin101.tutorialisland.leafs.MinerRoomLeafs.*;
-import com.gavin101.tutorialisland.leafs.PrayerRoomLeafs.LeavePrayerRoomLeaf;
 import com.gavin101.tutorialisland.leafs.PrayerRoomLeafs.OpenFriendsTabLeaf;
 import com.gavin101.tutorialisland.leafs.PrayerRoomLeafs.OpenPrayerTabLeaf;
 import com.gavin101.tutorialisland.leafs.PrayerRoomLeafs.TalkToBrotherLeaf;
-import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.ClimbDownLadderLeaf;
 import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.OpenQuestTabLeaf;
 import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.TalkToQuesterLeaf;
 import com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs.*;
@@ -55,74 +53,72 @@ public class Main extends AbstractScript implements Painter {
         startTimer = new Timer();
         boolean walkToGE = false;
         tree.addBranches(
-                new GuidesRoomBranch().addLeafs(
-                        new SetDisplayNameLeaf(),
-                        new CustomizeCharacterLeaf(),
-                        new TalkToGuideLeaf(),
-                        new LeaveGuidesRoomLeaf()
-                ),
-                new SurvivalExpertBranch().addLeafs(
-                        new TalkToExpertLeaf(),
-                        new OpenInventoryLeaf(),
-                        new FishShrimpLeaf(),
-                        new OpenSkillsTabLeaf(),
-                        new ChopTreeLeaf(),
-                        new LightFireLeaf(),
-                        new CookShrimpLeaf(),
-                        new LeaveSurvivalAreaLeaf()
-                ),
-                new CooksRoomBranch().addLeafs(
-                        new GetToCookLeaf(),
-                        new TalkToCookLeaf(),
-                        new MakeDoughLeaf(),
-                        new BakeBreadLeaf(),
-                        new LeaveCooksRoomLeaf()
-                ),
-                new QuesterRoomBranch().addLeafs(
-                        new TalkToQuesterLeaf(),
-                        new OpenQuestTabLeaf(),
-                        new ClimbDownLadderLeaf()
-                ),
-                new MinerRoomBranch().addLeafs(
-                        new TalkToMinerLeaf(),
-                        new MineRocksLeaf(),
-                        new SmeltBarLeaf(),
-                        new UseAnvilLeaf(),
-                        new SmithDaggerLeaf()
-                ),
-                new CombatRoomBranch().addLeafs(
-                        new TalkToCombatInstructorLeaf(),
-                        new OpenEquipmentTabLeaf(),
-                        new OpenEquipmentInterfaceLeaf(),
-                        new EquipDaggerLeaf(),
-                        new EquipSwordLeaf(),
-                        new OpenCombatTabLeaf(),
-                        new GoToRatPitLeaf(),
-                        new FightRatLeaf(),
-                        new EquipBowLeaf(),
-                        new LeaveCombatAreaLeaf()
-                ),
-                new BankRoomBranch().addLeafs(
-                        new OpenBankLeaf(),
-                        new UsePollBoothLeaf(),
-                        new GoToAccountGuideLeaf(),
-                        new TalkToAccountGuideLeaf(),
-                        new OpenManagementTabLeaf(),
-                        new LeaveBankRoomLeaf()
-                ),
-                new PrayerRoomBranch().addLeafs(
-                        new TalkToBrotherLeaf(),
-                        new OpenPrayerTabLeaf(),
-                        new OpenFriendsTabLeaf(),
-                        new LeavePrayerRoomLeaf()
-                ),
-                new MageRoomBranch().addLeafs(
-                        new TalkToMageLeaf(),
-                        new OpenMageTabLeaf(),
-                        new AttackChickenLeaf()
-                ),
-                new MainlandBranch().addLeafs(
-                        new EndScriptLeaf(walkToGE)
+                new IsAfkBranch().addLeafs(
+                        // https://oldschool.runescape.wiki/w/RuneScape:Varplayer/281
+                        new GuidesRoomBranch().addLeafs(
+                                new SetDisplayNameLeaf(),
+                                new CustomizeCharacterLeaf(),
+                                new TalkToGuideLeaf()
+                        ),
+                        new SurvivalExpertBranch().addLeafs(
+                                new TalkToExpertLeaf(),
+                                new OpenInventoryLeaf(),
+                                new FishShrimpLeaf(),
+                                new OpenSkillsTabLeaf(),
+                                new ChopTreeLeaf(),
+                                new LightFireLeaf(),
+                                new CookShrimpLeaf()
+                        ),
+                        new CooksRoomBranch().addLeafs(
+                                new TalkToCookLeaf(),
+                                new MakeDoughLeaf(),
+                                new BakeBreadLeaf()
+                        ),
+                        new QuesterRoomBranch().addLeafs(
+                                new TalkToQuesterLeaf(),
+                                new OpenQuestTabLeaf()
+                        ),
+                        new MinerRoomBranch().addLeafs(
+                                new TalkToMinerLeaf(),
+                                new MineRocksLeaf(),
+                                new SmeltBarLeaf(),
+                                new UseAnvilLeaf(),
+                                new SmithDaggerLeaf()
+                        ),
+                        new CombatRoomBranch().addLeafs(
+                                new TalkToCombatInstructorLeaf(),
+                                new OpenEquipmentTabLeaf(),
+                                new OpenEquipmentInterfaceLeaf(),
+                                new EquipDaggerLeaf(),
+                                new CloseEquipmentInterfaceLeaf(),
+                                new EquipSwordLeaf(),
+                                new OpenCombatTabLeaf(),
+                                new GoToRatPitLeaf(),
+                                new MeleeRatLeaf(),
+                                new EquipBowLeaf(),
+                                new RangeRatLeaf()
+                        ),
+                        new BankRoomBranch().addLeafs(
+                                new GoToBankAreaLeaf(),
+                                new OpenBankLeaf(),
+                                new CloseBankLeaf(),
+                                new UsePollBoothLeaf(),
+                                new TalkToAccountGuideLeaf(),
+                                new OpenManagementTabLeaf()
+                        ),
+                        new PrayerRoomBranch().addLeafs(
+                                new TalkToBrotherLeaf(),
+                                new OpenPrayerTabLeaf(),
+                                new OpenFriendsTabLeaf()
+                        ),
+                        new MageRoomBranch().addLeafs(
+                                new TalkToMageLeaf(),
+                                new OpenMageTabLeaf(),
+                                new AttackChickenLeaf()
+                        ),
+                        new MainlandBranch().addLeafs(
+                                new EndScriptLeaf(walkToGE)
+                        )
                 )
         );
     }

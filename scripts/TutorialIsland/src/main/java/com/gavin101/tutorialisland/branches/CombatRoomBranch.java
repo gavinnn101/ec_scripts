@@ -9,8 +9,6 @@ public class CombatRoomBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorialProgress >= 360 && tutorialProgress < 510
-                && !Players.localPlayer().isMoving()
-                && !Players.localPlayer().isAnimating();
+        return tutorialProgress >= 360 && tutorialProgress < 500;
     }
 }

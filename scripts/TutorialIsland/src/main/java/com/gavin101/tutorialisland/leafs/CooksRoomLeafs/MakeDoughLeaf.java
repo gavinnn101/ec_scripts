@@ -1,7 +1,7 @@
 package com.gavin101.tutorialisland.leafs.CooksRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
-import com.gavin101.tutorialisland.GLib;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.events.InventoryEvent;
@@ -20,12 +20,12 @@ public class MakeDoughLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Making bread dough");
-        GLib.openTab(Tab.INVENTORY);
-        Log.debug("Combining flour with water to make bread dough.");
-        new InventoryEvent(Inventory.get("Pot of flour")).on(Inventory.get("Bucket of water")
-        ).setEventCompleteCondition(
-                () -> Inventory.contains("Bread dough"), Calculations.random(1500, 3000)
-        ).execute();
+        if (Inventory.contains("Pot of flour") && Inventory.contains("Bucket of water")) {
+            new InventoryEvent(Inventory.get("Pot of flour")).on(Inventory.get("Bucket of water")
+            ).setEventCompleteCondition(
+                    () -> Inventory.contains("Bread dough"), Calculations.random(1500, 3000)
+            ).execute();
+        }
         return ReactionGenerator.getNormal();
     }
 }

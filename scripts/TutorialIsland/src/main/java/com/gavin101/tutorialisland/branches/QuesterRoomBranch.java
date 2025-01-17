@@ -9,8 +9,6 @@ public class QuesterRoomBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorialProgress >= 200 && tutorialProgress < 260
-                && !Players.localPlayer().isAnimating()
-                && !Players.localPlayer().isMoving();
+        return tutorialProgress >= 170 && tutorialProgress < 250;
     }
 }

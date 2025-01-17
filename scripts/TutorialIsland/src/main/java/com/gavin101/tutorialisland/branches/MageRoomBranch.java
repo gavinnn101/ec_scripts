@@ -9,8 +9,6 @@ public class MageRoomBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorialProgress >= 620 && tutorialProgress < 1000
-                && !Players.localPlayer().isMoving()
-                && !Players.localPlayer().isAnimating();
+        return tutorialProgress >= 610 && tutorialProgress < 1000;
     }
 }

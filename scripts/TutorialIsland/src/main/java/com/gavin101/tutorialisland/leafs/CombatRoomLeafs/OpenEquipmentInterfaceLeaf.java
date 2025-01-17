@@ -1,5 +1,6 @@
 package com.gavin101.tutorialisland.leafs.CombatRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Widgets;
@@ -20,10 +21,10 @@ public class OpenEquipmentInterfaceLeaf extends Leaf {
     public int onLoop() {
         Log.info("Opening equipment interface in equipment tab.");
         WidgetChild equipmentButtonWidget = Widgets.getWidgetChild(Constants.EQUIPMENT_TAB_PARENT_ID, Constants.EQUIPMENT_TAB_EQUIPMENT_INTERFACE_BUTTON_ID);
-        if (equipmentButtonWidget != null && equipmentButtonWidget.isVisible()) {
+        if (GLib.isWidgetValid(equipmentButtonWidget)) {
             Log.debug("Interacting 'View equipment stats' with equipment interface button.");
             new WidgetEvent(equipmentButtonWidget, "View equipment stats").setEventCompleteCondition(
-                    () -> PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 405, Calculations.random(1500, 3000)
+                    () -> GLib.isWidgetValid(Widgets.getWidget(Constants.EQUIPMENT_INTERFACE_PARENT_ID)), Calculations.random(1500, 3000)
             ).execute();
         }
         return ReactionGenerator.getNormal();

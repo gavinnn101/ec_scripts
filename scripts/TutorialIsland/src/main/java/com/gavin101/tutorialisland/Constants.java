@@ -7,6 +7,8 @@ import net.eternalclient.api.wrappers.map.WorldTile;
 public class Constants {
     public static final int TUTORIAL_PROGRESS_VAR = 281;
 
+    public static final RectArea GUIDE_ROOM_AREA = new RectArea(3092, 3110, 3094, 3103);
+
     public static final int SET_DISPLAY_NAME_PARENT_ID = 558;
     public static final int SET_DISPLAY_NAME_TEXT_ENTER_ID = 7;
     public static final int SET_DISPLAY_NAME_TEXT_CHECK_ID = 12;
@@ -23,10 +25,9 @@ public class Constants {
 
     public static final int CHOP_TREE_ANIMATION = 879;
 
-    public static final int COOK_ENTRANCE_DOR_ID = 9709;
-    public static final int COOK_EXIT_DOOR_ID = 9710;
+    public static final RectArea COOKS_AREA = new RectArea(3073, 3086, 3077, 3083);
 
-    public static final int QUEST_ENTRANCE_DOOR_ID = 9716;
+    public static final RectArea QUEST_GUIDE_AREA = new RectArea(3083, 3125, 3089, 3119);
 
     public static final RectArea MINING_INSTRUCTOR_AREA = new RectArea(3076, 9507, 3084, 9497);
 
@@ -34,16 +35,10 @@ public class Constants {
     public static final int SMITHING_DAGGER_ID = 9;
 
     public static final PolyArea COMBAT_INSTRUCTOR_AREA = new PolyArea(
-            new WorldTile[] {
-                    new WorldTile(3108, 9513, 0),
-                    new WorldTile(3105, 9509, 0),
-                    new WorldTile(3112, 9508, 0),
-                    new WorldTile(3112, 9515, 0)
-            }
-    );
-
-    public static final int RAT_PIT_LEFT_GATE_ID = 9719;
-    public static final int RAT_PIT_RIGHT_GATE_ID = 9720;
+            new WorldTile(3108, 9513, 0),
+            new WorldTile(3105, 9509, 0),
+            new WorldTile(3112, 9508, 0),
+            new WorldTile(3112, 9515, 0));
 
     public static final int EQUIPMENT_TAB_PARENT_ID = 387;
     public static final int EQUIPMENT_TAB_EQUIPMENT_INTERFACE_BUTTON_ID = 1;
@@ -58,21 +53,17 @@ public class Constants {
     public static final int SHORTBOW_ID = 841;
     public static final int BRONZE_ARROW_ID = 882;
 
-    public static final RectArea COMBAT_AREA_BOTTOM_LADDER = new RectArea(3110, 9524, 3111, 9523);
+    public static final RectArea BANK_AREA = new RectArea(3122, 3120, 3121, 3123);
 
-    public static final int ACCOUNT_GUIDE_EXIT_DOOR_ID = 9722;
+    public static final RectArea ACCOUNT_GUIDE_AREA = new RectArea(3125, 3125, 3129, 3123);
 
     public static final RectArea PRAYER_ROOM_AREA = new RectArea(3121, 3107, 3123, 3105);
-    public static final int PRAYER_ROOM_EXIT_DOOR_ID = 9723;
 
     public static final PolyArea MAGE_ROOM_AREA = new PolyArea(
-            new WorldTile[] {
                     new WorldTile(3138, 3091, 0),
                     new WorldTile(3143, 3086, 0),
                     new WorldTile(3142, 3091, 0),
-                    new WorldTile(3140, 3092, 0)
-            }
-    );
+                    new WorldTile(3140, 3092, 0));
 
     public static final RectArea GRAND_EXCHANGE_AREA = new RectArea(3146, 3507, 3182, 3470);
 

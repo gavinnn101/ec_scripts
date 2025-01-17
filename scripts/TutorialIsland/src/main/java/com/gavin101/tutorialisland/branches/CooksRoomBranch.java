@@ -9,8 +9,6 @@ public class CooksRoomBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorialProgress >= 130 && tutorialProgress < 200
-                && !Players.localPlayer().isAnimating()
-                && !Players.localPlayer().isMoving();
+        return tutorialProgress >= 120 && tutorialProgress < 170;
     }
 }

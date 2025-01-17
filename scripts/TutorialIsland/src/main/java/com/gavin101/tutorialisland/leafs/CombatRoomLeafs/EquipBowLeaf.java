@@ -13,7 +13,7 @@ import net.eternalclient.api.utilities.math.Calculations;
 public class EquipBowLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 480;
+        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 480 && !Equipment.containsAll(Constants.SHORTBOW_ID, Constants.BRONZE_ARROW_ID);
     }
 
     @Override
@@ -23,6 +23,6 @@ public class EquipBowLeaf extends Leaf {
         new EquipmentLoadoutEvent(loadout).setEventCompleteCondition(
                 () -> Equipment.containsAll(Constants.SHORTBOW_ID, Constants.BRONZE_ARROW_ID), Calculations.random(1500, 3000)
         ).execute();
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

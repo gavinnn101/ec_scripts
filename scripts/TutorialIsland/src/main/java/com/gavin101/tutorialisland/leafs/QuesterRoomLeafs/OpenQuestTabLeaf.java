@@ -1,7 +1,7 @@
 package com.gavin101.tutorialisland.leafs.QuesterRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
-import com.gavin101.tutorialisland.GLib;
 import net.eternalclient.api.accessors.Dialogues;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -14,12 +14,12 @@ public class OpenQuestTabLeaf extends Leaf {
     public boolean isValid() {
         return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 230
                 && !Tabs.isDisabled(Tab.QUEST)
-                && !Dialogues.inDialogue();
+                && !Tab.QUEST.isOpen();
     }
 
     @Override
     public int onLoop() {
         GLib.openTab(Tab.QUEST);
-        return ReactionGenerator.getLowPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

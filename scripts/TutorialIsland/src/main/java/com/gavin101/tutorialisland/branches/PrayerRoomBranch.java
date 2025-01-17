@@ -9,8 +9,6 @@ public class PrayerRoomBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorialProgress >= 540 && tutorialProgress < 620
-                && !Players.localPlayer().isAnimating()
-                && !Players.localPlayer().isMoving();
+        return tutorialProgress >= 540 && tutorialProgress < 610;
     }
 }

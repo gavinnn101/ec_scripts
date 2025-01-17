@@ -17,18 +17,12 @@ import net.eternalclient.api.wrappers.interactives.GameObject;
 public class UsePollBoothLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 520;
+        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 520 && !Bank.isOpen();
     }
 
     @Override
     public int onLoop() {
-        Log.info("Using poll booth.");
-        if (Bank.isOpen()) {
-            Log.debug("Closing bank.");
-            if (Bank.close()) {
-                MethodProvider.sleepUntil(() -> !Bank.isOpen(), Calculations.random(1500, 3000));
-            }
-        } else if (Dialogues.inDialogue()) {
+        if (Dialogues.inDialogue()) {
             new DialogueEvent().setEventCompleteCondition(
                     () -> PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 525, Calculations.random(1500, 5000)
             ).execute();
@@ -41,6 +35,6 @@ public class UsePollBoothLeaf extends Leaf {
                 ).execute();
             }
         }
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

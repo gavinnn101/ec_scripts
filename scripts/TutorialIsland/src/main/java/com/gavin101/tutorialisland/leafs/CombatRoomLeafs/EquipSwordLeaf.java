@@ -23,6 +23,6 @@ public class EquipSwordLeaf extends Leaf {
         new EquipmentLoadoutEvent(loadout).setEventCompleteCondition(
                 () -> Equipment.containsAll(Constants.BRONZE_SWORD_ID, Constants.WOODEN_SHIELD_ID), Calculations.random(1500, 3000)
         ).execute();
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

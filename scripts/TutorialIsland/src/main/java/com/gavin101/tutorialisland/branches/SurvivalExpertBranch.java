@@ -9,8 +9,6 @@ public class SurvivalExpertBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorailProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorailProgress >= 20 && tutorailProgress < 130
-                && !Players.localPlayer().isAnimating()
-                && !Players.localPlayer().isMoving();
+        return tutorailProgress >= 10 && tutorailProgress < 120;
     }
 }

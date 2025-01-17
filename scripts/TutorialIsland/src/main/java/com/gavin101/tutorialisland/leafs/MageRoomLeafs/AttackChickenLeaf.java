@@ -47,6 +47,8 @@ public class AttackChickenLeaf extends Leaf {
 
     public static NPC getChicken() {
         return NPCs.closest(g -> g.hasName("Chicken")
-                && !g.isInCombat() && Players.localPlayer().hasLineOfSightTo(g));
+                && Players.localPlayer().hasLineOfSightTo(g)
+                && !g.isInCombat()
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.gavin101.tutorialisland.leafs.GuidesRoomLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Widgets;
@@ -19,57 +20,55 @@ public class SetDisplayNameLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
-        Widget setDisplayNameParent = Widgets.getWidget(Constants.SET_DISPLAY_NAME_PARENT_ID);
-        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 1
-                && setDisplayNameParent != null
-                && setDisplayNameParent.isVisible();
+        return PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR) == 1 && isSetDisplayNameWindowOpen();
     }
 
     @Override
     public int onLoop() {
-        Log.info("Setting display name.");
-        WidgetChild enterDisplayNameCheckWidget = getWidget(Constants.SET_DISPLAY_NAME_TEXT_CHECK_ID);
-        WidgetChild enterDisplayNameAvailableWidget = getWidget(Constants.SET_DISPLAY_NAME_AVAILABLE_ID);
-        WidgetChild setNameWidget = getWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID);
-
-        if (enterDisplayNameCheckWidget != null && enterDisplayNameCheckWidget.isVisible()) {
-            if (isNameEmpty(enterDisplayNameCheckWidget)) {
-                enterGeneratedName();
-            } else if (isNameUnavailable(enterDisplayNameAvailableWidget)) {
-                selectSuggestedName();
-            } else {
-                setName(setNameWidget);
-            }
-        }
-
-        return ReactionGenerator.getNormal();
-    }
-
-    private WidgetChild getWidget(int childId) {
-        return Widgets.getWidgetChild(Constants.SET_DISPLAY_NAME_PARENT_ID, childId);
-    }
-
-    private boolean isNameEmpty(WidgetChild widget) {
-        return widget.getText().isEmpty() || widget.getText().contains("*");
-    }
-
-    private boolean isNameUnavailable(WidgetChild widget) {
-        return widget != null && widget.isVisible() && widget.getText().contains("not available");
-    }
-
-    private void enterGeneratedName() {
         if (displayName == null) {
             displayName = generateUsername();
         }
-        Log.debug("Entering generated display name: " + displayName);
-        WidgetChild enterDisplayNameEnterWidget = getWidget(Constants.SET_DISPLAY_NAME_TEXT_ENTER_ID);
-        new WidgetEvent(enterDisplayNameEnterWidget, "Enter name").setEventCompleteCondition(
-                () -> getWidget(Constants.SET_DISPLAY_NAME_TEXT_CHECK_ID).getText().contains("*"),
-                Calculations.random(2000, 3500)
-        ).execute();
+        if (isNameEmpty()) {
+            enterGeneratedName();
+        } else if (isNameUnavailable()) {
+            selectSuggestedName();
+        } else {
+            setName();
+        }
+        return ReactionGenerator.getNormal();
+    }
+
+    private boolean isSetDisplayNameWindowOpen() {
+        Widget setDisplayNameParent = Widgets.getWidget(Constants.SET_DISPLAY_NAME_PARENT_ID);
+        return GLib.isWidgetValid(setDisplayNameParent);
+    }
+
+    private WidgetChild getSetDisplayNameChildWidget(int childId) {
+        return Widgets.getWidgetChild(Constants.SET_DISPLAY_NAME_PARENT_ID, childId);
+    }
+
+    private boolean isNameEmpty() {
+        WidgetChild enterDisplayNameCheckWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_TEXT_CHECK_ID);
+        return GLib.isWidgetValid(enterDisplayNameCheckWidget)
+                && (enterDisplayNameCheckWidget.getText().isEmpty() || enterDisplayNameCheckWidget.getText().contains("*"));
+    }
+
+    private boolean isNameUnavailable() {
+        WidgetChild enterDisplayNameAvailableWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_AVAILABLE_ID);
+        return GLib.isWidgetValid(enterDisplayNameAvailableWidget)
+                && enterDisplayNameAvailableWidget.getText().contains("not available");
+    }
+
+    private void enterGeneratedName() {
+        Log.info("Entering generated display name: " + displayName);
+        WidgetChild enterDisplayNameEnterWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_TEXT_ENTER_ID);
+        if (!GLib.isWidgetValid(enterDisplayNameEnterWidget)) {
+            return;
+        }
+        new WidgetEvent(enterDisplayNameEnterWidget, "Enter name").execute();
         Keyboard.type(displayName, true);
         MethodProvider.tickSleepUntil(
-                () -> getWidget(Constants.SET_DISPLAY_NAME_AVAILABLE_ID).containsText("available"), 10
+                () -> getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_AVAILABLE_ID).containsText("available"), 10
         );
     }
 
@@ -79,41 +78,41 @@ public class SetDisplayNameLeaf extends Leaf {
 
         switch (suggestedNameNumber) {
             case 2:
-                suggestedNameWidget = getWidget(Constants.SET_DISPLAY_NAME_SUGGESTED_NAME_SECOND_ID);
+                suggestedNameWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SUGGESTED_NAME_SECOND_ID);
                 Log.debug("Using second suggested name.");
                 break;
             case 3:
-                suggestedNameWidget = getWidget(Constants.SET_DISPLAY_NAME_SUGGESTED_NAME_THIRD_ID);
+                suggestedNameWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SUGGESTED_NAME_THIRD_ID);
                 Log.debug("Using third suggested name.");
                 break;
             default:
-                suggestedNameWidget = getWidget(Constants.SET_DISPLAY_NAME_SUGGESTED_NAME_FIRST_ID);
+                suggestedNameWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SUGGESTED_NAME_FIRST_ID);
                 Log.debug("Using first suggested name.");
                 break;
         }
 
-        if (suggestedNameWidget != null && suggestedNameWidget.isVisible()) {
-            displayName = suggestedNameWidget.getText();
-            Log.debug("Name unavailable. Selecting suggested name: " + displayName);
-            new WidgetEvent(suggestedNameWidget, "Set name").setEventCompleteCondition(
-                    () -> getWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID) != null
-                            && getWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID).isVisible(),
-                    Calculations.random(3000, 5000)
-            ).execute();
-        } else {
+        if (!GLib.isWidgetValid(suggestedNameWidget)) {
             Log.warn("No suggested name found. This is unexpected.");
+            return;
         }
+        displayName = suggestedNameWidget.getText();
+        Log.debug("Display name was unavailable. Selecting suggested display name: " + displayName);
+        new WidgetEvent(suggestedNameWidget, "Set name").setEventCompleteCondition(
+                () -> GLib.isWidgetValid(getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID)),
+                Calculations.random(3000, 5000)
+        ).execute();
     }
 
-    private void setName(WidgetChild setNameWidget) {
-        if (setNameWidget != null && setNameWidget.isVisible()) {
+    private void setName() {
+        WidgetChild setNameWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID);
+        if (GLib.isWidgetValid(setNameWidget)) {
             Log.debug("Clicking 'Set name' button for name: " + displayName);
             new WidgetEvent(setNameWidget, "Set name").setEventCompleteCondition(
-                    () -> !setNameWidget.isVisible(), Calculations.random(2000, 3500)
+                    () -> !GLib.isWidgetValid(setNameWidget), Calculations.random(2000, 3500)
             ).execute();
             // I don't feel like this should be able to execute in a loop with these conditions but it does sometimes.
             // Will add a small sleep after to make sure it doesn't spam the button.
-            MethodProvider.sleep(750, 1500);
+//            MethodProvider.sleep(1000, 3000);
         }
     }
 

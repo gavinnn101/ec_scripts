@@ -1,7 +1,7 @@
 package com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
-import com.gavin101.tutorialisland.GLib;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
@@ -27,8 +27,7 @@ public class LightFireLeaf extends Leaf {
         Log.info("Lighting a fire.");
         GameObject nearestFire = GameObjects.closest("Fire");
         if (nearestFire == null || !nearestFire.getWorldTile().equals(Players.localPlayer().getWorldTile())) {
-            GLib.openTab(Tab.INVENTORY);
-            if (Inventory.contains("Logs")) {
+            if (Inventory.contains("Tinderbox") && Inventory.contains("Logs")) {
                 new InventoryEvent(Inventory.get("Tinderbox")).on(Inventory.get("Logs")
                 ).setEventCompleteCondition(
                         () -> Players.localPlayer().isAnimating(), Calculations.random(2000, 5000)

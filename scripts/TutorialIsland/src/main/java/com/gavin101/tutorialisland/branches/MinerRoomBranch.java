@@ -9,8 +9,6 @@ public class MinerRoomBranch extends Branch {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return tutorialProgress >= 260 && tutorialProgress < 360
-                && !Players.localPlayer().isAnimating()
-                && !Players.localPlayer().isMoving();
+        return tutorialProgress >= 250 && tutorialProgress < 360;
     }
 }
