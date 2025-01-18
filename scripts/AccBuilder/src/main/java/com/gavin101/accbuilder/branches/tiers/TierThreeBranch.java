@@ -19,6 +19,7 @@ public class TierThreeBranch extends Branch {
                 || Skills.getRealLevel(Skill.FISHING) < 40
                 || OwnedItems.contains(ItemID.RAW_SALMON)
                 || OwnedItems.contains(ItemID.RAW_TROUT)
+                || OwnedItems.contains(ItemID.WILLOW_LOGS)
                 || (General.canStartCombatTier(BarbarianCombat.BARBARIAN_LEVEL_RANGES)
                 && (Skills.getRealLevel(Skill.ATTACK) < 40 || Skills.getRealLevel(Skill.STRENGTH) < 40 || Skills.getRealLevel(Skill.DEFENCE) < 40)
         );

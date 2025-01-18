@@ -20,6 +20,7 @@ public class TierTwoBranch extends Branch {
                 || Skills.getRealLevel(Skill.FISHING) < 20
                 || OwnedItems.contains(ItemID.RAW_SARDINE)
                 || OwnedItems.contains(ItemID.RAW_HERRING)
+                || OwnedItems.contains(ItemID.OAK_LOGS)
                 || (General.canStartCombatTier(CowCombat.COW_LEVEL_RANGES) && !General.canStartCombatTier(BarbarianCombat.BARBARIAN_LEVEL_RANGES));
     }
 }

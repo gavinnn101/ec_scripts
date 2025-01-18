@@ -19,6 +19,7 @@ public class TierOneBranch extends Branch {
                 || Skills.getRealLevel(Skill.MINING) < 15
                 || Skills.getRealLevel(Skill.FISHING) < 5
                 || OwnedItems.contains(ItemID.RAW_SHRIMPS)
+                || OwnedItems.contains(ItemID.LOGS)
                 || (General.canStartCombatTier(ChickenCombat.CHICKEN_LEVEL_RANGES) && !General.canStartCombatTier(CowCombat.COW_LEVEL_RANGES));
     }
 }

@@ -6,6 +6,7 @@ import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.container.OwnedItems;
+import net.eternalclient.api.wrappers.item.ItemComposite;
 import net.eternalclient.api.wrappers.quest.Quest;
 import net.eternalclient.api.wrappers.skill.Skill;
 
@@ -21,7 +22,7 @@ public class CookFoodBranch extends Branch {
                 && Skills.getRealLevel(Skill.FISHING) >= tierFishingLevelGoal
                 && OwnedItems.contains(rawFoodID)
         ) {
-            Main.setActivity("Cooking food", Skill.COOKING, 0);
+            Main.setActivity("Cooking food: " + ItemComposite.getItem(rawFoodID).getName(), Skill.COOKING, 0);
             return true;
         }
         return false;

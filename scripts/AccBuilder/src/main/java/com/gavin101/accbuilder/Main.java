@@ -2,14 +2,15 @@ package com.gavin101.accbuilder;
 
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.GLib.branches.common.IsAfkBranch;
 import com.gavin101.GLib.leafs.common.*;
 import com.gavin101.accbuilder.branches.combat.alkharidguards.FightAlkharidGuardsBranch;
 import com.gavin101.accbuilder.branches.combat.barbarians.FightBarbariansBranch;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
-import com.gavin101.accbuilder.branches.common.IsAfkBranch;
 import com.gavin101.accbuilder.branches.common.LoadoutsFulfilledBranch;
 import com.gavin101.accbuilder.branches.combat.cows.FightCowsBranch;
 import com.gavin101.accbuilder.branches.cooking.CookFoodBranch;
+import com.gavin101.accbuilder.branches.firemaking.FiremakeLogsBranch;
 import com.gavin101.accbuilder.branches.fishing.bait.BaitFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.flyfishing.FlyFishingBranch;
 import com.gavin101.accbuilder.branches.fishing.shrimp.FishShrimpBranch;
@@ -31,6 +32,7 @@ import com.gavin101.accbuilder.constants.combat.AlkharidGuardsCombat;
 import com.gavin101.accbuilder.constants.combat.BarbarianCombat;
 import com.gavin101.accbuilder.constants.combat.ChickenCombat;
 import com.gavin101.accbuilder.constants.combat.CowCombat;
+import com.gavin101.accbuilder.constants.firemaking.Firemaking;
 import com.gavin101.accbuilder.constants.fishing.BaitFishing;
 import com.gavin101.accbuilder.constants.fishing.Fishing;
 import com.gavin101.accbuilder.constants.fishing.FlyFishing;
@@ -41,6 +43,8 @@ import com.gavin101.accbuilder.constants.woodcutting.Woodcutting;
 import com.gavin101.accbuilder.leafs.combat.*;
 import com.gavin101.accbuilder.leafs.common.*;
 import com.gavin101.accbuilder.leafs.cooking.CookFoodLeaf;
+import com.gavin101.accbuilder.leafs.firemaking.GoToFiremakingTileLeaf;
+import com.gavin101.accbuilder.leafs.firemaking.LightLogsLeaf;
 import com.gavin101.accbuilder.leafs.fishing.StartFishingLeaf;
 import com.gavin101.accbuilder.leafs.mining.MineRockLeaf;
 import com.gavin101.accbuilder.leafs.quests.cooksassistant.TalkToCookLeaf;
@@ -73,11 +77,13 @@ import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 import net.eternalclient.api.utilities.paint.PaintLocations;
+import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.awt.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import static net.eternalclient.api.accessors.AttackStyle.ACCURATE;
 
@@ -100,6 +106,7 @@ public class Main extends AbstractScript implements Painter {
     public static Skill currentSkillToTrain = Skill.RUNECRAFTING;
     public static int currentLevelGoal = 99;
     public static AttackStyle attackStyle = ACCURATE;
+    public static final List<WorldTile> firemakingTiles = Firemaking.getRandomFiremakingTileSet();
 
     public static EquipmentLoadout currentEquipmentLoadout = new EquipmentLoadout();
     public static InventoryLoadout currentInventoryLoadout = new InventoryLoadout();
@@ -155,6 +162,28 @@ public class Main extends AbstractScript implements Painter {
                                                 new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Tree"))),
                                                 new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
                                                 new ChopTreeLeaf("Tree")
+                                        )
+                                )
+                        ),
+                        new FiremakeLogsBranch(
+                                ItemID.LOGS,
+                                Woodcutting.NORMAL_TREE_LEVEL_RANGES.get(Skill.WOODCUTTING).getMax()
+                        ).addLeafs(
+                                new IsAfkBranch().addLeafs(
+                                        GetLoadoutLeaf.builder()
+                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .inventoryLoadout(
+                                                        new InventoryLoadout()
+                                                                .addReq(ItemID.TINDERBOX)
+                                                                .addReq(ItemID.LOGS, () -> Math.min(OwnedItems.count(ItemID.LOGS), 27))
+                                                                .setEnabled(() -> !Inventory.contains(ItemID.LOGS))
+                                                                .setStrict(true)
+                                                )
+                                                .buyRemainder(false)
+                                                .build(),
+                                        new LoadoutsFulfilledBranch().addLeafs(
+                                                new GoToFiremakingTileLeaf(firemakingTiles),
+                                                new LightLogsLeaf(ItemID.LOGS)
                                         )
                                 )
                         ),
@@ -256,6 +285,28 @@ public class Main extends AbstractScript implements Painter {
                                                 new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Oak tree"))),
                                                 new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
                                                 new ChopTreeLeaf("Oak tree")
+                                        )
+                                )
+                        ),
+                        new FiremakeLogsBranch(
+                                ItemID.OAK_LOGS,
+                                Woodcutting.OAK_TREE_LEVEL_RANGES.get(Skill.WOODCUTTING).getMax()
+                        ).addLeafs(
+                                new IsAfkBranch().addLeafs(
+                                        GetLoadoutLeaf.builder()
+                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .inventoryLoadout(
+                                                        new InventoryLoadout()
+                                                                .addReq(ItemID.TINDERBOX)
+                                                                .addReq(ItemID.OAK_LOGS, () -> Math.min(OwnedItems.count(ItemID.OAK_LOGS), 27))
+                                                                .setEnabled(() -> !Inventory.contains(ItemID.OAK_LOGS))
+                                                                .setStrict(true)
+                                                )
+                                                .buyRemainder(false)
+                                                .build(),
+                                        new LoadoutsFulfilledBranch().addLeafs(
+                                                new GoToFiremakingTileLeaf(firemakingTiles),
+                                                new LightLogsLeaf(ItemID.OAK_LOGS)
                                         )
                                 )
                         ),
@@ -382,6 +433,28 @@ public class Main extends AbstractScript implements Painter {
                                                 new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Willow tree"))),
                                                 new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
                                                 new ChopTreeLeaf("Willow tree")
+                                        )
+                                )
+                        ),
+                        new FiremakeLogsBranch(
+                                ItemID.WILLOW_LOGS,
+                                Woodcutting.WILLOW_TREE_LEVEL_RANGES.get(Skill.WOODCUTTING).getMax()
+                        ).addLeafs(
+                                new IsAfkBranch().addLeafs(
+                                        GetLoadoutLeaf.builder()
+                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .inventoryLoadout(
+                                                        new InventoryLoadout()
+                                                                .addReq(ItemID.TINDERBOX)
+                                                                .addReq(ItemID.WILLOW_LOGS, () -> Math.min(OwnedItems.count(ItemID.WILLOW_LOGS), 27))
+                                                                .setEnabled(() -> !Inventory.contains(ItemID.WILLOW_LOGS))
+                                                                .setStrict(true)
+                                                )
+                                                .buyRemainder(false)
+                                                .build(),
+                                        new LoadoutsFulfilledBranch().addLeafs(
+                                                new GoToFiremakingTileLeaf(firemakingTiles),
+                                                new LightLogsLeaf(ItemID.WILLOW_LOGS)
                                         )
                                 )
                         ),

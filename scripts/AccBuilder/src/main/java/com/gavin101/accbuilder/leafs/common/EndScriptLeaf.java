@@ -21,7 +21,8 @@ public class EndScriptLeaf extends Leaf {
                 && Skills.getRealLevel(Skill.MINING) >= 40
                 && Skills.getRealLevel(Skill.WOODCUTTING) >= 40
                 && PlayerSettings.getConfig(VarPlayer.QUEST_POINTS) >= 10
-                && !OwnedItems.contains("Raw");
+                && !OwnedItems.contains("Raw")
+                && !OwnedItems.contains("logs");
     }
 
     @Override
