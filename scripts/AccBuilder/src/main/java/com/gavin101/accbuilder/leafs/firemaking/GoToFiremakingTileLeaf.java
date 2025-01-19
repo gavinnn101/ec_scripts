@@ -1,6 +1,7 @@
 package com.gavin101.accbuilder.leafs.firemaking;
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.accbuilder.Main;
 import com.gavin101.accbuilder.constants.firemaking.Firemaking;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.Players;
@@ -20,13 +21,29 @@ public class GoToFiremakingTileLeaf extends Leaf {
     @Override
     public boolean isValid() {
         WorldTile playerTile = Players.localPlayer().getWorldTile();
-        return (Inventory.isFull() && !firemakingTiles.contains(playerTile)) || !Firemaking.atValidFiremakingTile();
+        if (Inventory.isFull() && !firemakingTiles.contains(playerTile)) {
+            Log.debug("Inventory is full and we're not at a firemaking tile, returning true");
+            return true;
+        } else if (!Firemaking.atValidFiremakingTile()) {
+            Log.debug("We're not at a valid firemaking tile, returning true.");
+            return true;
+        } else if (Main.needToChangeFiremakingTile) {
+            Log.debug("Main.needToChangeFiremakingTile is true, returning true.");
+            return true;
+        }
+        return false;
+//        return (Inventory.isFull() && !firemakingTiles.contains(playerTile)) || !Firemaking.atValidFiremakingTile();
     }
 
     @Override
     public int onLoop() {
         Log.info("Walking to firemaking tile.");
         Walking.walkExact(GLib.getRandomTile(firemakingTiles));
+        Log.info("Done walking to firemaking tile.");
+        if (Main.needToChangeFiremakingTile) {
+            Log.debug("Setting Main.needToChangeFiremakingTile = false");
+            Main.needToChangeFiremakingTile = false;
+        }
         return ReactionGenerator.getNormal();
     }
 }

@@ -56,13 +56,13 @@ public class Woodcutting {
         List<Area> treeAreaList = new ArrayList<>();
         switch (treeName) {
             case "Tree":
-                treeAreaList.add(new RectArea(3174, 3255, 3197, 3208)); // Behind Lumbridge castle
+//                treeAreaList.add(new RectArea(3174, 3255, 3197, 3208)); // Behind Lumbridge castle (excluded because low level dies to mugger)
                 treeAreaList.add(new RectArea(3158, 3417, 3172, 3375)); // East of Gertrude's house
                 treeAreaList.add(new RectArea(3117, 3439, 3145, 3420)); // South of cooking guild
                 break;
             case "Oak tree":
                 treeAreaList.add(new RectArea(3171, 3422, 3158, 3406)); // East of Gertrude's house (smaller for just oaks)
-                treeAreaList.add(new RectArea(3098, 3248, 3103, 3239)); // East of Draynor bank
+//                treeAreaList.add(new RectArea(3098, 3248, 3103, 3239)); // East of Draynor bank (excluded because low level dies to mugger)
                 treeAreaList.add(new RectArea(2946, 3410, 2956, 3395)); // North-West of Falador walls
                 break;
             case "Willow tree":

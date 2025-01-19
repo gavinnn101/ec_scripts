@@ -24,8 +24,8 @@ public class ChopTreeLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Finding tree to chop: " +treeName);
-        GameObject tree = GameObjects.closest(treeName);
-        if (tree != null && tree.canReach()) {
+        GameObject tree = GameObjects.closest(i -> i.hasName(treeName) && i.canReach());
+        if (tree != null) {
             Log.debug("Found tree, interacting with it.");
             new EntityInteractEvent(tree, "Chop down").setEventCompleteCondition(
                     () -> Players.localPlayer().getAnimation() == Woodcutting.TREE_CHOPPING_ANIMATION, Calculations.random(1500, 3000)

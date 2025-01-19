@@ -2,6 +2,7 @@ package com.gavin101.accbuilder.constants.firemaking;
 
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.rs.RSFloorDecoration;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;
@@ -15,7 +16,7 @@ public class Firemaking {
     public static final int FIREMAKING_ANIMATION = 733;
 
     private static final Area GRAND_EXCHANGE_FIREMAKING_AREA = new RectArea(3143, 3510, 3188, 3468);
-    private static final Area VARROCK_WEST_BANK_FIREMAKING_AREA = new RectArea(3172, 3432, 3199, 3429);
+    private static final Area VARROCK_WEST_BANK_FIREMAKING_AREA = new RectArea(3200, 3432, 3170, 3428);
     private static final Area VARROCK_EAST_BANK_FIREMAKING_AREA = new RectArea(3241, 3430, 3265, 3428);
 
     public static final List<Area> FIREMAKING_AREAS = List.of(
@@ -68,9 +69,16 @@ public class Firemaking {
     }
 
     public static boolean atValidFiremakingTile() {
-        GameObject nearestFire = GameObjects.closest("Fire");
         WorldTile playerTile = Players.localPlayer().getWorldTile();
-        return (nearestFire == null || !nearestFire.getWorldTile().equals(playerTile))
-                && Firemaking.FIREMAKING_AREAS.stream().anyMatch(area -> area.contains(playerTile));
+        GameObject nearestFire = GameObjects.closest("Fire");
+        if (nearestFire != null && Players.localPlayer().getWorldTile().equals(nearestFire.getWorldTile())) {
+            Log.debug("fire on our tile, returning false.");
+            return false;
+        }
+        if (Firemaking.FIREMAKING_AREAS.stream().noneMatch(area -> area.contains(playerTile))) {
+            Log.debug("player tile not in any firemaking areas, returning false.");
+            return false;
+        }
+        return true;
     }
 }

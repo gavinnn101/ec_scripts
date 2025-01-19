@@ -67,7 +67,9 @@ import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
+import net.eternalclient.api.listeners.Notify;
 import net.eternalclient.api.listeners.Painter;
+import net.eternalclient.api.listeners.message.ChatMessageEvent;
 import net.eternalclient.api.listeners.skill.SkillTracker;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
@@ -107,6 +109,7 @@ public class Main extends AbstractScript implements Painter {
     public static int currentLevelGoal = 99;
     public static AttackStyle attackStyle = ACCURATE;
     public static final List<WorldTile> firemakingTiles = Firemaking.getRandomFiremakingTileSet();
+    public static boolean needToChangeFiremakingTile = false;
 
     public static EquipmentLoadout currentEquipmentLoadout = new EquipmentLoadout();
     public static InventoryLoadout currentInventoryLoadout = new InventoryLoadout();
@@ -159,8 +162,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Tree"))),
                                                 new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Tree"))),
                                                 new ChopTreeLeaf("Tree")
                                         )
                                 )
@@ -282,8 +285,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Oak tree"))),
                                                 new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Oak tree"))),
                                                 new ChopTreeLeaf("Oak tree")
                                         )
                                 )
@@ -430,8 +433,8 @@ public class Main extends AbstractScript implements Painter {
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
                                         new IsAfkBranch().addLeafs(
-                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Willow tree"))),
                                                 new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Willow tree"))),
                                                 new ChopTreeLeaf("Willow tree")
                                         )
                                 )
@@ -617,5 +620,14 @@ public class Main extends AbstractScript implements Painter {
         currentLevelGoal = levelGoal;
         activityTimer.reset();
         SkillTracker.start(skill);
+    }
+
+    @Notify
+    public void notifyChatMessageEvent(ChatMessageEvent event) {
+        String msg = event.getMessage();
+        if (msg.equals("You can't light a fire here.")) {
+            Log.debug("Not on a valid firemaking tile, setting boolean to move to a new tile.");
+            needToChangeFiremakingTile = true;
+        }
     }
 }
