@@ -19,6 +19,6 @@ public class OpenInventoryLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.INVENTORY);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

@@ -28,6 +28,6 @@ public class TalkToMageLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Magic Instructor", Constants.MAGE_ROOM_AREA, chatOptions);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

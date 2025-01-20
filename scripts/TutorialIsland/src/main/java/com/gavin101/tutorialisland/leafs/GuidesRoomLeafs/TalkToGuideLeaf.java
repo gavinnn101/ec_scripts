@@ -27,6 +27,6 @@ public class TalkToGuideLeaf extends Leaf {
         int chatOptionIndex = Calculations.random(0, CHAT_OPTIONS.length - 1);
         String chatOption = CHAT_OPTIONS[chatOptionIndex];
         GLib.talkWithNpc("Gielinor Guide", Constants.GUIDE_ROOM_AREA, chatOption);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

@@ -15,7 +15,7 @@ import net.eternalclient.api.wrappers.widgets.WidgetChild;
 
 public class CustomizeCharacterLeaf extends Leaf {
 
-    private static final int[] CUSTOMIZATION_WIDGET_IDS = {
+    private final int[] CUSTOMIZATION_WIDGET_IDS = {
             16, 20, 24, 28, 32, 36, 40, 47, 51, 55, 59, 63
     };
 
@@ -45,6 +45,6 @@ public class CustomizeCharacterLeaf extends Leaf {
             new WidgetEvent(confirmCustomizationWidget, "Confirm").setEventCompleteCondition(
                     () -> !confirmCustomizationWidget.isVisible(), Calculations.random(2000, 3500)).execute();
         }
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

@@ -26,6 +26,6 @@ public class TalkToExpertLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Survival Expert", Constants.SURVIVAL_EXPERT_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

@@ -16,6 +16,6 @@ public class OpenFriendsTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.FRIEND);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

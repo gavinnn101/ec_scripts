@@ -20,6 +20,6 @@ public class OpenQuestTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.QUEST);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

@@ -20,6 +20,6 @@ public class TalkToMinerLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Mining Instructor", Constants.MINING_INSTRUCTOR_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

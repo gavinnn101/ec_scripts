@@ -42,7 +42,7 @@ public class AttackChickenLeaf extends Leaf {
             Walking.localWalk(Constants.MAGE_ROOM_AREA.getRandomTile(),
             () -> getChicken() != null);
         }
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 
     public static NPC getChicken() {

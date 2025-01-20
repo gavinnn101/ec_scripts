@@ -16,6 +16,6 @@ public class TalkToAccountGuideLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Account Guide", Constants.ACCOUNT_GUIDE_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

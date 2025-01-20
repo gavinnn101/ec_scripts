@@ -16,6 +16,6 @@ public class OpenManagementTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.ACCOUNT);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

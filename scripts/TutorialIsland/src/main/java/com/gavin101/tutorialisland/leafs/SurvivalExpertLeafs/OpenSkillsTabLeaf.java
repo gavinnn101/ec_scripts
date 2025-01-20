@@ -19,6 +19,6 @@ public class OpenSkillsTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.SKILL);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

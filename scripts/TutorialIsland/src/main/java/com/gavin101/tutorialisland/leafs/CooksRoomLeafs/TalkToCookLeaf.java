@@ -16,6 +16,6 @@ public class TalkToCookLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Master Chef", Constants.COOKS_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

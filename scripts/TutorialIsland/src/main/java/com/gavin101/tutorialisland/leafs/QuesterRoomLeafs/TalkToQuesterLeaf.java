@@ -32,6 +32,6 @@ public class TalkToQuesterLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Quest Guide", Constants.QUEST_GUIDE_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

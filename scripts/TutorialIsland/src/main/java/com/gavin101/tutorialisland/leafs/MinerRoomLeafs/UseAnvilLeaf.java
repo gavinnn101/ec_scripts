@@ -30,6 +30,6 @@ public class UseAnvilLeaf extends Leaf {
                     () -> GLib.isWidgetValid(Widgets.getWidget(Constants.SMITHING_PARENT_ID)), Calculations.random(1500, 3500)
             ).execute();
         }
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

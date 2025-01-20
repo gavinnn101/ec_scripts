@@ -31,6 +31,6 @@ public class MeleeRatLeaf extends Leaf {
                     () -> Players.localPlayer().isInCombat(), Calculations.random(1500, 3500)
             ).execute();
         }
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

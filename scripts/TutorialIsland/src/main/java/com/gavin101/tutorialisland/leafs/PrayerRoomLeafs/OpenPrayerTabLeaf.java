@@ -16,6 +16,6 @@ public class OpenPrayerTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.PRAYER);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

@@ -16,6 +16,6 @@ public class OpenEquipmentTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.EQUIPMENT);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

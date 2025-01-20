@@ -25,6 +25,6 @@ public class TalkToBrotherLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Brother Brace", Constants.PRAYER_ROOM_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

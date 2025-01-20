@@ -16,6 +16,6 @@ public class OpenCombatTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.ATTACK);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

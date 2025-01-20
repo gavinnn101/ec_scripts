@@ -23,6 +23,6 @@ public class EquipBowLeaf extends Leaf {
         new EquipmentLoadoutEvent(loadout).setEventCompleteCondition(
                 () -> Equipment.containsAll(Constants.SHORTBOW_ID, Constants.BRONZE_ARROW_ID), Calculations.random(1500, 3000)
         ).execute();
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

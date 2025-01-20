@@ -28,6 +28,6 @@ public class TalkToCombatInstructorLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Combat Instructor", Constants.COMBAT_INSTRUCTOR_AREA);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }

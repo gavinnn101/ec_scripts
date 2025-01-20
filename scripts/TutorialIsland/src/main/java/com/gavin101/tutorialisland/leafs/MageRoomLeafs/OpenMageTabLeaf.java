@@ -16,6 +16,6 @@ public class OpenMageTabLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.openTab(Tab.MAGIC);
-        return ReactionGenerator.getNormal();
+        return ReactionGenerator.getPredictable();
     }
 }
