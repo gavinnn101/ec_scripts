@@ -83,7 +83,7 @@ public final class GLib {
     public static void talkWithNpc(String npcName, Area npcArea, String... chatOptions) {
         Log.info("Talking to: " +npcName);
         if (Dialogues.inDialogue()) {
-            Log.debug("Finishing dialogue with: " +npcName + "with chat options: " + Arrays.toString(chatOptions));
+            Log.debug("Finishing dialogue with: " +npcName + " with chat options: " + Arrays.toString(chatOptions));
             new DialogueEvent(chatOptions).setEventCompleteCondition(
                     () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
             ).execute();

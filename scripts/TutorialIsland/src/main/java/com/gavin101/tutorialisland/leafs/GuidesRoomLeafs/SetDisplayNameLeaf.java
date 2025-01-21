@@ -29,11 +29,15 @@ public class SetDisplayNameLeaf extends Leaf {
             displayName = generateUsername();
         }
         if (isNameEmpty()) {
+            selectEnterDisplayNameWidget();
             enterGeneratedName();
         } else if (isNameUnavailable()) {
             selectSuggestedName();
-        } else {
+        } else if (GLib.isWidgetValid(getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID))) {
             setName();
+        } else {
+            selectEnterDisplayNameWidget();
+            eraseDisplayName();
         }
         return ReactionGenerator.getNormal();
     }
@@ -49,8 +53,9 @@ public class SetDisplayNameLeaf extends Leaf {
 
     private boolean isNameEmpty() {
         WidgetChild enterDisplayNameCheckWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_TEXT_CHECK_ID);
+        String widgetText = enterDisplayNameCheckWidget.getText();
         return GLib.isWidgetValid(enterDisplayNameCheckWidget)
-                && (enterDisplayNameCheckWidget.getText().isEmpty() || enterDisplayNameCheckWidget.getText().contains("*"));
+                && (widgetText.isEmpty() || widgetText.equals("*"));
     }
 
     private boolean isNameUnavailable() {
@@ -59,17 +64,31 @@ public class SetDisplayNameLeaf extends Leaf {
                 && enterDisplayNameAvailableWidget.getText().contains("not available");
     }
 
-    private void enterGeneratedName() {
-        Log.info("Entering generated display name: " + displayName);
-        WidgetChild enterDisplayNameEnterWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_TEXT_ENTER_ID);
-        if (!GLib.isWidgetValid(enterDisplayNameEnterWidget)) {
+    private void selectEnterDisplayNameWidget() {
+        Log.debug("Selecting enter display name text box widget.");
+        WidgetChild enterDisplayNameTextBoxWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_TEXT_ENTER_ID);
+        if (!GLib.isWidgetValid(enterDisplayNameTextBoxWidget)) {
             return;
         }
-        new WidgetEvent(enterDisplayNameEnterWidget, "Enter name").execute();
+        new WidgetEvent(enterDisplayNameTextBoxWidget, "Enter name").execute();
+    }
+
+    private void eraseDisplayName() {
+        Log.debug("Erasing display name from box");
+        Keyboard.eraseUntil(this::isNameEmpty, 5000);
+    }
+
+    private void enterGeneratedName() {
+        Log.info("Entering generated display name: " + displayName);
         Keyboard.type(displayName, true);
-        MethodProvider.tickSleepUntil(
-                () -> getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_AVAILABLE_ID).containsText("available"), 10
-        );
+//         // Checking for 'available' text, `look up name` and `set name` widgets all seem to return early so we'll use a random sleep for now..
+//        Log.debug("Waiting for name result...");
+//        MethodProvider.sleepUntil(
+//                () -> getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_AVAILABLE_ID).containsText("available")
+//                        && (GLib.isWidgetValid(getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID)) || GLib.isWidgetValid(getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_LOOK_UP_NAME_ID))), Calculations.random(5000, 10000)
+//        );
+//        Log.debug("found 'available' text after entering name.");
+        MethodProvider.sleep(3500, 5000);
     }
 
     private void selectSuggestedName() {
@@ -105,21 +124,20 @@ public class SetDisplayNameLeaf extends Leaf {
 
     private void setName() {
         WidgetChild setNameWidget = getSetDisplayNameChildWidget(Constants.SET_DISPLAY_NAME_SET_NAME_ID);
-        if (GLib.isWidgetValid(setNameWidget)) {
-            Log.debug("Clicking 'Set name' button for name: " + displayName);
-            new WidgetEvent(setNameWidget, "Set name").setEventCompleteCondition(
-                    () -> !GLib.isWidgetValid(setNameWidget), Calculations.random(2000, 3500)
-            ).execute();
-            // I don't feel like this should be able to execute in a loop with these conditions but it does sometimes.
-            // Will add a small sleep after to make sure it doesn't spam the button.
-//            MethodProvider.sleep(1000, 3000);
-        }
+        Log.debug("Clicking 'Set name' button for name: " + displayName);
+        new WidgetEvent(setNameWidget, "Set name").setEventCompleteCondition(
+                () -> !GLib.isWidgetValid(setNameWidget), Calculations.random(2000, 3500)
+        ).execute();
     }
 
+    // TODO: I think we should generate usernames in a smarter way to make them not look like bots.
+    // Make a request to `https://legacy-beta-api.eternalfarm.net/namegenerator/generate?&count=1&length=12`?
     private String generateUsername() {
         String word1 = Constants.DISPLAY_NAME_OPTIONS[Calculations.random(0, Constants.DISPLAY_NAME_OPTIONS.length - 1)];
         String word2 = Constants.DISPLAY_NAME_OPTIONS[Calculations.random(0, Constants.DISPLAY_NAME_OPTIONS.length - 1)];
         int number = Calculations.random(1, 99);
-        return word1 + word2 + number;
+        String displayName = word1 + word2 + number;
+        Log.debug("Returning generated display name: " +displayName);
+        return displayName;
     }
 }

@@ -12,6 +12,7 @@ public class Constants {
     public static final int SET_DISPLAY_NAME_PARENT_ID = 558;
     public static final int SET_DISPLAY_NAME_TEXT_ENTER_ID = 7;
     public static final int SET_DISPLAY_NAME_TEXT_CHECK_ID = 12;
+    public static final int SET_DISPLAY_NAME_LOOK_UP_NAME_ID = 18;
     public static final int SET_DISPLAY_NAME_SET_NAME_ID = 19;
     public static final int SET_DISPLAY_NAME_AVAILABLE_ID = 13;
     public static final int SET_DISPLAY_NAME_SUGGESTED_NAME_FIRST_ID = 15;
