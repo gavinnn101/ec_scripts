@@ -69,6 +69,11 @@ public class SetBestCombatEquipmentLeaf extends Leaf {
             loadout.addChest(ItemID.ADAMANT_PLATEBODY);
             loadout.addLegs(ItemID.ADAMANT_PLATELEGS);
             loadout.addShield(ItemID.ADAMANT_KITESHIELD);
+        } else if (defenseLevel >= 40 && defenseLevel < 60) {
+            loadout.addHat(ItemID.RUNE_FULL_HELM);
+            loadout.addChest(ItemID.RUNE_CHAINBODY);
+            loadout.addLegs(ItemID.RUNE_PLATELEGS);
+            loadout.addShield(ItemID.RUNE_KITESHIELD);
         }
 
         if (attackLevel >= 1 && attackLevel < 5) {
@@ -79,11 +84,9 @@ public class SetBestCombatEquipmentLeaf extends Leaf {
             loadout.addWeapon(ItemID.MITHRIL_SCIMITAR);
         } else if (attackLevel >= 30 && attackLevel < 40) {
             loadout.addWeapon(ItemID.ADAMANT_SCIMITAR);
+        } else if (attackLevel >= 40 && attackLevel < 60) {
+            loadout.addWeapon(ItemID.RUNE_SCIMITAR);
         }
         return loadout;
-    }
-
-    public String idToName(int itemId) {
-        return ItemComposite.getItem(itemId).getName();
     }
 }

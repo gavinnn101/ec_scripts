@@ -10,7 +10,7 @@ import net.eternalclient.api.wrappers.walking.Walking;
 public class EnableRunningLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        int energyThreshold = Calculations.random(15, 30);
+        int energyThreshold = Calculations.random(15, 100);
         return Walking.getRunEnergy() >= energyThreshold && !Walking.isRunEnabled();
     }
 
@@ -19,7 +19,7 @@ public class EnableRunningLeaf extends Leaf {
         Log.info("Enabling running");
         new ToggleRunEvent(true).setEventCompleteCondition(
                 Walking::isRunEnabled, Calculations.random(250, 350)
-                ).execute();
+        ).execute();
         return ReactionGenerator.getPredictable();
     }
 }

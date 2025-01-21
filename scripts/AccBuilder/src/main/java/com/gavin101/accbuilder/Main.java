@@ -7,6 +7,8 @@ import com.gavin101.GLib.leafs.common.*;
 import com.gavin101.accbuilder.branches.combat.alkharidguards.FightAlkharidGuardsBranch;
 import com.gavin101.accbuilder.branches.combat.barbarians.FightBarbariansBranch;
 import com.gavin101.accbuilder.branches.combat.chickens.FightChickensBranch;
+import com.gavin101.accbuilder.branches.combat.fleshcrawlers.FightFleshCrawlersBranch;
+import com.gavin101.accbuilder.branches.common.HandleFinancesBranch;
 import com.gavin101.accbuilder.branches.common.LoadoutsFulfilledBranch;
 import com.gavin101.accbuilder.branches.combat.cows.FightCowsBranch;
 import com.gavin101.accbuilder.branches.cooking.CookFoodBranch;
@@ -20,18 +22,20 @@ import com.gavin101.accbuilder.branches.quests.cooksassistant.CooksAssistantBran
 import com.gavin101.accbuilder.branches.quests.doricsquest.DoricsQuestBranch;
 import com.gavin101.accbuilder.branches.quests.goblindiplomacy.GoblinDiplomacyBranch;
 import com.gavin101.accbuilder.branches.quests.impcatcher.ImpCatcherBranch;
+import com.gavin101.accbuilder.branches.quests.restlessghost.RestlessGhostBranch;
+import com.gavin101.accbuilder.branches.quests.restlessghost.TalkToGhostBranch;
+import com.gavin101.accbuilder.branches.quests.runemysteries.RuneMysteriesBranch;
 import com.gavin101.accbuilder.branches.quests.sheepshearer.SheepShearerBranch;
 import com.gavin101.accbuilder.branches.quests.witchspotion.WitchsPotionBranch;
+import com.gavin101.accbuilder.branches.tiers.TierFourBranch;
 import com.gavin101.accbuilder.branches.tiers.TierOneBranch;
 import com.gavin101.accbuilder.branches.tiers.TierThreeBranch;
 import com.gavin101.accbuilder.branches.tiers.TierTwoBranch;
 import com.gavin101.accbuilder.branches.woodcutting.ChopNormalTreesBranch;
 import com.gavin101.accbuilder.branches.woodcutting.ChopOakTreesBranch;
 import com.gavin101.accbuilder.branches.woodcutting.ChopWillowTreesBranch;
-import com.gavin101.accbuilder.constants.combat.AlkharidGuardsCombat;
-import com.gavin101.accbuilder.constants.combat.BarbarianCombat;
-import com.gavin101.accbuilder.constants.combat.ChickenCombat;
-import com.gavin101.accbuilder.constants.combat.CowCombat;
+import com.gavin101.accbuilder.constants.Common;
+import com.gavin101.accbuilder.constants.combat.*;
 import com.gavin101.accbuilder.constants.firemaking.Firemaking;
 import com.gavin101.accbuilder.constants.fishing.BaitFishing;
 import com.gavin101.accbuilder.constants.fishing.Fishing;
@@ -52,6 +56,10 @@ import com.gavin101.accbuilder.leafs.quests.doricsquest.TalkToDoricLeaf;
 import com.gavin101.accbuilder.leafs.quests.goblindiplomacy.MakeArmorLeaf;
 import com.gavin101.accbuilder.leafs.quests.goblindiplomacy.TalkToGeneralLeaf;
 import com.gavin101.accbuilder.leafs.quests.impcatcher.TalkToWizardLeaf;
+import com.gavin101.accbuilder.leafs.quests.restlessghost.*;
+import com.gavin101.accbuilder.leafs.quests.runemysteries.TalkToAuburyLeaf;
+import com.gavin101.accbuilder.leafs.quests.runemysteries.TalkToDukeLeaf;
+import com.gavin101.accbuilder.leafs.quests.runemysteries.TalkToSedridorLeaf;
 import com.gavin101.accbuilder.leafs.quests.sheepshearer.TalkToFarmerLeaf;
 import com.gavin101.accbuilder.leafs.quests.witchspotion.BurnMeatLeaf;
 import com.gavin101.accbuilder.leafs.quests.witchspotion.DrinkFromCauldronLeaf;
@@ -79,6 +87,7 @@ import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 import net.eternalclient.api.utilities.paint.PaintLocations;
+import net.eternalclient.api.wrappers.magic.Rune;
 import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
 
@@ -107,7 +116,9 @@ public class Main extends AbstractScript implements Painter {
     public static boolean activityLoadoutsFulfilled = false;
     public static Skill currentSkillToTrain = Skill.RUNECRAFTING;
     public static int currentLevelGoal = 99;
+
     public static AttackStyle attackStyle = ACCURATE;
+
     public static final List<WorldTile> firemakingTiles = Firemaking.getRandomFiremakingTileSet();
     public static boolean needToChangeFiremakingTile = false;
 
@@ -119,8 +130,8 @@ public class Main extends AbstractScript implements Painter {
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
 
         // Save resources
-        Client.getSettings().setRenderingEnabled(false);
-        Client.getSettings().setFpsLimit(3);
+//        Client.getSettings().setRenderingEnabled(false);
+//        Client.getSettings().setFpsLimit(3);
 
         startTimer = new Timer();
         activityTimer = new Timer();
@@ -128,7 +139,10 @@ public class Main extends AbstractScript implements Painter {
         tree.addBranches(
                 new EnableRunningLeaf(),
                 new CacheBankLeaf(),
-                new RequestMuleLeaf(() -> OwnedItems.count(ItemID.COINS_995) < 5000),
+                new HandleFinancesBranch().addLeafs(
+                        new SellItemsLeaf(Common.itemsToSell),
+                        RequestMuleLeaf.builder().build()
+                ),
                 new TierOneBranch().addShuffledLeafs(
                         new DoricsQuestBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
@@ -425,7 +439,7 @@ public class Main extends AbstractScript implements Painter {
                                         )
                                 )
                         ),
-                        new ChopWillowTreesBranch().addLeafs(
+                        new ChopWillowTreesBranch(41).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
                                         .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
@@ -439,10 +453,7 @@ public class Main extends AbstractScript implements Painter {
                                         )
                                 )
                         ),
-                        new FiremakeLogsBranch(
-                                ItemID.WILLOW_LOGS,
-                                Woodcutting.WILLOW_TREE_LEVEL_RANGES.get(Skill.WOODCUTTING).getMax()
-                        ).addLeafs(
+                        new FiremakeLogsBranch(ItemID.WILLOW_LOGS, 41).addLeafs(
                                 new IsAfkBranch().addLeafs(
                                         GetLoadoutLeaf.builder()
                                                 .equipmentLoadout(new EquipmentLoadout())
@@ -474,7 +485,7 @@ public class Main extends AbstractScript implements Painter {
                                         )
                                 )
                         ),
-                        new FlyFishingBranch().addLeafs(
+                        new FlyFishingBranch(40).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
                                         .inventoryLoadout(FlyFishing.FLY_FISHING_INVENTORY)
@@ -489,7 +500,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new CookFoodBranch(
                                 ItemID.RAW_TROUT,
-                                FlyFishing.FLY_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                                 40
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .equipmentLoadout(new EquipmentLoadout())
@@ -509,7 +520,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new CookFoodBranch(
                                 ItemID.RAW_SALMON,
-                                FlyFishing.FLY_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
+                                40
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .equipmentLoadout(new EquipmentLoadout())
@@ -554,6 +565,154 @@ public class Main extends AbstractScript implements Painter {
                                         new IsAfkBranch().addLeafs(
                                                 new SetAttackStyleLeaf(),
                                                 new FightMonsterLeaf("Al Kharid warrior", AlkharidGuardsCombat.ALKHARID_GUARD_AREA)
+                                        )
+                                )
+                        )
+                ),
+                new TierFourBranch().addShuffledLeafs(
+                        new RuneMysteriesBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(RuneMysteries.RUNE_MYSTERIES_INVENTORY_LOADOUT)
+                                        .equipmentLoadout(RuneMysteries.RUNE_MYSTERIES_EQUIPMENT_LOADOUT)
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToDukeLeaf(),
+                                                new TalkToSedridorLeaf(),
+                                                new TalkToAuburyLeaf()
+                                        )
+                                )
+                        ),
+                        new RestlessGhostBranch().addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(RestlessGhost.RESTLESS_GHOST_INVENTORY)
+                                        .equipmentLoadout(RestlessGhost.RESTLESS_GHOST_EQUIPMENT)
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new TalkToFatherAereckLeaf(),
+                                                new TalkToFatherUrhneyLeaf(),
+                                                new TalkToGhostBranch().addLeafs(
+                                                        new OpenCoffinLeaf(),
+                                                        new TalkToGhostLeaf()
+                                                ),
+                                                new GetSkullLeaf()
+                                        )
+                                )
+                        ),
+                        new ChopWillowTreesBranch(51).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
+                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new LootItemsLeaf(Woodcutting.WOODCUTTING_LOOT, 10),
+                                                new GoToAreaLeaf(GLib.getRandomArea(Woodcutting.TREE_TO_AREAS_MAP("Willow tree"))),
+                                                new ChopTreeLeaf("Willow tree")
+                                        )
+                                )
+                        ),
+                        new FiremakeLogsBranch(ItemID.WILLOW_LOGS, 51).addLeafs(
+                                new IsAfkBranch().addLeafs(
+                                        GetLoadoutLeaf.builder()
+                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .inventoryLoadout(
+                                                        new InventoryLoadout()
+                                                                .addReq(ItemID.TINDERBOX)
+                                                                .addReq(ItemID.WILLOW_LOGS, () -> Math.min(OwnedItems.count(ItemID.WILLOW_LOGS), 27))
+                                                                .setEnabled(() -> !Inventory.contains(ItemID.WILLOW_LOGS))
+                                                                .setStrict(true)
+                                                )
+                                                .buyRemainder(false)
+                                                .build(),
+                                        new LoadoutsFulfilledBranch().addLeafs(
+                                                new GoToFiremakingTileLeaf(firemakingTiles),
+                                                new LightLogsLeaf(ItemID.WILLOW_LOGS)
+                                        )
+                                )
+                        ),
+                        new MineIronBranch(51).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .inventoryLoadout(Mining.MINING_INVENTORY)
+                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToTileLeaf(GLib.getRandomTile(Mining.ROCK_TO_TILES_MAP("Iron rocks"))),
+                                                new MineRockLeaf("Iron rocks")
+                                        )
+                                )
+                        ),
+                        new FlyFishingBranch(50).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
+                                        .inventoryLoadout(FlyFishing.FLY_FISHING_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.FLY_FISHING))),
+                                                new StartFishingLeaf(Fishing.FishingType.FLY_FISHING)
+                                        )
+                                )
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_TROUT,
+                                50
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_TROUT, () -> Math.min(OwnedItems.count(ItemID.RAW_TROUT), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_TROUT))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_TROUT)
+                                        )
+                                )
+                        ),
+                        new CookFoodBranch(
+                                ItemID.RAW_SALMON,
+                                50
+                        ).addLeafs(
+                                GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .inventoryLoadout(
+                                                new InventoryLoadout()
+                                                        .addReq(ItemID.RAW_SALMON, () -> Math.min(OwnedItems.count(ItemID.RAW_SALMON), 28))
+                                                        .setEnabled(() -> !Inventory.contains(ItemID.RAW_SALMON))
+                                                        .setStrict(true)
+                                        )
+                                        .buyRemainder(false)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new IsAfkBranch().addLeafs(
+                                                new CookFoodLeaf("Cooking range", ItemID.RAW_SALMON)
+                                        )
+                                )
+                        ),
+                        new FightFleshCrawlersBranch().addLeafs(
+                                new SetBestCombatEquipmentLeaf(),
+                                GetLoadoutLeaf.builder()
+                                        .useBestEquipment(true)
+                                        .inventoryLoadout(FleshCrawlersCombat.FLESH_CRAWLERS_INVENTORY)
+                                        .buyRemainder(true)
+                                        .build(),
+                                new LoadoutsFulfilledBranch().addLeafs(
+                                        new EatFoodLeaf(ItemID.LOBSTER),
+                                        new IsAfkBranch().addLeafs(
+                                                new SetAttackStyleLeaf(),
+                                                new FightMonsterLeaf("Flesh Crawler", GLib.getRandomArea(FleshCrawlersCombat.FLESH_CRAWLERS_AREAS))
                                         )
                                 )
                         )

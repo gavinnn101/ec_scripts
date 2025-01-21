@@ -14,13 +14,13 @@ public class EndScriptLeaf extends Leaf {
     @Override
     public boolean isValid() {
         return !Players.localPlayer().isInCombat()
-                && Skills.getRealLevel(Skill.ATTACK) >= 40
-                && Skills.getRealLevel(Skill.STRENGTH) >= 40
-                && Skills.getRealLevel(Skill.DEFENCE) >= 40
-                && Skills.getRealLevel(Skill.FISHING) >= 40
-                && Skills.getRealLevel(Skill.MINING) >= 40
-                && Skills.getRealLevel(Skill.WOODCUTTING) >= 40
-                && PlayerSettings.getConfig(VarPlayer.QUEST_POINTS) >= 10
+                && Skills.getRealLevel(Skill.ATTACK) >= 50
+                && Skills.getRealLevel(Skill.STRENGTH) >= 50
+                && Skills.getRealLevel(Skill.DEFENCE) >= 50
+                && Skills.getRealLevel(Skill.FISHING) >= 50
+                && Skills.getRealLevel(Skill.MINING) >= 51
+                && Skills.getRealLevel(Skill.WOODCUTTING) >= 51
+                && PlayerSettings.getConfig(VarPlayer.QUEST_POINTS) >= 12
                 && !OwnedItems.contains("Raw")
                 && !OwnedItems.contains("logs");
     }

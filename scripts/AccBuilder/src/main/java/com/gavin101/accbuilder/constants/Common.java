@@ -1,10 +1,12 @@
 package com.gavin101.accbuilder.constants;
 
-import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.events.loadout.EquipmentLoadout;
-import net.eternalclient.api.wrappers.skill.Skill;
+
+import java.util.Map;
 
 public class Common {
-
+    public static final Map<Integer, Integer> itemsToSell = Map.of(
+            ItemID.COWHIDE, 9999,
+            ItemID.IRON_ORE, 9999
+    );
 }

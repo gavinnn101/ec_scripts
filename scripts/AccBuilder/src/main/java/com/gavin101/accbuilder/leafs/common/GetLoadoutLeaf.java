@@ -59,13 +59,16 @@ public class GetLoadoutLeaf extends Leaf {
         Log.info("Getting loadout");
         Main.currentEquipmentLoadout = equipmentLoadout;
         Main.currentInventoryLoadout = inventoryLoadout;
-        new WithdrawLoadoutEvent(inventoryLoadout)
+        if (new WithdrawLoadoutEvent(inventoryLoadout)
                 .addEquipmentLoadout(eq)
                 .setBuyRemainder(buyRemainder)
                 .setEventCompleteCondition(() -> loadoutsFulfilled(eq, inventoryLoadout))
-                .execute();
-        Log.debug("Setting main.activityLoadoutsFulfilled = true");
-        Main.activityLoadoutsFulfilled = true;
+                .executed()) {
+            Log.debug("Setting main.activityLoadoutsFulfilled = true");
+            Main.activityLoadoutsFulfilled = true;
+        } else {
+            Log.warn("We weren't able to fulfill our withdraw loadout event.");
+        }
         return ReactionGenerator.getNormal();
     }
 }

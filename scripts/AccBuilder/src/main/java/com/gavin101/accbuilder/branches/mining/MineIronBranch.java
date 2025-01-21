@@ -12,9 +12,10 @@ public class MineIronBranch extends Branch {
 
     @Override
     public boolean isValid() {
+        int ironMiningLevelRequirement = 15;
         int miningLevel = Skills.getRealLevel(Skill.MINING);
-        if (miningLevel >= 15 && miningLevel < miningGoalLevel) {
-            Main.setActivity("Mining iron ore until lv" +miningGoalLevel +" mining.", Skill.MINING, miningGoalLevel);
+        if (miningLevel >= ironMiningLevelRequirement && miningLevel < miningGoalLevel) {
+            Main.setActivity("Mining iron ore", Skill.MINING, miningGoalLevel);
             return true;
         }
         return false;
