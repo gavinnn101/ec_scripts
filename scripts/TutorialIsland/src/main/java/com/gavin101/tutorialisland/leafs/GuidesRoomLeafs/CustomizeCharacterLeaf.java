@@ -16,6 +16,7 @@ import net.eternalclient.api.wrappers.widgets.WidgetChild;
 public class CustomizeCharacterLeaf extends Leaf {
 
     private final int[] CUSTOMIZATION_WIDGET_IDS = {
+            // TODO: Add possibility to change all options in character customization. (all clothes/colors, pronouns, gender)
             16, 20, 24, 28, 32, 36, 40, 47, 51, 55, 59, 63
     };
 

@@ -27,7 +27,7 @@ public class MineRocksLeaf extends Leaf {
         } else if (tutorialProgress == 310) {
             mineRock("Copper rocks");
         }
-        return ReactionGenerator.getAFK();
+        return ReactionGenerator.getNormal();
     }
 
     public void mineRock(String rockName) {

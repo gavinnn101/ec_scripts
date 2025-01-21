@@ -16,7 +16,8 @@ public class RestlessGhost {
     public static final RectArea LUMBRIDGE_CHURCH_AREA = new RectArea(3239, 3215, 3247, 3204);
     public static final String[] FATHER_AERECK_CHAT_OPTIONS = {
             "I'm looking for a quest!",
-            "Ok, let me help then."
+            "Ok, let me help then.",
+            "Yes."
     };
 
     public static final RectArea FATHER_URHNEY_AREA = new RectArea(3151, 3173, 3144, 3177);
