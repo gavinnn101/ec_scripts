@@ -15,7 +15,7 @@ public class WitchsPotion {
             .setEnabled(() -> Quest.WITCHS_POTION.getState() != 2)
             .addReq(ItemID.ONION, 1)
             .setEnabled(() -> Quest.WITCHS_POTION.getState() != 2)
-            .setStrict(true);
+            .setLoadoutStrict();
 
     public static final RectArea WITCHS_POTION_AREA = new RectArea(2965, 3206, 2968, 3205);
     public static final WorldTile RANGE_TILE = new WorldTile(2969, 3210, 0);

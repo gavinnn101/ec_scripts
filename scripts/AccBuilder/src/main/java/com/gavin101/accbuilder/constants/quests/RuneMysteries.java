@@ -14,7 +14,8 @@ public class RuneMysteries {
             .addReq(ItemID.RESEARCH_PACKAGE)
             .setEnabled(() -> Quest.RUNE_MYSTERIES.getState() == 3)
             .addReq(ItemID.RESEARCH_NOTES)
-            .setEnabled(() -> Quest.RUNE_MYSTERIES.getState() == 5);
+            .setEnabled(() -> Quest.RUNE_MYSTERIES.getState() == 5)
+            .setLoadoutStrict();
 
     public static final RectArea DUKE_AREA = new RectArea(3213, 3218, 3208, 3225, 1);
     public static final String[] DUKE_CHAT_OPTIONS = {

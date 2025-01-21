@@ -3,6 +3,7 @@ package com.gavin101.accbuilder.constants.quests;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
+import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.wrappers.interactives.NPC;
 import net.eternalclient.api.wrappers.map.RectArea;
@@ -12,6 +13,13 @@ public class RestlessGhost {
             .addAmulet(ItemID.GHOSTSPEAK_AMULET)
             .setEnabled(() -> OwnedItems.contains(ItemID.GHOSTSPEAK_AMULET)
     );
+
+    public static final InventoryLoadout RESTLESS_GHOST_INVENTORY = new InventoryLoadout()
+            .addReq(ItemID.GHOSTSPEAK_AMULET)
+            .setEnabled(() -> OwnedItems.contains(ItemID.GHOSTSPEAK_AMULET))
+            .addReq(ItemID.GHOSTS_SKULL)
+            .setEnabled(() -> OwnedItems.contains(ItemID.GHOSTS_SKULL))
+            .setLoadoutStrict();
 
     public static final RectArea LUMBRIDGE_CHURCH_AREA = new RectArea(3239, 3215, 3247, 3204);
     public static final String[] FATHER_AERECK_CHAT_OPTIONS = {

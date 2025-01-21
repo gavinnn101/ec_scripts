@@ -15,6 +15,5 @@ public class GoblinDiplomacy {
             .addReq(ItemID.ORANGE_DYE, 1)
             .setEnabled(() -> !Inventory.contains(ItemID.ORANGE_GOBLIN_MAIL) && Quest.GOBLIN_DIPLOMACY.isNotStarted())
             .addReq(ItemID.BLUE_DYE, 1)
-            .setEnabled(() -> !Inventory.contains(ItemID.BLUE_GOBLIN_MAIL) && Quest.GOBLIN_DIPLOMACY.isNotStarted())
-            .setStrict(true);
+            .setEnabled(() -> !Inventory.contains(ItemID.BLUE_GOBLIN_MAIL) && Quest.GOBLIN_DIPLOMACY.isNotStarted());
 }

@@ -9,7 +9,7 @@ public class DoricsQuest {
             .addReq(ItemID.CLAY, 6)
             .addReq(ItemID.COPPER_ORE, 4)
             .addReq(ItemID.IRON_ORE, 2)
-            .setStrict(true);
+            .setLoadoutStrict();
 
     public static final RectArea DORICS_QUEST_AREA = new RectArea(2949, 3452, 2953, 3449);
 }

@@ -271,7 +271,7 @@ public class Main extends AbstractScript implements Painter {
                         new SheepShearerBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
-                                        .inventoryLoadout(Common.EMPTY_INVENTORY_LOADOUT)
+                                        .inventoryLoadout(SheepShearer.SHEEP_SHEARER_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -587,7 +587,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new RestlessGhostBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .inventoryLoadout(Common.EMPTY_INVENTORY_LOADOUT)
+                                        .inventoryLoadout(RestlessGhost.RESTLESS_GHOST_INVENTORY)
                                         .equipmentLoadout(RestlessGhost.RESTLESS_GHOST_EQUIPMENT)
                                         .buyRemainder(false)
                                         .build(),

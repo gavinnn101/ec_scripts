@@ -10,7 +10,7 @@ public class ImpCatcher {
             .addReq(ItemID.WHITE_BEAD, 1)
             .addReq(ItemID.YELLOW_BEAD, 1)
             .addReq(ItemID.RED_BEAD, 1)
-            .setStrict(true);
+            .setLoadoutStrict();
 
     public static final RectArea IMP_CATCHER_AREA = new RectArea(3103, 3163, 3105, 3161, 2);
 }

@@ -9,7 +9,7 @@ public class CooksAssistant {
             .addReq(ItemID.EGG)
             .addReq(ItemID.POT_OF_FLOUR)
             .addReq(ItemID.BUCKET_OF_MILK)
-            .setStrict(true);
+            .setLoadoutStrict();
 
     public static final RectArea COOKS_ASSISTANT_AREA = new RectArea(3209, 3216, 3211, 3213);
 }
