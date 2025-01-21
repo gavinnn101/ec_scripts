@@ -32,6 +32,6 @@ public class MineRockLeaf extends Leaf {
                     Calculations.random(1250, 2500)
             ).execute();
         }
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

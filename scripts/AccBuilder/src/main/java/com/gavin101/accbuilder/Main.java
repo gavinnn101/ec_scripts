@@ -111,6 +111,7 @@ public class Main extends AbstractScript implements Painter {
     public static Timer startTimer;
     private final NumberFormat nf = NumberFormat.getInstance();
 
+    public static String currentTier = "None";
     public static String currentActivity = "None";
     public static Timer activityTimer;
     public static boolean activityLoadoutsFulfilled = false;
@@ -731,6 +732,7 @@ public class Main extends AbstractScript implements Painter {
             .setInfoSupplier(() -> new ArrayList<String>() {{
                 add(getScriptName() + " v" + getScriptVersion());
                 add("Runtime: " + startTimer);
+                add("Current Tier: " +currentTier);
                 add("Current Activity: " + currentActivity);
                 add("Current Branch: " + Tree.currentBranch);
                 add("Current Leaf: " + Tree.currentLeaf);
