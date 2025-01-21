@@ -1,14 +1,11 @@
 package com.gavin101.accbuilder.constants.quests;
 
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.wrappers.map.RectArea;
 
 public class SheepShearer {
-    public static EquipmentLoadout SHEEP_SHEARER_EQUIPMENT = new EquipmentLoadout();
-
-    public static InventoryLoadout SHEEP_SHEARER_INVENTORY = new InventoryLoadout()
+    public static final InventoryLoadout SHEEP_SHEARER_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.BALL_OF_WOOL, 20)
             .setStrict(true);
 

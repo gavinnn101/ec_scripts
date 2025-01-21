@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CowCombat {
-    public static InventoryLoadout COW_INVENTORY = new InventoryLoadout()
+    public static final InventoryLoadout COW_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.HERRING, 4)
             .setEnabled(() -> !Inventory.contains(ItemID.HERRING))
             .setLoadoutStrict(() -> !Inventory.contains(ItemID.HERRING) || Inventory.isFull());

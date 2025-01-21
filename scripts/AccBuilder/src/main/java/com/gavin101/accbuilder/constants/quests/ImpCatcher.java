@@ -1,14 +1,11 @@
 package com.gavin101.accbuilder.constants.quests;
 
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.wrappers.map.RectArea;
 
 public class ImpCatcher {
-    public static EquipmentLoadout IMP_CATCHER_EQUIPMENT = new EquipmentLoadout();
-
-    public static InventoryLoadout IMP_CATCHER_INVENTORY = new InventoryLoadout()
+    public static final InventoryLoadout IMP_CATCHER_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.BLACK_BEAD, 1)
             .addReq(ItemID.WHITE_BEAD, 1)
             .addReq(ItemID.YELLOW_BEAD, 1)

@@ -2,7 +2,6 @@ package com.gavin101.accbuilder.constants.firemaking;
 
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;
-import net.eternalclient.api.rs.RSFloorDecoration;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;

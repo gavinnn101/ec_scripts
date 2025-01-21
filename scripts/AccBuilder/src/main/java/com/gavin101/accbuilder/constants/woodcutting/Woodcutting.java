@@ -4,11 +4,8 @@ import com.gavin101.accbuilder.utility.LevelRange;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
-import net.eternalclient.api.utilities.LivePrices;
 import net.eternalclient.api.utilities.math.Calculations;
-import net.eternalclient.api.wrappers.item.Item;
 import net.eternalclient.api.wrappers.map.Area;
 import net.eternalclient.api.wrappers.map.PolyArea;
 import net.eternalclient.api.wrappers.map.RectArea;
@@ -22,7 +19,6 @@ import java.util.Map;
 public class Woodcutting {
     public static final int TREE_CHOPPING_ANIMATION = 877;
 
-    public static EquipmentLoadout WOODCUTTING_EQUIPMENT = new EquipmentLoadout();
     public static InventoryLoadout WOODCUTTING_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.IRON_AXE)
             .setEnabled(() -> Skills.getRealLevel(Skill.WOODCUTTING) >= 1 && Skills.getRealLevel(Skill.WOODCUTTING) < 6)

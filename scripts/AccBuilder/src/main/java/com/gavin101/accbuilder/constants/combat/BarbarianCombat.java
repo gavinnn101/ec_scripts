@@ -11,7 +11,7 @@ import net.eternalclient.api.wrappers.skill.Skill;
 import java.util.Map;
 
 public class BarbarianCombat {
-    public static InventoryLoadout BARBARIAN_INVENTORY = new InventoryLoadout()
+    public static final InventoryLoadout BARBARIAN_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.TROUT, Calculations.random(10, 21)) // Withdraw between 10-20 trout
             .setEnabled(() -> !Inventory.contains(ItemID.TROUT))
             .setRefill(Calculations.random(80, 101)) // Buy 80-100 trout if we don't have enough

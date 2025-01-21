@@ -146,7 +146,7 @@ public class Main extends AbstractScript implements Painter {
                 new TierOneBranch().addShuffledLeafs(
                         new DoricsQuestBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(DoricsQuest.DORICS_QUEST_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(DoricsQuest.DORICS_QUEST_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
@@ -158,8 +158,8 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new CooksAssistantBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(CooksAssistant.COOKS_ASSISTANT_INVENTORY)
-                                        .equipmentLoadout(CooksAssistant.COOKS_ASSISTANT_EQUIPMENT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -170,8 +170,8 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new ChopNormalTreesBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
-                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -188,7 +188,7 @@ public class Main extends AbstractScript implements Painter {
                         ).addLeafs(
                                 new IsAfkBranch().addLeafs(
                                         GetLoadoutLeaf.builder()
-                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                                 .inventoryLoadout(
                                                         new InventoryLoadout()
                                                                 .addReq(ItemID.TINDERBOX)
@@ -207,7 +207,7 @@ public class Main extends AbstractScript implements Painter {
                         new MineCopperBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Mining.MINING_INVENTORY)
-                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -220,7 +220,7 @@ public class Main extends AbstractScript implements Painter {
                         new FishShrimpBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(ShrimpFishing.SHRIMP_INVENTORY)
-                                        .equipmentLoadout(ShrimpFishing.SHRIMP_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -235,7 +235,7 @@ public class Main extends AbstractScript implements Painter {
                                 ShrimpFishing.SHRIMP_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_SHRIMPS, () -> Math.min(OwnedItems.count(ItemID.RAW_SHRIMPS), 28))
@@ -254,7 +254,7 @@ public class Main extends AbstractScript implements Painter {
                                 new SetBestCombatEquipmentLeaf(),
                                 GetLoadoutLeaf.builder()
                                         .useBestEquipment(true)
-                                        .inventoryLoadout(ChickenCombat.CHICKEN_INVENTORY)
+                                        .inventoryLoadout(Common.EMPTY_INVENTORY_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -269,8 +269,8 @@ public class Main extends AbstractScript implements Painter {
                 new TierTwoBranch().addShuffledLeafs(
                         new SheepShearerBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(SheepShearer.SHEEP_SHEARER_EQUIPMENT)
-                                        .inventoryLoadout(SheepShearer.SHEEP_SHEARER_INVENTORY)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
+                                        .inventoryLoadout(Common.EMPTY_INVENTORY_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -281,7 +281,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new ImpCatcherBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(ImpCatcher.IMP_CATCHER_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(ImpCatcher.IMP_CATCHER_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
@@ -293,8 +293,8 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new ChopOakTreesBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
-                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -311,7 +311,7 @@ public class Main extends AbstractScript implements Painter {
                         ).addLeafs(
                                 new IsAfkBranch().addLeafs(
                                         GetLoadoutLeaf.builder()
-                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                                 .inventoryLoadout(
                                                         new InventoryLoadout()
                                                                 .addReq(ItemID.TINDERBOX)
@@ -330,7 +330,7 @@ public class Main extends AbstractScript implements Painter {
                         new MineIronBranch(31).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Mining.MINING_INVENTORY)
-                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -342,7 +342,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new BaitFishingBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(BaitFishing.BAIT_FISHING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(BaitFishing.BAIT_FISHING_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
@@ -358,7 +358,7 @@ public class Main extends AbstractScript implements Painter {
                                 BaitFishing.BAIT_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_SARDINE, () -> Math.min(OwnedItems.count(ItemID.RAW_SARDINE), 28))
@@ -378,7 +378,7 @@ public class Main extends AbstractScript implements Painter {
                                 BaitFishing.BAIT_FISHING_LEVEL_RANGES.get(Skill.FISHING).getMax()
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_HERRING, () -> Math.min(OwnedItems.count(ItemID.RAW_HERRING), 28))
@@ -413,8 +413,8 @@ public class Main extends AbstractScript implements Painter {
                 new TierThreeBranch().addShuffledLeafs(
                         new WitchsPotionBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(WitchsPotion.WITCHS_POTION_INVENTORY)
-                                        .equipmentLoadout(WitchsPotion.WITCHS_POTION_EQUIPMENT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -428,7 +428,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new GoblinDiplomacyBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(GoblinDiplomacy.GOBLIN_DIPLOMACY_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(GoblinDiplomacy.GOBLIN_DIPLOMACY_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
@@ -441,8 +441,8 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new ChopWillowTreesBranch(41).addLeafs(
                                 GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
-                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -456,7 +456,7 @@ public class Main extends AbstractScript implements Painter {
                         new FiremakeLogsBranch(ItemID.WILLOW_LOGS, 41).addLeafs(
                                 new IsAfkBranch().addLeafs(
                                         GetLoadoutLeaf.builder()
-                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                                 .inventoryLoadout(
                                                         new InventoryLoadout()
                                                                 .addReq(ItemID.TINDERBOX)
@@ -475,7 +475,7 @@ public class Main extends AbstractScript implements Painter {
                         new MineIronBranch(41).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Mining.MINING_INVENTORY)
-                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -487,7 +487,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new FlyFishingBranch(40).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(FlyFishing.FLY_FISHING_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
@@ -503,7 +503,7 @@ public class Main extends AbstractScript implements Painter {
                                  40
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_TROUT, () -> Math.min(OwnedItems.count(ItemID.RAW_TROUT), 28))
@@ -523,7 +523,7 @@ public class Main extends AbstractScript implements Painter {
                                 40
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_SALMON, () -> Math.min(OwnedItems.count(ItemID.RAW_SALMON), 28))
@@ -573,7 +573,7 @@ public class Main extends AbstractScript implements Painter {
                         new RuneMysteriesBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(RuneMysteries.RUNE_MYSTERIES_INVENTORY_LOADOUT)
-                                        .equipmentLoadout(RuneMysteries.RUNE_MYSTERIES_EQUIPMENT_LOADOUT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .buyRemainder(false)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -586,7 +586,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new RestlessGhostBranch().addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .inventoryLoadout(RestlessGhost.RESTLESS_GHOST_INVENTORY)
+                                        .inventoryLoadout(Common.EMPTY_INVENTORY_LOADOUT)
                                         .equipmentLoadout(RestlessGhost.RESTLESS_GHOST_EQUIPMENT)
                                         .buyRemainder(false)
                                         .build(),
@@ -604,8 +604,8 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new ChopWillowTreesBranch(51).addLeafs(
                                 GetLoadoutLeaf.builder()
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(Woodcutting.WOODCUTTING_INVENTORY)
-                                        .equipmentLoadout(Woodcutting.WOODCUTTING_EQUIPMENT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -619,7 +619,7 @@ public class Main extends AbstractScript implements Painter {
                         new FiremakeLogsBranch(ItemID.WILLOW_LOGS, 51).addLeafs(
                                 new IsAfkBranch().addLeafs(
                                         GetLoadoutLeaf.builder()
-                                                .equipmentLoadout(new EquipmentLoadout())
+                                                .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                                 .inventoryLoadout(
                                                         new InventoryLoadout()
                                                                 .addReq(ItemID.TINDERBOX)
@@ -638,7 +638,7 @@ public class Main extends AbstractScript implements Painter {
                         new MineIronBranch(51).addLeafs(
                                 GetLoadoutLeaf.builder()
                                         .inventoryLoadout(Mining.MINING_INVENTORY)
-                                        .equipmentLoadout(Mining.MINING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .buyRemainder(true)
                                         .build(),
                                 new LoadoutsFulfilledBranch().addLeafs(
@@ -650,7 +650,7 @@ public class Main extends AbstractScript implements Painter {
                         ),
                         new FlyFishingBranch(50).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(FlyFishing.FLY_FISHING_EQUIPMENT)
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(FlyFishing.FLY_FISHING_INVENTORY)
                                         .buyRemainder(true)
                                         .build(),
@@ -666,7 +666,7 @@ public class Main extends AbstractScript implements Painter {
                                 50
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_TROUT, () -> Math.min(OwnedItems.count(ItemID.RAW_TROUT), 28))
@@ -686,7 +686,7 @@ public class Main extends AbstractScript implements Painter {
                                 50
                         ).addLeafs(
                                 GetLoadoutLeaf.builder()
-                                        .equipmentLoadout(new EquipmentLoadout())
+                                        .equipmentLoadout(Common.EMPTY_EQUIPMENT_LOADOUT)
                                         .inventoryLoadout(
                                                 new InventoryLoadout()
                                                         .addReq(ItemID.RAW_SALMON, () -> Math.min(OwnedItems.count(ItemID.RAW_SALMON), 28))

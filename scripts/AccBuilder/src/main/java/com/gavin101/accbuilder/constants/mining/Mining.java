@@ -3,7 +3,6 @@ package com.gavin101.accbuilder.constants.mining;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
@@ -12,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mining {
-    public static EquipmentLoadout MINING_EQUIPMENT = new EquipmentLoadout();
-    public static InventoryLoadout MINING_INVENTORY = new InventoryLoadout()
+    public static final InventoryLoadout MINING_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.STEEL_PICKAXE)
             .setEnabled(() -> Skills.getRealLevel(Skill.MINING) >= 6 && Skills.getRealLevel(Skill.MINING) < 21)
             .addReq(ItemID.MITHRIL_PICKAXE)

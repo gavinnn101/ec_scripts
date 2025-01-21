@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 public class FleshCrawlersCombat {
-    public static InventoryLoadout FLESH_CRAWLERS_INVENTORY = new InventoryLoadout()
-            .addReq(ItemID.LOBSTER, Calculations.random(10, 21)) // Withdraw between 10-20 lobsters
+    public static final InventoryLoadout FLESH_CRAWLERS_INVENTORY = new InventoryLoadout()
+            .addReq(ItemID.LOBSTER, Calculations.random(20, 28)) // Withdraw between 20-28 lobsters
             .setEnabled(() -> !Inventory.contains(ItemID.LOBSTER))
-            .setRefill(Calculations.random(80, 101)) // Buy between 80-100 lobsters if we run out
+            .setRefill(Calculations.random(100, 201)) // Buy between 100-200 lobsters if we run out
             .setLoadoutStrict(() -> !Inventory.contains(ItemID.LOBSTER));
 
     public static final List<Area> FLESH_CRAWLERS_AREAS = List.of(
