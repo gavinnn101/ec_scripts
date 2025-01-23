@@ -18,7 +18,7 @@ public class EndScriptLeaf extends Leaf {
                 && Skills.getRealLevel(Skill.FISHING) >= 50
                 && Skills.getRealLevel(Skill.MINING) >= 51
                 && Skills.getRealLevel(Skill.WOODCUTTING) >= 51
-                && GLib.getQuestPoints() >= 12
+                && GLib.getQuestPoints(false) >= 12
                 && !OwnedItems.contains("Raw")
                 && !OwnedItems.contains("logs");
     }

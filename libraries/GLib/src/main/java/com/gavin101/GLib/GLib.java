@@ -196,30 +196,51 @@ public final class GLib {
         }
     }
 
-    public static int getQuestPoints() {
+    public static boolean isQuestListTabOpen() {
+        int questTabWidgetId = 399;
+        return isWidgetValid(Widgets.getWidget(questTabWidgetId));
+    }
+
+    public static void openQuestListTab() {
+        WidgetChild questListWidget = Widgets.getWidgetChild(629, 10);
+        Log.info("Opening the quest list tab");
+        GLib.openTab(Tab.QUEST);
+        new WidgetEvent(questListWidget, "Quest List").setEventCompleteCondition(
+                GLib::isQuestListTabOpen, Calculations.random(500, 1500)
+        ).execute();
+    }
+
+    public static boolean isCharacterSummaryTabOpen() {
+        int characterSummaryWidgetId = 712;
+        return isWidgetValid(Widgets.getWidget(characterSummaryWidgetId));
+    }
+
+    public static void openCharacterSummaryTab() {
+        WidgetChild characterSummaryWidget = Widgets.getWidgetChild(629, 2);
+        Log.info("Opening the character summary tab");
+        GLib.openTab(Tab.QUEST);
+        new WidgetEvent(characterSummaryWidget, "Character Summary").setEventCompleteCondition(
+                GLib::isCharacterSummaryTabOpen, Calculations.random(500, 1500)
+        ).execute();
+    }
+
+    public static int getQuestPoints(boolean forceRefresh) {
+        if (forceRefresh) {
+            openTab(Tab.QUEST);
+        }
         int questPoints = PlayerSettings.getConfig(VarPlayer.QUEST_POINTS);
         Log.debug("Returning quest points: " +questPoints);
         return questPoints;
     }
 
     public static int getMinutesPlayed(boolean forceRefresh) {
-        WidgetChild characterSummaryWidget = Widgets.getWidget(629).getChild(2);
-        WidgetChild questListWidget = Widgets.getWidget(629).getChild(10);
-        int questTabWidgetId = 399;
         int minutesPlayedVar = 526;
-        int trackingVarValue = PlayerSettings.getVarClientInt(384);    // Not sure what this var is for but it changes when we switch views in the quest tab so we're gonna use it as a validator.
         if (forceRefresh) {
             GLib.openTab(Tab.QUEST);
-            if (!GLib.isWidgetValid(Widgets.getWidget(questTabWidgetId))) {
-                Log.info("Switching to quest tab to allow refreshing time played.");
-                new WidgetEvent(questListWidget, "Quest List").setEventCompleteCondition(
-                        () -> PlayerSettings.getVarClientInt(384) != trackingVarValue, Calculations.random(500, 1500)
-                );
+            if (!isQuestListTabOpen()) {
+                openQuestListTab();
             } else {
-                Log.info("Opening character summary tab to get refreshed time played.");
-                new WidgetEvent(characterSummaryWidget, "Character Summary").setEventCompleteCondition(
-                        () -> PlayerSettings.getVarClientInt(384) != trackingVarValue, Calculations.random(500, 1500)
-                );
+                openCharacterSummaryTab();
             }
         }
         int minutesPlayed = PlayerSettings.getVarClientInt(minutesPlayedVar);
@@ -230,7 +251,11 @@ public final class GLib {
     public static boolean isTradeRestricted() {
         int minutesRequired = 1200; // 20 hours
         int questPointsRequired = 10;
-        int questPoints = getQuestPoints();
+
+        int questPoints = getQuestPoints(false);
+        if (questPoints == 0) {
+            questPoints = getQuestPoints(true);
+        }
 
         int minutesPlayed = getMinutesPlayed(false);
         if (minutesPlayed == 0) {
