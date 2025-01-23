@@ -1,5 +1,6 @@
 package com.gavin101.accbuilder.leafs.common;
 
+import com.gavin101.GLib.GLib;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.events.ge.GrandExchangeEvent;
 import net.eternalclient.api.events.ge.items.SellItem;
@@ -19,7 +20,7 @@ public class SellItemsLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
-        return itemsToSell.keySet().stream().anyMatch(OwnedItems::contains);
+        return GLib.canSellItems() && itemsToSell.keySet().stream().anyMatch(OwnedItems::contains);
     }
 
     @Override

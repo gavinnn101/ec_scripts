@@ -9,7 +9,6 @@ import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
-import net.eternalclient.api.wrappers.item.ItemComposite;
 import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.util.Arrays;
@@ -46,8 +45,7 @@ public class SetBestCombatEquipmentLeaf extends Leaf {
         int attackLevel = Skills.getRealLevel(Skill.ATTACK);
 
         EquipmentLoadout loadout = new EquipmentLoadout()
-                .addAmulet(ItemID.AMULET_OF_POWER)
-                .setStrict(true);
+                .addAmulet(ItemID.AMULET_OF_POWER);
 
         if (defenseLevel >= 1 && defenseLevel < 5) {
             loadout.addHat(ItemID.IRON_FULL_HELM);
@@ -69,7 +67,7 @@ public class SetBestCombatEquipmentLeaf extends Leaf {
             loadout.addChest(ItemID.ADAMANT_PLATEBODY);
             loadout.addLegs(ItemID.ADAMANT_PLATELEGS);
             loadout.addShield(ItemID.ADAMANT_KITESHIELD);
-        } else if (defenseLevel >= 40 && defenseLevel < 60) {
+        } else if (defenseLevel >= 40) {
             loadout.addHat(ItemID.RUNE_FULL_HELM);
             loadout.addChest(ItemID.RUNE_CHAINBODY);
             loadout.addLegs(ItemID.RUNE_PLATELEGS);
@@ -84,7 +82,7 @@ public class SetBestCombatEquipmentLeaf extends Leaf {
             loadout.addWeapon(ItemID.MITHRIL_SCIMITAR);
         } else if (attackLevel >= 30 && attackLevel < 40) {
             loadout.addWeapon(ItemID.ADAMANT_SCIMITAR);
-        } else if (attackLevel >= 40 && attackLevel < 60) {
+        } else if (attackLevel >= 40) {
             loadout.addWeapon(ItemID.RUNE_SCIMITAR);
         }
         return loadout;

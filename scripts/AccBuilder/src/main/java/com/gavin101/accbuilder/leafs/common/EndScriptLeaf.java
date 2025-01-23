@@ -1,10 +1,8 @@
 package com.gavin101.accbuilder.leafs.common;
 
 import com.gavin101.GLib.GLib;
-import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.accessors.Skills;
-import net.eternalclient.api.data.VarPlayer;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.container.OwnedItems;
@@ -20,7 +18,7 @@ public class EndScriptLeaf extends Leaf {
                 && Skills.getRealLevel(Skill.FISHING) >= 50
                 && Skills.getRealLevel(Skill.MINING) >= 51
                 && Skills.getRealLevel(Skill.WOODCUTTING) >= 51
-                && PlayerSettings.getConfig(VarPlayer.QUEST_POINTS) >= 12
+                && GLib.getQuestPoints() >= 12
                 && !OwnedItems.contains("Raw")
                 && !OwnedItems.contains("logs");
     }

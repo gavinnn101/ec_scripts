@@ -16,7 +16,7 @@ public class RestlessGhost {
 
     public static final InventoryLoadout RESTLESS_GHOST_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.GHOSTSPEAK_AMULET)
-            .setEnabled(() -> OwnedItems.contains(ItemID.GHOSTSPEAK_AMULET))
+            .setEnabled(() -> OwnedItems.contains(ItemID.GHOSTSPEAK_AMULET) && !RESTLESS_GHOST_EQUIPMENT.isFulfilled())
             .addReq(ItemID.GHOSTS_SKULL)
             .setEnabled(() -> OwnedItems.contains(ItemID.GHOSTS_SKULL))
             .setLoadoutStrict();

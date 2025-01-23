@@ -1,15 +1,15 @@
 package com.gavin101.GLib;
 
 import net.eternalclient.api.Client;
-import net.eternalclient.api.accessors.AttackStyle;
-import net.eternalclient.api.accessors.Dialogues;
-import net.eternalclient.api.accessors.NPCs;
-import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.accessors.*;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.data.VarClientInt;
+import net.eternalclient.api.data.VarPlayer;
 import net.eternalclient.api.events.DialogueEvent;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.events.LogoutEvent;
+import net.eternalclient.api.events.WidgetEvent;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.events.muling.MuleRequestEvent;
@@ -18,6 +18,7 @@ import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.MethodProvider;
+import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
 import net.eternalclient.api.wrappers.map.Area;
@@ -190,13 +191,79 @@ public final class GLib {
         if (!Tabs.isOpen(tab)) {
             Log.debug("Tab isn't open. Opening tab: " +tab.name());
             if (Tabs.open(tab)) {
-                MethodProvider.sleepUntil(
-                        tab::isOpen, Calculations.random(1500, 3000)
-                );
-                // Above check seems correct but still spam opens tab.
-                // Will add an extra sleep as a potential band-aid.
-                MethodProvider.sleep(750, 1500);
+                MethodProvider.sleepUntil(() -> Tabs.isOpen(tab), Calculations.random(1500, 3000));
             }
         }
+    }
+
+    public static int getQuestPoints() {
+        int questPoints = PlayerSettings.getConfig(VarPlayer.QUEST_POINTS);
+        Log.debug("Returning quest points: " +questPoints);
+        return questPoints;
+    }
+
+    public static int getMinutesPlayed(boolean forceRefresh) {
+        WidgetChild characterSummaryWidget = Widgets.getWidget(629).getChild(2);
+        WidgetChild questListWidget = Widgets.getWidget(629).getChild(10);
+        int questTabWidgetId = 399;
+        int minutesPlayedVar = 526;
+        int trackingVarValue = PlayerSettings.getVarClientInt(384);    // Not sure what this var is for but it changes when we switch views in the quest tab so we're gonna use it as a validator.
+        if (forceRefresh) {
+            GLib.openTab(Tab.QUEST);
+            if (!GLib.isWidgetValid(Widgets.getWidget(questTabWidgetId))) {
+                Log.info("Switching to quest tab to allow refreshing time played.");
+                new WidgetEvent(questListWidget, "Quest List").setEventCompleteCondition(
+                        () -> PlayerSettings.getVarClientInt(384) != trackingVarValue, Calculations.random(500, 1500)
+                );
+            } else {
+                Log.info("Opening character summary tab to get refreshed time played.");
+                new WidgetEvent(characterSummaryWidget, "Character Summary").setEventCompleteCondition(
+                        () -> PlayerSettings.getVarClientInt(384) != trackingVarValue, Calculations.random(500, 1500)
+                );
+            }
+        }
+        int minutesPlayed = PlayerSettings.getVarClientInt(minutesPlayedVar);
+        Log.debug("Returning minutes played: " +minutesPlayed);
+        return minutesPlayed;
+    }
+
+    public static boolean isTradeRestricted() {
+        int minutesRequired = 1200; // 20 hours
+        int questPointsRequired = 10;
+        int questPoints = getQuestPoints();
+
+        int minutesPlayed = getMinutesPlayed(false);
+        if (minutesPlayed == 0) {
+            minutesPlayed = GLib.getMinutesPlayed(true);
+        }
+
+        long currentEpoch = System.currentTimeMillis();
+        long loggedInEpoch = Client.getLoggedInAt();
+        long minutesLoggedIn = msToMinutes(currentEpoch) - msToMinutes(loggedInEpoch);
+        long totalMinutesPlayed = minutesPlayed + minutesLoggedIn;
+
+        Log.debug("Total minutes played(summary + logged in time): " +totalMinutesPlayed);
+
+        if (totalMinutesPlayed < minutesRequired) {
+            Log.debug("We're trade restricted because our minutes played: " +minutesPlayed +" is lower than: " +minutesRequired);
+            return true;
+        } else if (questPoints < questPointsRequired) {
+            Log.debug("We're trade restricted because our quest points: " +questPoints +" is less than: " +questPointsRequired);
+            return true;
+        }
+        Log.debug("We're not trade restricted.");
+        return false;
+    }
+
+    public static boolean accHasMembership() {
+        return Client.hasMembership();
+    }
+
+    public static boolean canSellItems() {
+        return !isTradeRestricted() || accHasMembership();
+    }
+
+    public static long msToMinutes(long milliseconds) {
+        return milliseconds / (60 * 1000);
     }
 }

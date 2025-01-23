@@ -10,7 +10,7 @@ public class HandleFinancesBranch extends Branch {
 
     @Override
     public boolean isValid() {
-        if (!Main.activityLoadoutsFulfilled) {
+        if (!Main.activityLoadoutsFulfilled && Main.currentEquipmentLoadout != null && Main.currentInventoryLoadout != null) {
             // Get total cost of missing equipment and items from loadouts.
             int equipmentCost = Main.currentEquipmentLoadout.getTotalPrice();
             int inventoryCost = Main.currentInventoryLoadout.getTotalPrice();
