@@ -16,8 +16,6 @@ import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.skill.Skill;
 
-import java.util.function.Supplier;
-
 public class FlyFishing {
     private static final String activityName = "Fly fishing";
 

@@ -3,22 +3,26 @@ package com.gavin101.gbuilder;
 import com.gavin101.GLib.leafs.common.CacheBankLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
+import com.gavin101.gbuilder.activities.skilling.firemaking.common.Firemaking;
 import com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing.BaitFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.flyfishing.FlyFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.shrimp.ShrimpFishing;
 import com.gavin101.gbuilder.activities.quests.cooksassistant.CooksAssistant;
 import com.gavin101.gbuilder.activities.quests.doricsquest.DoricsQuest;
-import com.gavin101.gbuilder.activities.skilling.woodcutting.chopnormaltrees.ChopNormalTrees;
+import com.gavin101.gbuilder.activities.skilling.woodcutting.Woodcutting;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.leafs.SetActivityLeaf;
-import com.gavin101.gbuilder.utility.branches.HandleFinancesBranch;
+import com.gavin101.gbuilder.utility.branches.NeedLoadoutMoneyBranch;
 import com.gavin101.gbuilder.utility.constants.Common;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.Client;
+import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
+import net.eternalclient.api.listeners.Notify;
 import net.eternalclient.api.listeners.Painter;
+import net.eternalclient.api.listeners.message.ChatMessageEvent;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
 import net.eternalclient.api.script.ScriptManifest;
@@ -42,6 +46,8 @@ public class Main extends AbstractScript implements Painter {
     private Timer timer;
     private Tree tree;
 
+    public static boolean needToChangeFiremakingTile = false;
+
 
     public void onStart(String[] args) {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
@@ -62,7 +68,7 @@ public class Main extends AbstractScript implements Painter {
                 new EnableRunningLeaf(),
                 new CacheBankLeaf(),
                 new SetActivityLeaf(),
-                new HandleFinancesBranch().addLeafs(
+                new NeedLoadoutMoneyBranch().addLeafs(
                         new SellItemsLeaf(Common.itemsToSell),
                         RequestMuleLeaf.builder().build()
                 )
@@ -97,15 +103,29 @@ public class Main extends AbstractScript implements Painter {
     }
 
     private void registerActivities() {
-        Log.info("Registering all activities (registerActivities).");
-        // All registered activities can be randomly selected.
+        Log.info("Registering all activities...");
         ActivityManager.registerActivity(ShrimpFishing.ACTIVITY);
         ActivityManager.registerActivity(BaitFishing.ACTIVITY);
         ActivityManager.registerActivity(FlyFishing.ACTIVITY);
 
-        ActivityManager.registerActivity(ChopNormalTrees.ACTIVITY);
+        ActivityManager.registerActivity(Woodcutting.createActivity("Tree", 1, 15));
+        ActivityManager.registerActivity(Woodcutting.createActivity("Oak tree", 15, 31));
+        ActivityManager.registerActivity(Woodcutting.createActivity("Willow tree", 31, 99));
+
+        ActivityManager.registerActivity(Firemaking.createActivity(ItemID.LOGS));
+        ActivityManager.registerActivity(Firemaking.createActivity(ItemID.OAK_LOGS));
+        ActivityManager.registerActivity(Firemaking.createActivity(ItemID.WILLOW_LOGS));
 
         ActivityManager.registerActivity(CooksAssistant.ACTIVITY);
         ActivityManager.registerActivity(DoricsQuest.ACTIVITY);
+    }
+
+    @Notify
+    public void notifyChatMessageEvent(ChatMessageEvent event) {
+        String msg = event.getMessage();
+        if (msg.equals("You can't light a fire here.")) {
+            Log.debug("Not on a valid firemaking tile, setting boolean to move to a new tile.");
+            needToChangeFiremakingTile = true;
+        }
     }
 }

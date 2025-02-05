@@ -15,10 +15,20 @@ public class SkillActivity extends Activity {
     @NonNull
     private final Skill activitySkill;
     @Builder.Default
-    private final int minLevel = 0;
+    private final int minLevel = 1;
     @Builder.Default
-    private final int maxLevel = 0;
+    private final int maxLevel = 99;
 
+
+    public boolean canStart() {
+        int skillLevel = Skills.getRealLevel(activitySkill);
+        return skillLevel >= minLevel;
+    }
+
+    public boolean isCompleted() {
+        int skillLevel = Skills.getRealLevel(activitySkill);
+        return skillLevel >= maxLevel;
+    }
 
     @Override
     public String getDetailedString() {
@@ -30,11 +40,6 @@ public class SkillActivity extends Activity {
 
     @Override
     protected boolean validateActivity() {
-        int skillLevel = Skills.getRealLevel(activitySkill);
-
-        boolean meetsMin = (minLevel == 0 || skillLevel >= minLevel);
-        boolean meetsMax = (maxLevel == 0 || skillLevel < maxLevel);
-
-        return meetsMin && meetsMax;
+        return canStart() && !isCompleted();
     }
 }
