@@ -1,6 +1,6 @@
-package com.gavin101.gbuilder.activities.skilling.firemaking.common.leafs;
+package com.gavin101.gbuilder.activities.skilling.firemaking.leafs;
 
-import com.gavin101.gbuilder.activities.skilling.firemaking.common.constants.FiremakingConstants;
+import com.gavin101.gbuilder.activities.skilling.firemaking.constants.FiremakingConstants;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;

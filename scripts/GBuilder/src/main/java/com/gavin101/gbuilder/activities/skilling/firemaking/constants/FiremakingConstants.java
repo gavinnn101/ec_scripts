@@ -1,4 +1,4 @@
-package com.gavin101.gbuilder.activities.skilling.firemaking.common.constants;
+package com.gavin101.gbuilder.activities.skilling.firemaking.constants;
 
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;

@@ -1,9 +1,9 @@
-package com.gavin101.gbuilder.activities.skilling.firemaking.common;
+package com.gavin101.gbuilder.activities.skilling.firemaking;
 
 import com.gavin101.GLib.branches.common.IsAfkBranch;
-import com.gavin101.gbuilder.activities.skilling.firemaking.common.constants.FiremakingConstants;
-import com.gavin101.gbuilder.activities.skilling.firemaking.common.leafs.GoToFiremakingTileLeaf;
-import com.gavin101.gbuilder.activities.skilling.firemaking.common.leafs.LightLogsLeaf;
+import com.gavin101.gbuilder.activities.skilling.firemaking.constants.FiremakingConstants;
+import com.gavin101.gbuilder.activities.skilling.firemaking.leafs.GoToFiremakingTileLeaf;
+import com.gavin101.gbuilder.activities.skilling.firemaking.leafs.LightLogsLeaf;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import com.gavin101.gbuilder.activitymanager.branches.ValidateActivityBranch;

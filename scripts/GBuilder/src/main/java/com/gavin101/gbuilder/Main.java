@@ -3,7 +3,8 @@ package com.gavin101.gbuilder;
 import com.gavin101.GLib.leafs.common.CacheBankLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
-import com.gavin101.gbuilder.activities.skilling.firemaking.common.Firemaking;
+import com.gavin101.gbuilder.activities.skilling.cooking.Cooking;
+import com.gavin101.gbuilder.activities.skilling.firemaking.Firemaking;
 import com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing.BaitFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.flyfishing.FlyFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.shrimp.ShrimpFishing;
@@ -107,6 +108,12 @@ public class Main extends AbstractScript implements Painter {
         ActivityManager.registerActivity(ShrimpFishing.ACTIVITY);
         ActivityManager.registerActivity(BaitFishing.ACTIVITY);
         ActivityManager.registerActivity(FlyFishing.ACTIVITY);
+
+        ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_SHRIMPS));
+        ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_SARDINE));
+        ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_HERRING));
+        ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_TROUT));
+        ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_SALMON));
 
         ActivityManager.registerActivity(Woodcutting.createActivity("Tree", 1, 15));
         ActivityManager.registerActivity(Woodcutting.createActivity("Oak tree", 15, 31));
