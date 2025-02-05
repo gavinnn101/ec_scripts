@@ -295,4 +295,9 @@ public final class GLib {
     public static long minutesToMs(long minutes) {
         return minutes * 60 * 1000;
     }
+
+    public static boolean isNpcAggressive(int npcLevel) {
+        int combatLevel = Players.localPlayer().getCombatLevel();
+        return combatLevel <= (npcLevel * 2);
+    }
 }

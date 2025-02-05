@@ -24,6 +24,13 @@ public class Woodcutting {
                 .inventoryLoadout(Constants.WOODCUTTING_INVENTORY)
                 .minLevel(minLevel)
                 .maxLevel(maxLevel)
+                .validator(() -> {
+                    if (treeName.equals("Willow tree")) {
+                        int wizardLevel = 7;
+                        return !GLib.isNpcAggressive(wizardLevel);
+                    }
+                    return true;
+                })
                 .build();
     }
 
