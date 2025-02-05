@@ -85,8 +85,10 @@ public class Main extends AbstractScript implements Painter {
                 add("Runtime: " + timer);
                 add("Current branch: " + Tree.currentBranch);
                 add("Current leaf: " + Tree.currentLeaf);
-                add("Current activity: " + ActivityManager.getCurrentActivity().getName());
-                add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
+                if (ActivityManager.getCurrentActivity() != null) {
+                    add("Current activity: " + ActivityManager.getCurrentActivity().getName());
+                    add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
+                }
             }}.toArray(new String[0]));
 
     @Override
@@ -95,6 +97,7 @@ public class Main extends AbstractScript implements Painter {
     }
 
     private void registerActivities() {
+        Log.info("Registering all activities (registerActivities).");
         // All registered activities can be randomly selected.
         ActivityManager.registerActivity(ShrimpFishing.ACTIVITY);
         ActivityManager.registerActivity(BaitFishing.ACTIVITY);

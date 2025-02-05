@@ -13,7 +13,6 @@ import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Constants {
     public static final int TREE_CHOPPING_ANIMATION = 877;

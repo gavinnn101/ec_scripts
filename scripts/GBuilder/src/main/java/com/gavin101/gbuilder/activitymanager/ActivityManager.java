@@ -23,6 +23,7 @@ public class ActivityManager {
     private static Activity currentActivity;
 
     public static void registerActivity(Activity activity) {
+        Log.info("Registering activity: " +activity.getName());
         activities.add(activity);
         activityBranches.add(activity.getBranch());
     }
@@ -33,7 +34,7 @@ public class ActivityManager {
             Log.info("Current activity is null.");
             return false;
         }
-        if (!currentActivity.getValidator().get()) {
+        if (!currentActivity.isValid()) {
             Log.info("Current activity validator is no longer true.");
             return false;
         } else if (getCurrentActivityTimeLeftMs() <= 0) {
@@ -81,11 +82,14 @@ public class ActivityManager {
     }
 
     public static Activity getActivity(String activityName) {
+        Log.debug("Looking for activity: " +activityName +" in the list of registered activities.");
         for (Activity activity : activities) {
             if (activity.getName().equals(activityName)) {
+                Log.debug("Found matching activity in list.");
                 return activity;
             }
         }
+        Log.debug("Couldn't find matching activity, returning null.");
         return null;
     }
 }

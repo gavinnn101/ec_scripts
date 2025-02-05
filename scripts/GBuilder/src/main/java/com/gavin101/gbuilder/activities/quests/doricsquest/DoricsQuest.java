@@ -23,19 +23,21 @@ public class DoricsQuest {
 
     public static final RectArea DORICS_HOUSE_AREA = new RectArea(2949, 3452, 2953, 3449);
 
-    public static final Branch ACTIVITY_BRANCH = new ValidateActivityBranch(
-            ActivityManager.getActivity(activityName)).addLeafs(
-            GetCurrentActivityLoadoutLeaf.builder()
-                    .buyRemainder(true)
-                    .build(),
-            new IsAfkBranch().addLeafs(
-                    new TalkToDoricLeaf()
-            )
-    );
+    private static Branch createBranch() {
+        return new ValidateActivityBranch(
+                ActivityManager.getActivity(activityName)).addLeafs(
+                GetCurrentActivityLoadoutLeaf.builder()
+                        .buyRemainder(true)
+                        .build(),
+                new IsAfkBranch().addLeafs(
+                        new TalkToDoricLeaf()
+                )
+        );
+    }
 
     public static final QuestActivity ACTIVITY = QuestActivity.builder()
             .name(activityName)
-            .branch(ACTIVITY_BRANCH)
+            .branchSupplier(DoricsQuest::createBranch)
             .quest(Quest.DORICS_QUEST)
             .inventoryLoadout(INVENTORY_LOADOUT)
             .build();

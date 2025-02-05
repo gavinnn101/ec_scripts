@@ -23,19 +23,21 @@ public class CooksAssistant {
 
     public static final RectArea COOK_KITCHEN_AREA = new RectArea(3209, 3216, 3211, 3213);
 
-    public static final Branch ACTIVITY_BRANCH = new ValidateActivityBranch(
-            ActivityManager.getActivity(activityName)).addLeafs(
-            GetCurrentActivityLoadoutLeaf.builder()
-                    .buyRemainder(true)
-                    .build(),
-            new IsAfkBranch().addLeafs(
-                    new TalkToCookLeaf()
-            )
-    );
+    private static Branch createBranch() {
+        return new ValidateActivityBranch(
+                ActivityManager.getActivity(activityName)).addLeafs(
+                GetCurrentActivityLoadoutLeaf.builder()
+                        .buyRemainder(true)
+                        .build(),
+                new IsAfkBranch().addLeafs(
+                        new TalkToCookLeaf()
+                )
+        );
+    }
 
     public static final QuestActivity ACTIVITY = QuestActivity.builder()
             .name(activityName)
-            .branch(ACTIVITY_BRANCH)
+            .branchSupplier(CooksAssistant::createBranch)
             .quest(Quest.COOKS_ASSISTANT)
             .inventoryLoadout(INVENTORY_LOADOUT)
             .build();

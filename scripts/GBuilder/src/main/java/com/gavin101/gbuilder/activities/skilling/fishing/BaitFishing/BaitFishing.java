@@ -26,20 +26,24 @@ public class BaitFishing {
             .setRefill(Calculations.random(1000, 2001)) // Buy between 1000-2000 fishing bait if we don't have enough for our withdraw amount
             .setLoadoutStrict(Inventory::isFull);
 
-    public static final Branch ACTIVITY_BRANCH = new ValidateActivityBranch(
-            ActivityManager.getActivity(activityName)).addLeafs(
-            GetCurrentActivityLoadoutLeaf.builder()
-                    .buyRemainder(true)
-                    .build(),
-            new IsAfkBranch().addLeafs(
-                    new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.BAIT_FISHING))),
-                    new StartFishingLeaf(Fishing.FishingType.BAIT_FISHING)
-            )
-    );
+
+    private static Branch createBranch() {
+        return new ValidateActivityBranch(
+                ActivityManager.getActivity(activityName)).addLeafs(
+                GetCurrentActivityLoadoutLeaf.builder()
+                        .buyRemainder(true)
+                        .build(),
+                new IsAfkBranch().addLeafs(
+                        new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.BAIT_FISHING))),
+                        new StartFishingLeaf(Fishing.FishingType.BAIT_FISHING)
+                )
+        );
+    }
+
 
     public static final SkillActivity ACTIVITY = SkillActivity.builder()
             .name(activityName)
-            .branch(ACTIVITY_BRANCH)
+            .branchSupplier(BaitFishing::createBranch)
             .activitySkill(Skill.FISHING)
             .inventoryLoadout(INVENTORY_LOADOUT)
             .minLevel(5)

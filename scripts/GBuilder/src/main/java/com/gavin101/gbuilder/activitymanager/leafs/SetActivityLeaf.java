@@ -2,6 +2,7 @@ package com.gavin101.gbuilder.activitymanager.leafs;
 
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import net.eternalclient.api.frameworks.tree.Leaf;
+import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 
 public class SetActivityLeaf extends Leaf {

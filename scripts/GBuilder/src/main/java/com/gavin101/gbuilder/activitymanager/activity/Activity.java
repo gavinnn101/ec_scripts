@@ -18,7 +18,7 @@ public abstract class Activity {
     @NonNull
     private final String name;
     @NonNull
-    private final Branch branch;
+    private final Supplier<Branch> branchSupplier;
     @Builder.Default
     private final Supplier<Boolean> validator = () -> true;
     @Builder.Default
@@ -26,7 +26,10 @@ public abstract class Activity {
     @Builder.Default
     private final InventoryLoadout inventoryLoadout = Common.EMPTY_INVENTORY_LOADOUT;
     @Builder.Default
-    private final long maxDurationMinutes = Calculations.random(5, 10);
+    private final long maxDurationMinutes = Calculations.random(30, 60);
+
+    // Sub-class implements function
+    public abstract String getDetailedString();
 
     // Sub-class implements function
     protected abstract boolean validateActivity();
@@ -35,7 +38,8 @@ public abstract class Activity {
         return validateActivity() && validator.get();
     }
 
-    // Sub-class implements function
-    public abstract String getDetailedString();
+    public Branch getBranch() {
+        return branchSupplier.get();
+    }
 }
 

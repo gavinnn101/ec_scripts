@@ -22,20 +22,22 @@ public class ShrimpFishing {
             .addReq(ItemID.SMALL_FISHING_NET)
             .setLoadoutStrict(Inventory::isFull);
 
-    public static final Branch ACTIVITY_BRANCH = new ValidateActivityBranch(
-            ActivityManager.getActivity(activityName)).addLeafs(
-            GetCurrentActivityLoadoutLeaf.builder()
-                    .buyRemainder(true)
-                    .build(),
-            new IsAfkBranch().addLeafs(
-                    new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.SMALL_FISHING_NET))),
-                    new StartFishingLeaf(Fishing.FishingType.SMALL_FISHING_NET)
-            )
-    );
+    private static Branch createBranch() {
+        return new ValidateActivityBranch(
+                ActivityManager.getActivity(activityName)).addLeafs(
+                GetCurrentActivityLoadoutLeaf.builder()
+                        .buyRemainder(true)
+                        .build(),
+                new IsAfkBranch().addLeafs(
+                        new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.SMALL_FISHING_NET))),
+                        new StartFishingLeaf(Fishing.FishingType.SMALL_FISHING_NET)
+                )
+        );
+    }
 
     public static final SkillActivity ACTIVITY = SkillActivity.builder()
             .name(activityName)
-            .branch(ACTIVITY_BRANCH)
+            .branchSupplier(ShrimpFishing::createBranch)
             .activitySkill(Skill.FISHING)
             .inventoryLoadout(INVENTORY_LOADOUT)
             .minLevel(1)

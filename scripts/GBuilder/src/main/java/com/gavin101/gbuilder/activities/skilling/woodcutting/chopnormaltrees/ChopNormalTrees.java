@@ -16,22 +16,24 @@ import net.eternalclient.api.wrappers.skill.Skill;
 public class ChopNormalTrees {
     private static final String activityName = "Chop normal trees";
 
-    public static final Branch ACTIVITY_BRANCH = new ValidateActivityBranch(
-            ActivityManager.getActivity(activityName)).addLeafs(
-            GetCurrentActivityLoadoutLeaf.builder()
-                    .buyRemainder(true)
-                    .build(),
-            new IsAfkBranch().addLeafs(
-                    new LootItemsLeaf(Constants.WOODCUTTING_LOOT, 10),
-                    new GoToAreaLeaf(GLib.getRandomArea(Constants.TREE_TO_AREAS_MAP("Tree"))),
-                    new ChopTreeLeaf("Tree")
-            )
-    );
+    private static Branch createBranch() {
+        return new ValidateActivityBranch(
+                ActivityManager.getActivity(activityName)).addLeafs(
+                GetCurrentActivityLoadoutLeaf.builder()
+                        .buyRemainder(true)
+                        .build(),
+                new IsAfkBranch().addLeafs(
+                        new LootItemsLeaf(Constants.WOODCUTTING_LOOT, 10),
+                        new GoToAreaLeaf(GLib.getRandomArea(Constants.TREE_TO_AREAS_MAP("Tree"))),
+                        new ChopTreeLeaf("Tree")
+                )
+        );
+    }
 
     public static final SkillActivity ACTIVITY = SkillActivity.builder()
             .name(activityName)
-            .branch(ACTIVITY_BRANCH)
-            .activitySkill(Skill.FISHING)
+            .branchSupplier(ChopNormalTrees::createBranch)
+            .activitySkill(Skill.WOODCUTTING)
             .inventoryLoadout(Constants.WOODCUTTING_INVENTORY)
             .minLevel(1)
             .maxLevel(15)
