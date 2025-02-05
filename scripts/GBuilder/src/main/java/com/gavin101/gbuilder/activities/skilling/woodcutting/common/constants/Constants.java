@@ -35,18 +35,6 @@ public class Constants {
             .setEnabled(() -> Skills.getRealLevel(Skill.WOODCUTTING) >= 41)
             .setLoadoutStrict(Inventory::isFull);
 
-    public static final Map<Skill, LevelRange> NORMAL_TREE_LEVEL_RANGES = Map.of(
-            Skill.WOODCUTTING,    new LevelRange(1, 15)
-    );
-
-    public static final Map<Skill, LevelRange> OAK_TREE_LEVEL_RANGES = Map.of(
-            Skill.WOODCUTTING,    new LevelRange(15, 31)
-    );
-
-    public static final Map<Skill, LevelRange> WILLOW_TREE_LEVEL_RANGES = Map.of(
-            Skill.WOODCUTTING,    new LevelRange(31, 41)
-    );
-
     public static List<Area> TREE_TO_AREAS_MAP(String treeName) {
         List<Area> treeAreaList = new ArrayList<>();
         switch (treeName) {

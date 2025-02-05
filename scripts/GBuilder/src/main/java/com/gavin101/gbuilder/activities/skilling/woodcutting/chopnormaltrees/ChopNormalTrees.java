@@ -34,6 +34,6 @@ public class ChopNormalTrees {
             .activitySkill(Skill.FISHING)
             .inventoryLoadout(Constants.WOODCUTTING_INVENTORY)
             .minLevel(1)
-            .maxLevel(99)
+            .maxLevel(15)
             .build();
 }

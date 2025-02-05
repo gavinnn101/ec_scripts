@@ -1,4 +1,4 @@
-package com.gavin101.gbuilder.activities.skilling.fishing.shrimp;
+package com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing;
 
 import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.branches.common.IsAfkBranch;
@@ -13,13 +13,17 @@ import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
+import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.skill.Skill;
 
-public class ShrimpFishing {
-    private static final String activityName = "Fish shrimp";
+public class BaitFishing {
+    private static final String activityName = "Bait fishing";
 
     public static final InventoryLoadout INVENTORY_LOADOUT = new InventoryLoadout()
-            .addReq(ItemID.SMALL_FISHING_NET)
+            .addReq(ItemID.FISHING_ROD)
+            .addReq(ItemID.FISHING_BAIT, Calculations.random(500, 751)) // Withdraw between 500-751 fishing bait
+            .setEnabled(() -> !Inventory.contains(ItemID.FISHING_BAIT))
+            .setRefill(Calculations.random(1000, 2001)) // Buy between 1000-2000 fishing bait if we don't have enough for our withdraw amount
             .setLoadoutStrict(Inventory::isFull);
 
     public static final Branch ACTIVITY_BRANCH = new ValidateActivityBranch(
@@ -28,8 +32,8 @@ public class ShrimpFishing {
                     .buyRemainder(true)
                     .build(),
             new IsAfkBranch().addLeafs(
-                    new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.SMALL_FISHING_NET))),
-                    new StartFishingLeaf(Fishing.FishingType.SMALL_FISHING_NET)
+                    new GoToAreaLeaf(GLib.getRandomArea(Fishing.FISHING_TYPE_TO_AREAS_MAP(Fishing.FishingType.BAIT_FISHING))),
+                    new StartFishingLeaf(Fishing.FishingType.BAIT_FISHING)
             )
     );
 
@@ -38,7 +42,7 @@ public class ShrimpFishing {
             .branch(ACTIVITY_BRANCH)
             .activitySkill(Skill.FISHING)
             .inventoryLoadout(INVENTORY_LOADOUT)
-            .minLevel(1)
-            .maxLevel(5)
+            .minLevel(5)
+            .maxLevel(20)
             .build();
 }

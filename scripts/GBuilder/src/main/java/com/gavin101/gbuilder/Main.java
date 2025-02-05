@@ -3,6 +3,7 @@ package com.gavin101.gbuilder;
 import com.gavin101.GLib.leafs.common.CacheBankLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
+import com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing.BaitFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.flyfishing.FlyFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.shrimp.ShrimpFishing;
 import com.gavin101.gbuilder.activities.quests.cooksassistant.CooksAssistant;
@@ -82,10 +83,10 @@ public class Main extends AbstractScript implements Painter {
             {{
                 add(getScriptName() + " v" + getScriptVersion());
                 add("Runtime: " + timer);
-                add("Current Branch: " + Tree.currentBranch);
-                add("Current Leaf: " + Tree.currentLeaf);
-                add("Current Activity: " + ActivityManager.getCurrentActivity().getName());
-                add("Current Activity time left: " + ActivityManager.getFormattedTimeLeft());
+                add("Current branch: " + Tree.currentBranch);
+                add("Current leaf: " + Tree.currentLeaf);
+                add("Current activity: " + ActivityManager.getCurrentActivity().getName());
+                add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
             }}.toArray(new String[0]));
 
     @Override
@@ -96,11 +97,12 @@ public class Main extends AbstractScript implements Painter {
     private void registerActivities() {
         // All registered activities can be randomly selected.
         ActivityManager.registerActivity(ShrimpFishing.ACTIVITY);
+        ActivityManager.registerActivity(BaitFishing.ACTIVITY);
+        ActivityManager.registerActivity(FlyFishing.ACTIVITY);
+
         ActivityManager.registerActivity(ChopNormalTrees.ACTIVITY);
 
         ActivityManager.registerActivity(CooksAssistant.ACTIVITY);
         ActivityManager.registerActivity(DoricsQuest.ACTIVITY);
-
-        ActivityManager.registerActivity(FlyFishing.ACTIVITY);
     }
 }
