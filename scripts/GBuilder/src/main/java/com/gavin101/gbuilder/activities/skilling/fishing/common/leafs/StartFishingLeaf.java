@@ -1,6 +1,6 @@
-package com.gavin101.gbuilder.activities.fishing.common.leafs;
+package com.gavin101.gbuilder.activities.skilling.fishing.common.leafs;
 
-import com.gavin101.gbuilder.activities.fishing.common.constants.Fishing;
+import com.gavin101.gbuilder.activities.skilling.fishing.common.constants.Fishing;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.Players;

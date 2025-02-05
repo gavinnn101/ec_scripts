@@ -3,6 +3,7 @@ package com.gavin101.gbuilder.activitymanager;
 import com.gavin101.GLib.GLib;
 import com.gavin101.gbuilder.activitymanager.activity.Activity;
 import lombok.Getter;
+import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.Timer;
 
@@ -13,6 +14,8 @@ import java.util.List;
 
 public class ActivityManager {
     private static final List<Activity> activities = new ArrayList<>();
+    @Getter
+    private static final List<Branch> activityBranches = new ArrayList<>();
 
     @Getter
     private static final Timer activityTimer = new Timer();
@@ -21,6 +24,7 @@ public class ActivityManager {
 
     public static void registerActivity(Activity activity) {
         activities.add(activity);
+        activityBranches.add(activity.getBranch());
     }
 
     public static boolean currentActivityIsValid() {
@@ -74,5 +78,14 @@ public class ActivityManager {
         for (Activity activity : activities) {
             Log.info(activity.getDetailedString());
         }
+    }
+
+    public static Activity getActivity(String activityName) {
+        for (Activity activity : activities) {
+            if (activity.getName().equals(activityName)) {
+                return activity;
+            }
+        }
+        return null;
     }
 }

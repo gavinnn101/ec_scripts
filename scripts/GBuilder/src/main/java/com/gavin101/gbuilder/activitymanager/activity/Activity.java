@@ -3,9 +3,11 @@ package com.gavin101.gbuilder.activitymanager.activity;
 import com.gavin101.gbuilder.utility.constants.Common;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
+import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.math.Calculations;
 
 import java.util.function.Supplier;
@@ -13,7 +15,10 @@ import java.util.function.Supplier;
 @Data
 @SuperBuilder
 public abstract class Activity {
+    @NonNull
     private final String name;
+    @NonNull
+    private final Branch branch;
     @Builder.Default
     private final Supplier<Boolean> validator = () -> true;
     @Builder.Default

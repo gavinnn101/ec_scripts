@@ -1,4 +1,4 @@
-package com.gavin101.gbuilder.activities.fishing.common.constants;
+package com.gavin101.gbuilder.activities.skilling.fishing.common.constants;
 
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.wrappers.map.Area;
