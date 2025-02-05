@@ -291,4 +291,8 @@ public final class GLib {
     public static long msToMinutes(long milliseconds) {
         return milliseconds / (60 * 1000);
     }
+
+    public static long minutesToMs(long minutes) {
+        return minutes * 60 * 1000;
+    }
 }
