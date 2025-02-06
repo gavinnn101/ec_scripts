@@ -38,6 +38,7 @@ import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
 import net.eternalclient.api.script.ScriptManifest;
 import net.eternalclient.api.utilities.Log;
+import net.eternalclient.api.utilities.MethodProvider;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 import net.eternalclient.api.utilities.paint.PaintLocations;
@@ -63,6 +64,12 @@ public class Main extends AbstractScript implements Painter {
     public void onStart(String[] args) {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
+
+        // We'll check skill levels too early if we don't wait until we're logged in.
+        if (!Client.isLoggedIn()) {
+            Log.info("Waiting until we're logged in to continue with onStart().");
+            MethodProvider.sleepUntil(Client::isLoggedIn, 15_000);
+        }
 
 //        // Save resources
 //        Client.getSettings().setRenderingEnabled(false);

@@ -28,7 +28,7 @@ public abstract class Activity {
     @Builder.Default
     private final Supplier<Boolean> validator = () -> true;
     @Builder.Default
-    private final EquipmentLoadout equipmentLoadout = Common.EMPTY_EQUIPMENT_LOADOUT;
+    private EquipmentLoadout equipmentLoadout = Common.EMPTY_EQUIPMENT_LOADOUT;
     @Builder.Default
     private final InventoryLoadout inventoryLoadout = Common.EMPTY_INVENTORY_LOADOUT;
     @Builder.Default
