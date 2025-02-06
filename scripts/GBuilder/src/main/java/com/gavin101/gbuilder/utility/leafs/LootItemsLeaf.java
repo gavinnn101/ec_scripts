@@ -1,6 +1,6 @@
 package com.gavin101.gbuilder.utility.leafs;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import net.eternalclient.api.accessors.GroundItems;
 import net.eternalclient.api.accessors.LocalPlayer;
 import net.eternalclient.api.containers.Inventory;
@@ -11,10 +11,14 @@ import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GroundItem;
 
-@RequiredArgsConstructor
+
+@Builder
 public class LootItemsLeaf extends Leaf {
-    private final int[] itemsToLoot;
-    private final int maxDistance;
+    @Builder.Default
+    private final int maxDistance = 5;
+
+    private final int[] itemIds;
+    private final String[] itemNames;
 
     private static GroundItem currentLootItem;
 
@@ -34,7 +38,7 @@ public class LootItemsLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Looting item: " +currentLootItem.getName());
+        Log.info("Looting item: " + currentLootItem.getName());
         new EntityInteractEvent(currentLootItem, "Take").setEventCompleteCondition(
                 () -> currentLootItem == null, Calculations.random(250, 1500)
         ).execute();
@@ -42,11 +46,21 @@ public class LootItemsLeaf extends Leaf {
     }
 
     public GroundItem findValidLoot() {
-        return GroundItems.closest(i ->
-                i.hasID(itemsToLoot)
-                        && i.hasAction("Take")
-                        && i.distanceTo(LocalPlayer.get()) <= maxDistance
-                        && i.canReach()
-        );
+        return GroundItems.closest(i -> {
+            boolean baseConditions = i.hasAction("Take")
+                    && i.distanceTo(LocalPlayer.get()) <= maxDistance
+                    && i.canReach();
+
+            if (itemIds != null && itemIds.length > 0) {
+                return baseConditions && i.hasID(itemIds);
+            } else if (itemNames != null) {
+                for (String name : itemNames) {
+                    if (i.containsName(name)) {
+                        return baseConditions;
+                    }
+                }
+            }
+            return false;
+        });
     }
 }

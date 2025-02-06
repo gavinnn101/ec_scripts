@@ -57,8 +57,8 @@ public class Woodcutting {
                 GetCurrentActivityLoadoutLeaf.builder()
                         .buyRemainder(true)
                         .build(),
+                LootItemsLeaf.builder().itemNames(Constants.WOODCUTTING_LOOT).build(),
                 new IsAfkBranch().addLeafs(
-                        new LootItemsLeaf(Constants.WOODCUTTING_LOOT, 10),
                         new GoToAreaLeaf(GLib.getRandomArea(Constants.TREE_TO_AREAS_MAP(treeName))),
                         new ChopTreeLeaf(treeName)
                 )

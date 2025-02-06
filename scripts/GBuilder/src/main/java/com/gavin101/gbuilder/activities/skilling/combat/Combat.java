@@ -16,6 +16,7 @@ import com.gavin101.gbuilder.utility.leafs.LootItemsLeaf;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.AttackStyle;
+import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
@@ -112,6 +113,7 @@ public class Combat {
                 .inventoryLoadout(monsterTier.getInventoryLoadout())
                 .minLevel(monsterTier.getMinLevel())
                 .maxLevel(monsterTier.getMaxLevel())
+                .validator(() -> canStartMonsterTier(monsterTier))
                 .build();
     }
 
@@ -123,10 +125,21 @@ public class Combat {
                         .build(),
                 new EatFoodLeaf(monsterTier.getFoodId()),
                 new IsAfkBranch().addLeafs(
-                        new LootItemsLeaf(monsterTier.getLoot(), 3),
+                        LootItemsLeaf.builder().itemIds(monsterTier.getLoot()).build(),
                         new SetAttackStyleLeaf(combatType.getAttackStyle()),
                         new FightMonsterLeaf(monsterTier.getName(), monsterTier.getArea())
                 )
+        );
+    }
+
+    private static boolean canStartMonsterTier(MonsterTier monsterTier) {
+        // Don't start a monster tier if all combat stats don't meet that tiers minimum level.
+        int attackLevel = Skills.getRealLevel(Skill.ATTACK);
+        int strengthLevel = Skills.getRealLevel(Skill.STRENGTH);
+        int defenseLevel = Skills.getRealLevel(Skill.DEFENCE);
+        return (attackLevel >= monsterTier.getMinLevel()
+                && strengthLevel >= monsterTier.getMinLevel()
+                && defenseLevel >= monsterTier.getMinLevel()
         );
     }
 }

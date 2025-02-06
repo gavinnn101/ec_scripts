@@ -65,16 +65,7 @@ public class Constants {
         return treeAreaList;
     }
 
-    public static final int[] WOODCUTTING_LOOT = {
-            ItemID.BIRD_NEST,
-            ItemID.BIRD_NEST_5071,
-            ItemID.BIRD_NEST_5072,
-            ItemID.BIRD_NEST_5073,
-            ItemID.BIRD_NEST_5074,
-            ItemID.BIRD_NEST_5075,
-            ItemID.BIRD_NEST_7413,
-            ItemID.BIRD_NEST_13653,
-            ItemID.BIRD_NEST_22798,
-            ItemID.BIRD_NEST_22800
+    public static final String[] WOODCUTTING_LOOT = {
+            "nest"
     };
 }
