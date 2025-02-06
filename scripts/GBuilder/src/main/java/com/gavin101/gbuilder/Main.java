@@ -9,6 +9,7 @@ import com.gavin101.gbuilder.activities.quests.restlessghost.RestlessGhost;
 import com.gavin101.gbuilder.activities.quests.runemysteries.RuneMysteries;
 import com.gavin101.gbuilder.activities.quests.sheepshearer.SheepShearer;
 import com.gavin101.gbuilder.activities.quests.witchspotion.WitchsPotion;
+import com.gavin101.gbuilder.activities.skilling.combat.Combat;
 import com.gavin101.gbuilder.activities.skilling.cooking.Cooking;
 import com.gavin101.gbuilder.activities.skilling.firemaking.Firemaking;
 import com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing.BaitFishing;
@@ -19,6 +20,8 @@ import com.gavin101.gbuilder.activities.quests.doricsquest.DoricsQuest;
 import com.gavin101.gbuilder.activities.skilling.mining.Mining;
 import com.gavin101.gbuilder.activities.skilling.woodcutting.Woodcutting;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
+import com.gavin101.gbuilder.activitymanager.activity.Activity;
+import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import com.gavin101.gbuilder.activitymanager.leafs.SetActivityLeaf;
 import com.gavin101.gbuilder.utility.branches.NeedLoadoutMoneyBranch;
 import com.gavin101.gbuilder.utility.constants.Common;
@@ -61,6 +64,10 @@ public class Main extends AbstractScript implements Painter {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
 
+//        // Save resources
+//        Client.getSettings().setRenderingEnabled(false);
+//        Client.getSettings().setFpsLimit(3);
+
         timer = new Timer();
         tree = new Tree();
 
@@ -99,8 +106,14 @@ public class Main extends AbstractScript implements Painter {
                 add("Runtime: " + timer);
                 add("Current branch: " + Tree.currentBranch);
                 add("Current leaf: " + Tree.currentLeaf);
+
                 if (ActivityManager.getCurrentActivity() != null) {
-                    add("Current activity: " + ActivityManager.getCurrentActivity().getName());
+                    Activity currentActivity = ActivityManager.getCurrentActivity();
+                    add("Current activity: " + currentActivity.getName());
+                    if (currentActivity.getType().equals(Activity.ActivityType.SKILL)) {
+                        SkillActivity currentSkillActivity = (SkillActivity) currentActivity;
+                        add("Current activity skill: " +currentSkillActivity.getActivitySkill());
+                    }
                     add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
                 }
             }}.toArray(new String[0]));
@@ -141,6 +154,12 @@ public class Main extends AbstractScript implements Painter {
         ActivityManager.registerActivity(GoblinDiplomacy.ACTIVITY);
         ActivityManager.registerActivity(RuneMysteries.ACTIVITY);
         ActivityManager.registerActivity(RestlessGhost.ACTIVITY);
+
+        Combat.MonsterTier.CHICKENS.register();
+        Combat.MonsterTier.COWS.register();
+        Combat.MonsterTier.BARBARIANS.register();
+        Combat.MonsterTier.ALKHARIDWARRIORS.register();
+        Combat.MonsterTier.FLESHCRAWLERS.register();
     }
 
     @Notify

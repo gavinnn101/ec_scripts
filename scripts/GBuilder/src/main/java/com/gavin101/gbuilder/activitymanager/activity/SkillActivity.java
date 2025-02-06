@@ -18,6 +18,8 @@ public class SkillActivity extends Activity {
     private final int minLevel = 1;
     @Builder.Default
     private final int maxLevel = 99;
+    @Builder.Default
+    private final ActivityType type = ActivityType.SKILL;
 
     @Override
     public String getDetailedString() {

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 public class ActivityManager {
-    private static final List<Activity> activities = new ArrayList<>();
+    private static final List<Activity> registeredActivities = new ArrayList<>();
     @Getter
     private static final List<Branch> activityBranches = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class ActivityManager {
 
     public static void registerActivity(Activity activity) {
         Log.info("Registering activity: " +activity.getName());
-        activities.add(activity);
+        registeredActivities.add(activity);
         activityBranches.add(activity.getBranch());
     }
 
@@ -46,8 +46,8 @@ public class ActivityManager {
 
     public static void setCurrentActivity() {
         Log.info("Looking for a random valid activity to start.");
-        Collections.shuffle(activities);
-        for (Activity activity : activities) {
+        Collections.shuffle(registeredActivities);
+        for (Activity activity : registeredActivities) {
             if (activity.isValid()) {
                 Log.info("Setting current activity to: " +activity.getName());
                 Log.info("Current activity max duration (minutes): " +activity.getMaxDurationMinutes());
@@ -76,14 +76,14 @@ public class ActivityManager {
 
     public static void listActivities() {
         Log.info("Listing registered activities:");
-        for (Activity activity : activities) {
+        for (Activity activity : registeredActivities) {
             Log.info(activity.getDetailedString());
         }
     }
 
     public static Activity getActivity(String activityName) {
         Log.debug("Looking for activity: " +activityName +" in the list of registered activities.");
-        for (Activity activity : activities) {
+        for (Activity activity : registeredActivities) {
             if (activity.getName().equals(activityName)) {
                 Log.debug("Found matching activity in list.");
                 return activity;

@@ -15,8 +15,14 @@ import java.util.function.Supplier;
 @Data
 @SuperBuilder
 public abstract class Activity {
+    public enum ActivityType {
+        SKILL,
+        QUEST
+    }
+
     @NonNull
     private final String name;
+    protected final ActivityType type;
     @NonNull
     private final Supplier<Branch> branchSupplier;
     @Builder.Default

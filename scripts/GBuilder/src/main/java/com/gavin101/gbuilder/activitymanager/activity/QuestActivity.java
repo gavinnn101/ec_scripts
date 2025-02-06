@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activitymanager.activity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -12,6 +13,8 @@ import net.eternalclient.api.wrappers.quest.Quest;
 public class QuestActivity extends Activity {
     @NonNull
     private final Quest quest;
+    @Builder.Default
+    private final ActivityType type = ActivityType.QUEST;
 
     @Override
     protected boolean validateActivity() {

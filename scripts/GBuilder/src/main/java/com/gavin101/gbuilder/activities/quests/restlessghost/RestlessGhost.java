@@ -15,7 +15,7 @@ import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.wrappers.quest.Quest;
 
 public class RestlessGhost {
-    private static final String activityName = "Rune mysteries";
+    private static final String activityName = "Restless Ghost";
 
     private static final EquipmentLoadout EQUIPMENT_LOADOUT = new EquipmentLoadout()
             .addAmulet(ItemID.GHOSTSPEAK_AMULET)
