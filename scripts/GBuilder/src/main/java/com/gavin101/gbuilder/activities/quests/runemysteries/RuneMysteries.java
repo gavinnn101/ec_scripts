@@ -1,7 +1,9 @@
-package com.gavin101.gbuilder.activities.quests.doricsquest;
+package com.gavin101.gbuilder.activities.quests.runemysteries;
 
 import com.gavin101.GLib.branches.common.IsAfkBranch;
-import com.gavin101.gbuilder.activities.quests.doricsquest.leafs.TalkToDoricLeaf;
+import com.gavin101.gbuilder.activities.quests.runemysteries.leafs.TalkToAuburyLeaf;
+import com.gavin101.gbuilder.activities.quests.runemysteries.leafs.TalkToDukeLeaf;
+import com.gavin101.gbuilder.activities.quests.runemysteries.leafs.TalkToSedridorLeaf;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.activity.QuestActivity;
 import com.gavin101.gbuilder.activitymanager.branches.ValidateActivityBranch;
@@ -11,13 +13,16 @@ import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.wrappers.quest.Quest;
 
-public class DoricsQuest {
-    private static final String activityName = "Dorics Quest";
+public class RuneMysteries {
+    private static final String activityName = "Rune mysteries";
 
     public static final InventoryLoadout INVENTORY_LOADOUT = new InventoryLoadout()
-            .addReq(ItemID.CLAY, 6)
-            .addReq(ItemID.COPPER_ORE, 4)
-            .addReq(ItemID.IRON_ORE, 2)
+            .addReq(ItemID.AIR_TALISMAN)
+            .setEnabled(() -> Quest.RUNE_MYSTERIES.getState() == 1)
+            .addReq(ItemID.RESEARCH_PACKAGE)
+            .setEnabled(() -> Quest.RUNE_MYSTERIES.getState() == 3)
+            .addReq(ItemID.RESEARCH_NOTES)
+            .setEnabled(() -> Quest.RUNE_MYSTERIES.getState() == 5)
             .setLoadoutStrict();
 
     private static Branch createBranch() {
@@ -27,15 +32,17 @@ public class DoricsQuest {
                         .buyRemainder(true)
                         .build(),
                 new IsAfkBranch().addLeafs(
-                        new TalkToDoricLeaf()
+                        new TalkToDukeLeaf(),
+                        new TalkToSedridorLeaf(),
+                        new TalkToAuburyLeaf()
                 )
         );
     }
 
     public static final QuestActivity ACTIVITY = QuestActivity.builder()
             .name(activityName)
-            .branchSupplier(DoricsQuest::createBranch)
-            .quest(Quest.DORICS_QUEST)
+            .branchSupplier(RuneMysteries::createBranch)
+            .quest(Quest.RUNE_MYSTERIES)
             .inventoryLoadout(INVENTORY_LOADOUT)
             .build();
 }

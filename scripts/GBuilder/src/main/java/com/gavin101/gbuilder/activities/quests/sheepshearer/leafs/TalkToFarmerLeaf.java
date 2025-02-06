@@ -1,4 +1,4 @@
-package com.gavin101.gbuilder.activities.quests.cooksassistant.leafs;
+package com.gavin101.gbuilder.activities.quests.sheepshearer.leafs;
 
 import com.gavin101.GLib.GLib;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -6,13 +6,13 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.RectArea;
 
-public class TalkToCookLeaf extends Leaf {
-    private static final String COOK_NAME = "Cook";
+public class TalkToFarmerLeaf extends Leaf {
+    private static final String FARMER_NAME = "Fred the Farmer";
     private static final String[] CHAT_OPTIONS = {
-            "What's wrong?",
-            "Yes",
+            "I'm looking for a quest.",
+            "Yes."
     };
-    private static final RectArea COOK_KITCHEN_AREA = new RectArea(3209, 3216, 3211, 3213);
+    private static final RectArea FARMER_AREA = new RectArea(3184, 3279, 3191, 3270, 0);
 
     @Override
     public boolean isValid() {
@@ -21,8 +21,8 @@ public class TalkToCookLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Trying to talk to: " +COOK_NAME);
-        GLib.talkWithNpc(COOK_NAME, COOK_KITCHEN_AREA, CHAT_OPTIONS);
+        Log.info("Trying to talk to: " +FARMER_NAME);
+        GLib.talkWithNpc(FARMER_NAME, FARMER_AREA, CHAT_OPTIONS);
         return ReactionGenerator.getNormal();
     }
 }

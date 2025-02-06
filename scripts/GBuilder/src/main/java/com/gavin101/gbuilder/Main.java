@@ -3,6 +3,12 @@ package com.gavin101.gbuilder;
 import com.gavin101.GLib.leafs.common.CacheBankLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
+import com.gavin101.gbuilder.activities.quests.goblindiplomacy.GoblinDiplomacy;
+import com.gavin101.gbuilder.activities.quests.impcatcher.ImpCatcher;
+import com.gavin101.gbuilder.activities.quests.restlessghost.RestlessGhost;
+import com.gavin101.gbuilder.activities.quests.runemysteries.RuneMysteries;
+import com.gavin101.gbuilder.activities.quests.sheepshearer.SheepShearer;
+import com.gavin101.gbuilder.activities.quests.witchspotion.WitchsPotion;
 import com.gavin101.gbuilder.activities.skilling.cooking.Cooking;
 import com.gavin101.gbuilder.activities.skilling.firemaking.Firemaking;
 import com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing.BaitFishing;
@@ -129,6 +135,12 @@ public class Main extends AbstractScript implements Painter {
 
         ActivityManager.registerActivity(CooksAssistant.ACTIVITY);
         ActivityManager.registerActivity(DoricsQuest.ACTIVITY);
+        ActivityManager.registerActivity(SheepShearer.ACTIVITY);
+        ActivityManager.registerActivity(ImpCatcher.ACTIVITY);
+        ActivityManager.registerActivity(WitchsPotion.ACTIVITY);
+        ActivityManager.registerActivity(GoblinDiplomacy.ACTIVITY);
+        ActivityManager.registerActivity(RuneMysteries.ACTIVITY);
+        ActivityManager.registerActivity(RestlessGhost.ACTIVITY);
     }
 
     @Notify

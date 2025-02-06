@@ -9,7 +9,6 @@ import com.gavin101.gbuilder.activitymanager.leafs.GetCurrentActivityLoadoutLeaf
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
-import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.quest.Quest;
 
 public class CooksAssistant {
@@ -20,8 +19,6 @@ public class CooksAssistant {
             .addReq(ItemID.POT_OF_FLOUR)
             .addReq(ItemID.BUCKET_OF_MILK)
             .setLoadoutStrict();
-
-    public static final RectArea COOK_KITCHEN_AREA = new RectArea(3209, 3216, 3211, 3213);
 
     private static Branch createBranch() {
         return new ValidateActivityBranch(
