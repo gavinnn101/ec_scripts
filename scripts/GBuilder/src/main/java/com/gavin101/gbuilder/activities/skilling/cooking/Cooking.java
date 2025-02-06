@@ -1,6 +1,9 @@
 package com.gavin101.gbuilder.activities.skilling.cooking;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.branches.common.IsAfkBranch;
+import com.gavin101.GLib.leafs.common.GoToAreaLeaf;
+import com.gavin101.gbuilder.activities.skilling.cooking.constants.CookingConstants;
 import com.gavin101.gbuilder.activities.skilling.cooking.leafs.CookFoodLeaf;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
@@ -11,13 +14,12 @@ import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.container.OwnedItems;
-import net.eternalclient.api.wrappers.item.ItemComposite;
 import net.eternalclient.api.wrappers.quest.Quest;
 import net.eternalclient.api.wrappers.skill.Skill;
 
 public class Cooking {
     public static SkillActivity createActivity(int rawFoodId) {
-        String activityName = String.format("Cooking food: %s", ItemComposite.getItem(rawFoodId).getName());
+        String activityName = String.format("Cooking food: %s", GLib.getItemName(rawFoodId));
 
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
                 .addReq(rawFoodId, () -> Math.min(OwnedItems.count(rawFoodId), 28))
@@ -41,6 +43,7 @@ public class Cooking {
                         .buyRemainder(false)
                         .build(),
                 new IsAfkBranch().addLeafs(
+                        new GoToAreaLeaf(CookingConstants.LUMBRIDGE_CASTLE_COOKING_AREA),
                         new CookFoodLeaf("Cooking range", rawFoodId)
                 )
         );

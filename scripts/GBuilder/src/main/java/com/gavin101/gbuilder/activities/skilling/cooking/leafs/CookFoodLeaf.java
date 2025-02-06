@@ -1,6 +1,5 @@
 package com.gavin101.gbuilder.activities.skilling.cooking.leafs;
 
-import com.gavin101.gbuilder.activities.skilling.cooking.constants.CookingConstants;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Widgets;
@@ -13,7 +12,6 @@ import net.eternalclient.api.utilities.MethodProvider;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;
-import net.eternalclient.api.wrappers.walking.Walking;
 import net.eternalclient.api.wrappers.widgets.WidgetChild;
 
 
@@ -45,11 +43,7 @@ public class CookFoodLeaf extends Leaf {
                 new EntityInteractEvent(cookingObject, "Cook").setEventCompleteCondition(
                         () -> getCookWidget() != null, Calculations.random(500, 1500)
                 ).execute();
-            } else {
-                Log.debug("Walking to cooking area.");
-                Walking.walk(CookingConstants.LUMBRIDGE_CASTLE_COOKING_AREA.getRandomTile());
             }
-
         }
         return ReactionGenerator.getNormal();
     }
@@ -63,6 +57,8 @@ public class CookFoodLeaf extends Leaf {
                 // widget that has a parent (child widget) with action "Cook"
                 i.getParent() != null
                 && i.containsAction("Cook")
+                // Filter out the cooking skill widget
+                && !i.containsAction("Cooking")
         );
     }
 }

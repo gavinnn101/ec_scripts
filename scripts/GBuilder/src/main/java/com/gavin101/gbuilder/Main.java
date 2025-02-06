@@ -10,6 +10,7 @@ import com.gavin101.gbuilder.activities.skilling.fishing.flyfishing.FlyFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.shrimp.ShrimpFishing;
 import com.gavin101.gbuilder.activities.quests.cooksassistant.CooksAssistant;
 import com.gavin101.gbuilder.activities.quests.doricsquest.DoricsQuest;
+import com.gavin101.gbuilder.activities.skilling.mining.Mining;
 import com.gavin101.gbuilder.activities.skilling.woodcutting.Woodcutting;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.leafs.SetActivityLeaf;
@@ -115,13 +116,16 @@ public class Main extends AbstractScript implements Painter {
         ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_TROUT));
         ActivityManager.registerActivity(Cooking.createActivity(ItemID.RAW_SALMON));
 
-        ActivityManager.registerActivity(Woodcutting.createActivity("Tree", 1, 15));
-        ActivityManager.registerActivity(Woodcutting.createActivity("Oak tree", 15, 31));
-        ActivityManager.registerActivity(Woodcutting.createActivity("Willow tree", 31, 99));
+        ActivityManager.registerActivity(Woodcutting.createActivity(Woodcutting.TreeType.TREE));
+        ActivityManager.registerActivity(Woodcutting.createActivity(Woodcutting.TreeType.OAK));
+        ActivityManager.registerActivity(Woodcutting.createActivity(Woodcutting.TreeType.WILLOW));
 
-        ActivityManager.registerActivity(Firemaking.createActivity(ItemID.LOGS));
-        ActivityManager.registerActivity(Firemaking.createActivity(ItemID.OAK_LOGS));
-        ActivityManager.registerActivity(Firemaking.createActivity(ItemID.WILLOW_LOGS));
+        ActivityManager.registerActivity(Firemaking.createActivity(Firemaking.LogType.NORMAL));
+        ActivityManager.registerActivity(Firemaking.createActivity(Firemaking.LogType.OAK));
+        ActivityManager.registerActivity(Firemaking.createActivity(Firemaking.LogType.WILLOW));
+
+        ActivityManager.registerActivity(Mining.createActivity(Mining.RockType.COPPER));
+        ActivityManager.registerActivity(Mining.createActivity(Mining.RockType.IRON));
 
         ActivityManager.registerActivity(CooksAssistant.ACTIVITY);
         ActivityManager.registerActivity(DoricsQuest.ACTIVITY);

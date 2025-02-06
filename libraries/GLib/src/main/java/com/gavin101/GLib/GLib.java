@@ -21,6 +21,7 @@ import net.eternalclient.api.utilities.MethodProvider;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
+import net.eternalclient.api.wrappers.item.ItemComposite;
 import net.eternalclient.api.wrappers.map.Area;
 import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
@@ -299,5 +300,13 @@ public final class GLib {
     public static boolean isNpcAggressive(int npcLevel) {
         int combatLevel = Players.localPlayer().getCombatLevel();
         return combatLevel <= (npcLevel * 2);
+    }
+
+    public static String getItemName(int itemId) {
+        ItemComposite itemComposite = ItemComposite.getItem(itemId);
+        if (itemComposite != null) {
+            return itemComposite.getName();
+        }
+        return null;
     }
 }

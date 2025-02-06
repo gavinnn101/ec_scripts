@@ -35,7 +35,7 @@ public class SellItemsLeaf extends Leaf {
             // Sell all of our items for now. setting a high value like 99999 doesn't work like we'd hope.
             int quantityToSell = OwnedItems.count(itemId);
             if (OwnedItems.contains(itemId)) {
-                Log.debug("Adding item to sell: " + ItemComposite.getItem(itemId).getName() +" of quantity: " +quantityToSell);
+                Log.debug("Adding item to sell: " + GLib.getItemName(itemId) +" of quantity: " +quantityToSell);
                 sellItems.add(new SellItem(itemId, quantityToSell));
             }
         }

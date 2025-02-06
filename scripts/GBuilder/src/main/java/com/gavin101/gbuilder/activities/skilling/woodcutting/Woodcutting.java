@@ -10,11 +10,28 @@ import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import com.gavin101.gbuilder.activitymanager.branches.ValidateActivityBranch;
 import com.gavin101.gbuilder.activitymanager.leafs.GetCurrentActivityLoadoutLeaf;
 import com.gavin101.gbuilder.utility.leafs.LootItemsLeaf;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.wrappers.skill.Skill;
 
+
 public class Woodcutting {
-    public static SkillActivity createActivity(String treeName, int minLevel, int maxLevel) {
+    @Getter
+    @RequiredArgsConstructor
+    public enum TreeType {
+        TREE("Tree", 1, 15),
+        OAK("Oak tree", 15, 31),
+        WILLOW("Willow tree", 31, 99);
+
+        private final String name;
+        private final int minLevel;
+        private final int maxLevel;
+    }
+
+    public static SkillActivity createActivity(TreeType treeType) {
+        String treeName = treeType.getName();
+
         String activityName = String.format("Chopping %ss", treeName);
 
         return SkillActivity.builder()
@@ -22,10 +39,10 @@ public class Woodcutting {
                 .branchSupplier(() -> createBranch(treeName, activityName))
                 .activitySkill(Skill.WOODCUTTING)
                 .inventoryLoadout(Constants.WOODCUTTING_INVENTORY)
-                .minLevel(minLevel)
-                .maxLevel(maxLevel)
+                .minLevel(treeType.getMinLevel())
+                .maxLevel(treeType.getMaxLevel())
                 .validator(() -> {
-                    if (treeName.equals("Willow tree")) {
+                    if (treeType.equals(TreeType.WILLOW)) {
                         int wizardLevel = 7;
                         return !GLib.isNpcAggressive(wizardLevel);
                     }
