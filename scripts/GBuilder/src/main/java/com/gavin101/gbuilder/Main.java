@@ -25,6 +25,7 @@ import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import com.gavin101.gbuilder.activitymanager.leafs.SetActivityLeaf;
 import com.gavin101.gbuilder.utility.branches.NeedLoadoutMoneyBranch;
 import com.gavin101.gbuilder.utility.constants.Common;
+import com.gavin101.gbuilder.utility.leafs.EndScriptLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.data.ItemID;
@@ -68,7 +69,10 @@ public class Main extends AbstractScript implements Painter {
         // We'll check skill levels too early if we don't wait until we're logged in.
         if (!Client.isLoggedIn()) {
             Log.info("Waiting until we're logged in to continue with onStart().");
-            MethodProvider.sleepUntil(Client::isLoggedIn, 15_000);
+            if (MethodProvider.sleepUntil(Client::isLoggedIn, 15_000)) {
+                Log.info("We're logged in.");
+                MethodProvider.sleep(2000);
+            }
         }
 
 //        // Save resources
@@ -87,6 +91,7 @@ public class Main extends AbstractScript implements Painter {
 
         // Create base tree with required branches/leafs.
         tree.addBranches(
+                new EndScriptLeaf(),
                 new EnableRunningLeaf(),
                 new CacheBankLeaf(),
                 new SetActivityLeaf(),
