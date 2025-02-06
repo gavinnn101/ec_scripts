@@ -23,6 +23,11 @@ import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.activity.Activity;
 import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import com.gavin101.gbuilder.activitymanager.leafs.SetActivityLeaf;
+import com.gavin101.gbuilder.breaks.BreakFinishedLeaf;
+import com.gavin101.gbuilder.breaks.LoggedOutLeaf;
+import com.gavin101.gbuilder.breaks.TakeBreakLeaf;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
+import com.gavin101.gbuilder.fatiguetracker.ManageFatigueLeaf;
 import com.gavin101.gbuilder.utility.branches.NeedLoadoutMoneyBranch;
 import com.gavin101.gbuilder.utility.constants.Common;
 import com.gavin101.gbuilder.utility.leafs.EndScriptLeaf;
@@ -75,6 +80,8 @@ public class Main extends AbstractScript implements Painter {
             }
         }
 
+        FatigueTracker.reset();
+
 //        // Save resources
 //        Client.getSettings().setRenderingEnabled(false);
 //        Client.getSettings().setFpsLimit(3);
@@ -92,6 +99,10 @@ public class Main extends AbstractScript implements Painter {
         // Create base tree with required branches/leafs.
         tree.addBranches(
                 new EndScriptLeaf(),
+                new ManageFatigueLeaf(),
+                new TakeBreakLeaf(),
+                new BreakFinishedLeaf(),
+                new LoggedOutLeaf(),
                 new EnableRunningLeaf(),
                 new CacheBankLeaf(),
                 new SetActivityLeaf(),
@@ -128,6 +139,12 @@ public class Main extends AbstractScript implements Painter {
                     }
                     add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
                 }
+                add("Fatigue level: " +FatigueTracker.getFatigueLevel());
+                if (FatigueTracker.isOnBreak()) {
+                    add("Current break duration: " +FatigueTracker.getFormattedRemainingBreakTime());
+                }
+                add("Next break in: " +FatigueTracker.getFormattedNextBreakIn());
+                add("Next break duration: " +FatigueTracker.getFormattedNextBreakDuration());
             }}.toArray(new String[0]));
 
     @Override
