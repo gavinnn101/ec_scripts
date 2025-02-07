@@ -31,10 +31,12 @@ import com.gavin101.gbuilder.fatiguetracker.ManageFatigueLeaf;
 import com.gavin101.gbuilder.utility.branches.NeedLoadoutMoneyBranch;
 import com.gavin101.gbuilder.utility.constants.Common;
 import com.gavin101.gbuilder.utility.leafs.EndScriptLeaf;
+import com.gavin101.gbuilder.utility.leafs.HandleDeathLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
@@ -46,7 +48,6 @@ import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
 import net.eternalclient.api.script.ScriptManifest;
 import net.eternalclient.api.utilities.Log;
-import net.eternalclient.api.utilities.MethodProvider;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 import net.eternalclient.api.utilities.paint.PaintLocations;
@@ -68,6 +69,7 @@ public class Main extends AbstractScript implements Painter {
 
     public static boolean needToChangeFiremakingTile = false;
 
+    public static boolean died = false;
 
     public void onStart(String[] args) {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
@@ -102,6 +104,7 @@ public class Main extends AbstractScript implements Painter {
                 new BreakFinishedLeaf(),
                 new LoggedOutLeaf(),
                 new EnableRunningLeaf(),
+                new HandleDeathLeaf(),
                 new CacheBankLeaf(),
                 new SetActivityLeaf(),
                 new NeedLoadoutMoneyBranch().addLeafs(
@@ -197,6 +200,11 @@ public class Main extends AbstractScript implements Painter {
         if (msg.equals("You can't light a fire here.")) {
             Log.debug("Not on a valid firemaking tile, setting boolean to move to a new tile.");
             needToChangeFiremakingTile = true;
+        } else if (msg.equals("Some of your dropped items are being held in a gravestone, near where you died.")) {
+            died = true;
+        } else if (msg.contains("Your gravestone has expired") || msg.contains("You successfully retrieved everything from your gravestone")) {
+            Log.info("We collected our items or our gravestone has expired, setting `died = false`.");
+            died = false;
         }
     }
 }
