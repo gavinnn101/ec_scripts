@@ -141,9 +141,10 @@ public class Main extends AbstractScript implements Painter {
                 add("Fatigue level: " +FatigueTracker.getFatigueLevel());
                 if (FatigueTracker.isOnBreak()) {
                     add("Current break duration: " +FatigueTracker.getFormattedRemainingBreakTime());
+                } else {
+                    add("Next break in: " +FatigueTracker.getFormattedNextBreakIn());
+                    add("Next break duration: " +FatigueTracker.getFormattedNextBreakDuration());
                 }
-                add("Next break in: " +FatigueTracker.getFormattedNextBreakIn());
-                add("Next break duration: " +FatigueTracker.getFormattedNextBreakDuration());
             }}.toArray(new String[0]));
 
     @Override
