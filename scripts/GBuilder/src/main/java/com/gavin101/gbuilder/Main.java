@@ -33,7 +33,9 @@ import com.gavin101.gbuilder.utility.constants.Common;
 import com.gavin101.gbuilder.utility.leafs.EndScriptLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.Client;
+import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
@@ -73,11 +75,7 @@ public class Main extends AbstractScript implements Painter {
 
         // We'll check skill levels too early if we don't wait until we're logged in.
         if (!Client.isLoggedIn()) {
-            Log.info("Waiting until we're logged in to continue with onStart().");
-            if (MethodProvider.sleepUntil(Client::isLoggedIn, 15_000)) {
-                Log.info("We're logged in.");
-                MethodProvider.sleep(2000);
-            }
+            new LoginEvent().setEventCompleteCondition(Client::isLoggedIn).execute();
         }
 
         FatigueTracker.reset();
@@ -136,6 +134,7 @@ public class Main extends AbstractScript implements Painter {
                     if (currentActivity.getType().equals(Activity.ActivityType.SKILL)) {
                         SkillActivity currentSkillActivity = (SkillActivity) currentActivity;
                         add("Current activity skill: " +currentSkillActivity.getActivitySkill());
+                        add("Current activity skill level: " +Skills.getRealLevel(currentSkillActivity.getActivitySkill()));
                     }
                     add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
                 }

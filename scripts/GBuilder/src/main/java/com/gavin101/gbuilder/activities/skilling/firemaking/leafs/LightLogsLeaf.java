@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.skilling.firemaking.leafs;
 
 import com.gavin101.gbuilder.activities.skilling.firemaking.constants.FiremakingConstants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;
@@ -35,6 +36,7 @@ public class LightLogsLeaf extends Leaf {
                     return nearestFire != null && nearestFire.getWorldTile().equals(originalPlayerTile);
                 }, Calculations.random(2000, 7000)
         ).execute();
-        return ReactionGenerator.getPredictable();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getPredictable();
     }
 }

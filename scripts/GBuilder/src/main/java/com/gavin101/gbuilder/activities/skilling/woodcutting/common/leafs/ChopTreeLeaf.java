@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.skilling.woodcutting.common.leafs;
 
 import com.gavin101.gbuilder.activities.skilling.woodcutting.common.constants.Constants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;
@@ -31,6 +32,7 @@ public class ChopTreeLeaf extends Leaf {
                     () -> Players.localPlayer().getAnimation() == Constants.TREE_CHOPPING_ANIMATION, Calculations.random(1500, 3000)
             ).execute();
         }
-        return ReactionGenerator.getAFK();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getAFK();
     }
 }

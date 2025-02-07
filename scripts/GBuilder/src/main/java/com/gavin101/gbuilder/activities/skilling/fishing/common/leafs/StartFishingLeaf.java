@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.skilling.fishing.common.leafs;
 
 import com.gavin101.gbuilder.activities.skilling.fishing.common.constants.Fishing;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.Players;
@@ -33,7 +34,8 @@ public class StartFishingLeaf extends Leaf {
                     () -> Players.localPlayer().isInteractingWith(fishingSpot), Calculations.random(2500, 5000)
             ).execute();
         }
-        return ReactionGenerator.getAFK();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getAFK();
     }
 
     private String[] getFishingTypeActions(Fishing.FishingType fishingType) {

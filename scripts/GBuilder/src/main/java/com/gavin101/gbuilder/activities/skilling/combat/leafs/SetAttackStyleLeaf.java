@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.skilling.combat.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.AttackStyle;
 import net.eternalclient.api.accessors.Combat;
@@ -25,6 +26,7 @@ public class SetAttackStyleLeaf extends Leaf {
                 () -> Combat.getAttackStyle().equals(attackStyle),
                 Calculations.random(350, 1000)
         ).execute();
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

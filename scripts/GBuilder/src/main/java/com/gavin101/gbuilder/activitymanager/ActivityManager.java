@@ -22,6 +22,10 @@ public class ActivityManager {
     @Getter
     private static Activity currentActivity;
 
+    private static long activityStartTime = 0;
+    private static long totalActiveTime = 0;
+    private static boolean isPaused = false;
+
     public static void registerActivity(Activity activity) {
         Log.info("Registering activity: " +activity.getName());
         registeredActivities.add(activity);
@@ -49,9 +53,13 @@ public class ActivityManager {
         Collections.shuffle(registeredActivities);
         for (Activity activity : registeredActivities) {
             if (activity.isValid()) {
-                Log.info("Setting current activity to: " +activity.getName());
-                Log.info("Current activity max duration (minutes): " +activity.getMaxDurationMinutes());
+                Log.info("Setting current activity to: " + activity.getName());
+                Log.info("Current activity max duration (minutes): " + activity.getMaxDurationMinutes());
                 currentActivity = activity;
+                // Reset our time tracking
+                activityStartTime = System.currentTimeMillis();
+                totalActiveTime = 0;
+                isPaused = false;
                 activityTimer.reset();
                 break;
             }
@@ -59,12 +67,23 @@ public class ActivityManager {
     }
 
     public static long getCurrentActivityTimeLeftMs() {
+        if (currentActivity == null) {
+            return 0;
+        }
+
         long maxDurationMs = GLib.minutesToMs(currentActivity.getMaxDurationMinutes());
-        return maxDurationMs - activityTimer.elapsed();
+        long currentActiveTime;
+
+        if (isPaused) {
+            currentActiveTime = totalActiveTime;
+        } else {
+            currentActiveTime = totalActiveTime + (System.currentTimeMillis() - activityStartTime);
+        }
+
+        return maxDurationMs - currentActiveTime;
     }
 
-    public static String getFormattedTimeLeft() {
-        long milliseconds = getCurrentActivityTimeLeftMs();
+    private static String formatTime(long milliseconds) {
         long seconds = milliseconds / 1000;
         long hours = seconds / 3600;
         seconds = seconds % 3600;
@@ -72,6 +91,10 @@ public class ActivityManager {
         seconds = seconds % 60;
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public static String getFormattedTimeLeft() {
+        return formatTime(getCurrentActivityTimeLeftMs());
     }
 
     public static void listActivities() {
@@ -91,5 +114,21 @@ public class ActivityManager {
         }
         Log.debug("Couldn't find matching activity, returning null.");
         return null;
+    }
+
+    public static void pauseActivityTimer() {
+        if (!isPaused) {
+            isPaused = true;
+            totalActiveTime += (System.currentTimeMillis() - activityStartTime);
+            Log.debug(String.format("Activity paused. Total active time: %s", formatTime(totalActiveTime)));
+        }
+    }
+
+    public static void resumeActivityTimer() {
+        if (isPaused) {
+            isPaused = false;
+            activityStartTime = System.currentTimeMillis();
+            Log.debug(String.format("Activity resumed. Current total time: %s", formatTime(totalActiveTime)));
+        }
     }
 }

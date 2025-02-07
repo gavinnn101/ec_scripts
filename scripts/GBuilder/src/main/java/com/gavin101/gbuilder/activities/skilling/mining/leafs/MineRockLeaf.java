@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.skilling.mining.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;
@@ -15,23 +16,24 @@ import net.eternalclient.api.wrappers.interactives.GameObject;
 public class MineRockLeaf extends Leaf {
     private final String rockToMine;
 
+    private GameObject currentRock;
+
     @Override
     public boolean isValid() {
-        return !Inventory.isFull();
+        currentRock = GameObjects.closest(i -> i.hasName(rockToMine) && i.distance() <= 1);
+        return currentRock != null && !Inventory.isFull();
     }
 
     @Override
     public int onLoop() {
         Log.info("Mining rock: " +rockToMine);
-        GameObject ironRock = GameObjects.closest(
-                i -> i.hasName(rockToMine) && i.distance() <= 1
-        );
-        if (ironRock != null) {
-            new EntityInteractEvent(ironRock, "Mine").setEventCompleteCondition(
+        if (currentRock != null) {
+            new EntityInteractEvent(currentRock, "Mine").setEventCompleteCondition(
                     () -> Players.localPlayer().isAnimating(),
                     Calculations.random(1250, 2500)
             ).execute();
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

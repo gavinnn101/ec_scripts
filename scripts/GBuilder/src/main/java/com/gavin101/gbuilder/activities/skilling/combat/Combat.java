@@ -68,8 +68,8 @@ public class Combat {
         ),
         ALKHARIDWARRIORS(
                 "Al Kharid warrior",
+                30,
                 40,
-                50,
                 AlkharidWarriors.ALKHARID_WARRIOR_INVENTORY,
                 ItemID.TROUT,
                 Common.EMPTY_LOOT,
@@ -78,7 +78,7 @@ public class Combat {
         ),
         FLESHCRAWLERS(
                 "Flesh Crawler",
-                50,
+                40,
                 99,
                 FleshCrawlers.FLESH_CRAWLERS_INVENTORY,
                 ItemID.LOBSTER,

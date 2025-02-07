@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.skilling.cooking.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Widgets;
@@ -45,7 +46,8 @@ public class CookFoodLeaf extends Leaf {
                 ).execute();
             }
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 
     private int getFoodCount(int rawFoodID) {

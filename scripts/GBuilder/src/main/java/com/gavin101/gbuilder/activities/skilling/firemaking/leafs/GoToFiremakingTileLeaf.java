@@ -3,6 +3,7 @@ package com.gavin101.gbuilder.activities.skilling.firemaking.leafs;
 import com.gavin101.GLib.GLib;
 import com.gavin101.gbuilder.Main;
 import com.gavin101.gbuilder.activities.skilling.firemaking.constants.FiremakingConstants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.containers.Inventory;
@@ -44,6 +45,7 @@ public class GoToFiremakingTileLeaf extends Leaf {
             Log.debug("Setting Main.needToChangeFiremakingTile = false");
             Main.needToChangeFiremakingTile = false;
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

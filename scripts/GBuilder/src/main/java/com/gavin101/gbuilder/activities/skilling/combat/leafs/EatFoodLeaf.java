@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.skilling.combat.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.containers.Inventory;
@@ -29,7 +30,8 @@ public class EatFoodLeaf extends Leaf {
         new InventoryEvent(foodToEatID, "Eat").setEventCompleteCondition(
                 () -> Skills.getBoostedLevels(Skill.HITPOINTS) > originalHp, Calculations.random(350, 500)
         ).execute();
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 
     private int getRandomHealthThreshold(int foodToEatID) {

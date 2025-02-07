@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.skilling.combat.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.Players;
@@ -41,6 +42,7 @@ public class FightMonsterLeaf extends Leaf {
             Log.info("Couldn't find a suitable monster to fight... Walking to monster area.");
             Walking.walk(monsterArea.getRandomTile());
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }
