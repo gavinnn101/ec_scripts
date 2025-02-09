@@ -10,7 +10,7 @@ import net.eternalclient.api.utilities.ReactionGenerator;
 public class BreakFinishedLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        return FatigueTracker.isBreakOver() && !RandomManager.isAutoLoginEnabled();
+        return FatigueTracker.isBreakComplete() && !RandomManager.isAutoLoginEnabled();
     }
 
     @Override

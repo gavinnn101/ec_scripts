@@ -84,7 +84,7 @@ public class Main extends AbstractScript implements Painter {
 
 //        // Save resources
 //        Client.getSettings().setRenderingEnabled(false);
-//        Client.getSettings().setFpsLimit(3);
+        Client.getSettings().setFpsLimit(3);
 
         timer = new Timer();
         tree = new Tree();

@@ -14,12 +14,6 @@ public class FatigueTracker {
     private static final int FATIGUE_INCREMENT = 1;
     private static final long FATIGUE_INCREMENT_INTERVAL = TimeUnit.MINUTES.toMillis(5);
 
-    // Session time thresholds
-    private static final long EARLY_SESSION = TimeUnit.HOURS.toMillis(3);
-    private static final long MID_SESSION = TimeUnit.HOURS.toMillis(6);
-    private static final long LATE_SESSION = TimeUnit.HOURS.toMillis(9);
-    private static final long END_SESSION = TimeUnit.HOURS.toMillis(12);
-
     private static final int FATIGUE_FRESH = 30;
     private static final int FATIGUE_TIRED = 50;
     private static final int FATIGUE_VERY_TIRED = 70;
@@ -30,40 +24,49 @@ public class FatigueTracker {
     private static Timer breakTimer = new Timer();
     private static Timer nextBreakTimer = new Timer();
 
+    // Break state
     @Getter private static boolean onBreak = false;
     @Getter private static long currentBreakDuration = 0;
     @Getter private static long nextBreakIn = 0;
     @Getter private static long nextBreakDuration = 0;
+    @Getter private static boolean needsBreakSchedule = true;
 
+    private static double dailyEnergyMultiplier = 0.8 + (Calculations.random(0.0, 0.4)); // 0.8-1.2x
+
+    private static final double LOW_INTENSITY = 0.8;
+    private static final double HIGH_INTENSITY = 1.3;
+    private static double currentIntensity = 1.0;
+
+    /**
+     * Calculate the timing and duration of the next break based on current fatigue level.
+     * This should only be called when needsBreakSchedule is true.
+     */
     private static void calculateNextBreak() {
-        // First check if we need a long rest
+        Log.info("Calculating new break schedule at fatigue level: " + fatigueLevel);
+
         if (fatigueLevel >= FATIGUE_SLEEP_NEEDED) {
             // Time for "sleep" - long rest of 6-8 hours
             nextBreakDuration = Calculations.random(TimeUnit.HOURS.toMillis(6), TimeUnit.HOURS.toMillis(8));
-            // Short interval until this needed long break
             nextBreakIn = Calculations.random(TimeUnit.MINUTES.toMillis(5), TimeUnit.MINUTES.toMillis(15));
             Log.info("Scheduling long rest break due to high fatigue: " + fatigueLevel);
-            return;
         }
-
-        // Normal break scheduling based on fatigue
-        if (fatigueLevel < FATIGUE_FRESH) {
-            // Fresh: Longer intervals (45-75 mins), shorter breaks (5-15 mins)
+        else if (fatigueLevel < FATIGUE_FRESH) {
+            // Fresh: Longer intervals, shorter breaks
             nextBreakIn = Calculations.random(TimeUnit.MINUTES.toMillis(45), TimeUnit.MINUTES.toMillis(75));
             nextBreakDuration = Calculations.random(TimeUnit.MINUTES.toMillis(5), TimeUnit.MINUTES.toMillis(15));
         }
         else if (fatigueLevel < FATIGUE_TIRED) {
-            // Getting tired: Medium intervals (30-45 mins), medium breaks (15-25 mins)
+            // Getting tired: Medium intervals, medium breaks
             nextBreakIn = Calculations.random(TimeUnit.MINUTES.toMillis(30), TimeUnit.MINUTES.toMillis(45));
             nextBreakDuration = Calculations.random(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(25));
         }
         else if (fatigueLevel < FATIGUE_VERY_TIRED) {
-            // Tired: Shorter intervals (20-35 mins), longer breaks (25-35 mins)
+            // Tired: Shorter intervals, longer breaks
             nextBreakIn = Calculations.random(TimeUnit.MINUTES.toMillis(20), TimeUnit.MINUTES.toMillis(35));
             nextBreakDuration = Calculations.random(TimeUnit.MINUTES.toMillis(25), TimeUnit.MINUTES.toMillis(35));
         }
         else {
-            // Very tired: Frequent breaks (15-25 mins), longest breaks (35-45 mins)
+            // Very tired: Frequent breaks, longest breaks
             nextBreakIn = Calculations.random(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(25));
             nextBreakDuration = Calculations.random(TimeUnit.MINUTES.toMillis(35), TimeUnit.MINUTES.toMillis(45));
         }
@@ -73,32 +76,88 @@ public class FatigueTracker {
                 formatTime(nextBreakIn), formatTime(nextBreakDuration), fatigueLevel));
     }
 
-    // Increment fatigueLevel based on session time
+    /**
+     * Checks if fatigue should be increased based on time elapsed
+     */
     public static boolean shouldIncreaseFatigue() {
         return fatigueTimer.elapsed() >= FATIGUE_INCREMENT_INTERVAL;
     }
 
+    /**
+     * Increases fatigue level using an exponential growth formula
+     */
     public static void increaseFatigue() {
-        if (fatigueLevel < MAX_FATIGUE) {
-            // Base rate increases with fatigue level
-            double baseRate = 0.5 + (fatigueLevel * 0.015); // Starts at 0.5, increases to about 2.0 at max fatigue
+        if (fatigueLevel < MAX_FATIGUE && !onBreak) {
+            // Higher base rate to ensure early increases
+            double baseRate = 0.8 + (fatigueLevel * 0.01);  // Changed from 0.25
 
-            // Fatigue multiplier remains for exponential growth
-            double fatigueMultiplier = 1.0 + (Math.pow(fatigueLevel, 1.5) / 400.0);
+            // Combine various factors
+            double variabilityMultiplier = dailyEnergyMultiplier
+                    * currentIntensity
+                    * getTimeOfDayMultiplier();
 
-            // Calculate final increment
-            double increment = FATIGUE_INCREMENT * baseRate * fatigueMultiplier;
+            double fatigueMultiplier = 1.0 + (Math.pow(fatigueLevel, 1.5) / 600.0);
+            double increment = FATIGUE_INCREMENT * baseRate * fatigueMultiplier * variabilityMultiplier;
 
             fatigueLevel += (int) Math.round(increment);
             fatigueLevel = Math.min(fatigueLevel, MAX_FATIGUE);
 
-            Log.info(String.format("Fatigue increased to: %d (baseRate=%.2f, fatigueMultiplier=%.2f)",
-                    fatigueLevel, baseRate, fatigueMultiplier));
+            Log.info(String.format("Fatigue increased to: %d (baseRate=%.2f, fatigueMultiplier=%.2f, variabilityMultiplier=%.2f)",
+                    fatigueLevel, baseRate, fatigueMultiplier, variabilityMultiplier));
         }
         fatigueTimer.reset();
     }
 
-    // Reduce fatigue based on break duration
+    /**
+     * Check if it's time to take a scheduled break
+     */
+    public static boolean shouldTakeBreak() {
+        if (onBreak) return false;
+
+        // Calculate next break if needed
+        if (needsBreakSchedule) {
+            calculateNextBreak();
+            needsBreakSchedule = false;
+            return false;
+        }
+
+        // Check if it's time for the scheduled break
+        return nextBreakTimer.elapsed() >= nextBreakIn;
+    }
+
+    /**
+     * Start a scheduled break
+     */
+    public static void startBreak() {
+        if (!onBreak) {
+            onBreak = true;
+            currentBreakDuration = nextBreakDuration;
+            breakTimer.reset();
+            Log.info("Taking a break for " + formatTime(currentBreakDuration) + " with fatigue level: " + fatigueLevel);
+        }
+    }
+
+    /**
+     * Check if current break is complete and apply fatigue reduction if it is
+     */
+    public static boolean isBreakComplete() {
+        if (!onBreak) return true;
+
+        if (breakTimer.elapsed() >= currentBreakDuration) {
+            Log.info("Break is over.");
+            // Break is over, reduce fatigue and prepare for next break cycle
+            reduceFatigue(currentBreakDuration);
+            updateActivityIntensity();
+            onBreak = false;
+            needsBreakSchedule = true;  // Signal that we need to calculate next break
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Reduce fatigue based on break duration
+     */
     private static void reduceFatigue(long breakDuration) {
         int reduction;
         long hours = breakDuration / TimeUnit.HOURS.toMillis(1);
@@ -179,49 +238,37 @@ public class FatigueTracker {
         }
     }
 
-    // Check if it's time to take a break
-    public static boolean shouldTakeBreak() {
-        if (onBreak) return false;
-        if (nextBreakIn == 0) {
-            calculateNextBreak();
-            return false;
-        }
-        return nextBreakTimer.elapsed() >= nextBreakIn;
+    // Periodically update intensity (maybe every 30-60 mins)
+    private static void updateActivityIntensity() {
+        currentIntensity = LOW_INTENSITY + Calculations.random(0.0, HIGH_INTENSITY - LOW_INTENSITY);
     }
 
-    // Start a break
-    public static void startBreak() {
-        onBreak = true;
-        currentBreakDuration = nextBreakDuration;
-        breakTimer.reset();
-        Log.info("Taking a break for " + formatTime(currentBreakDuration) + " with fatigue level: " + fatigueLevel);
+    private static double getTimeOfDayMultiplier() {
+        // Get current hour (0-23)
+        int hour = java.time.LocalTime.now().getHour();
+
+        // More fatigue late at night (10PM-6AM)
+        if (hour >= 22 || hour < 6) return 1.2;
+        // Less fatigue in morning (6AM-10AM)
+        if (hour >= 6 && hour < 10) return 0.9;
+        // Normal afternoon
+        return 1.0;
     }
 
-    // Determine if the break is over
-    public static boolean isBreakOver() {
-        if (!onBreak) return true;
-        if (breakTimer.elapsed() >= currentBreakDuration) {
-            reduceFatigue(currentBreakDuration);
-            onBreak = false;
-            calculateNextBreak();
-            return true;
-        }
-        return false;
-    }
-
-    // Reset the tracker
+    // Reset all tracker state
     public static void reset() {
         fatigueLevel = 0;
         onBreak = false;
         currentBreakDuration = 0;
         nextBreakIn = 0;
         nextBreakDuration = 0;
+        needsBreakSchedule = true;
         fatigueTimer.reset();
         breakTimer.reset();
         nextBreakTimer.reset();
     }
 
-    // Get the time remaining until the next break
+    // Utility methods for time formatting and remaining time calculations
     public static long getTimeUntilNextBreak() {
         return Math.max(0, nextBreakIn - nextBreakTimer.elapsed());
     }
@@ -235,13 +282,10 @@ public class FatigueTracker {
     }
 
     public static long getRemainingBreakTime() {
-        if (!onBreak) {
-            return 0;
-        }
+        if (!onBreak) return 0;
         return Math.max(0, currentBreakDuration - breakTimer.elapsed());
     }
 
-    // Get formatted remaining break time
     public static String getFormattedRemainingBreakTime() {
         return formatTime(getRemainingBreakTime());
     }
