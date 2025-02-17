@@ -13,6 +13,7 @@ import com.gavin101.gbuilder.utility.leafs.LootItemsLeaf;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.frameworks.tree.Branch;
+import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.skill.Skill;
 
 
@@ -22,7 +23,7 @@ public class Woodcutting {
     public enum TreeType {
         TREE("Tree", 1, 15),
         OAK("Oak tree", 15, 31),
-        WILLOW("Willow tree", 31, 99);
+        WILLOW("Willow tree", 31, 55);
 
         private final String name;
         private final int minLevel;
@@ -34,13 +35,20 @@ public class Woodcutting {
 
         String activityName = String.format("Chopping %ss", treeName);
 
+        int maxLevel;
+        if (treeType.equals(TreeType.WILLOW)) {
+            maxLevel = treeType.getMaxLevel() + Calculations.random(-5, 6);
+        } else {
+            maxLevel = treeType.getMaxLevel();
+        }
+
         return SkillActivity.builder()
                 .name(activityName)
                 .branchSupplier(() -> createBranch(treeName, activityName))
                 .activitySkill(Skill.WOODCUTTING)
                 .inventoryLoadout(Constants.WOODCUTTING_INVENTORY)
                 .minLevel(treeType.getMinLevel())
-                .maxLevel(treeType.getMaxLevel())
+                .maxLevel(maxLevel)
                 .validator(() -> {
                     if (treeType.equals(TreeType.WILLOW)) {
                         int wizardLevel = 7;

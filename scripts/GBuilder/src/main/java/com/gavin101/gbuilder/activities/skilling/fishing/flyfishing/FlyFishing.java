@@ -46,6 +46,6 @@ public class FlyFishing {
             .activitySkill(Skill.FISHING)
             .inventoryLoadout(INVENTORY_LOADOUT)
             .minLevel(20)
-            .maxLevel(99)
+            .maxLevel(Calculations.random(50, 60))
             .build();
 }

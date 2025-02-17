@@ -16,6 +16,7 @@ import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.container.OwnedItems;
+import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
 
@@ -27,7 +28,7 @@ public class Firemaking {
     public enum LogType {
         NORMAL(GLib.getItemName(ItemID.LOGS), ItemID.LOGS, 1, 15),
         OAK(GLib.getItemName(ItemID.OAK_LOGS), ItemID.OAK_LOGS, 15, 30),
-        WILLOW(GLib.getItemName(ItemID.WILLOW_LOGS), ItemID.WILLOW_LOGS, 30, 99),
+        WILLOW(GLib.getItemName(ItemID.WILLOW_LOGS), ItemID.WILLOW_LOGS, 30, 50),
         MAPLE(GLib.getItemName(ItemID.MAPLE_LOGS), ItemID.MAPLE_LOGS, 45, 60),
         YEW(GLib.getItemName(ItemID.YEW_LOGS), ItemID.YEW_LOGS, 60, 75),
         MAGIC(GLib.getItemName(ItemID.MAGIC_LOGS), ItemID.MAGIC_LOGS, 75, 90),
@@ -44,6 +45,13 @@ public class Firemaking {
 
         List<WorldTile> firemakingTiles = FiremakingConstants.getRandomFiremakingTileSet();
 
+        int maxLevel;
+        if (logType.equals(LogType.WILLOW)) {
+            maxLevel = logType.getMaxLevel() + Calculations.random(-5, 10);
+        } else {
+            maxLevel = logType.getMaxLevel();
+        }
+
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
                 .addReq(ItemID.TINDERBOX)
                 .addReq(logType.getItemId(), () -> Math.min(OwnedItems.count(logType.getItemId()), 27))
@@ -56,7 +64,7 @@ public class Firemaking {
                 .activitySkill(Skill.FIREMAKING)
                 .inventoryLoadout(inventoryLoadout)
                 .minLevel(logType.getMinLevel())
-                .maxLevel(logType.getMaxLevel())
+                .maxLevel(maxLevel)
                 .validator(() -> OwnedItems.contains(logType.getItemId()))
                 .build();
     }
