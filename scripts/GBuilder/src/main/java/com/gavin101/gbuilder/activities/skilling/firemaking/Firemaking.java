@@ -27,7 +27,7 @@ public class Firemaking {
     public enum LogType {
         NORMAL(GLib.getItemName(ItemID.LOGS), ItemID.LOGS, 1, 15),
         OAK(GLib.getItemName(ItemID.OAK_LOGS), ItemID.OAK_LOGS, 15, 30),
-        WILLOW(GLib.getItemName(ItemID.WILLOW_LOGS), ItemID.WILLOW_LOGS, 30, 45),
+        WILLOW(GLib.getItemName(ItemID.WILLOW_LOGS), ItemID.WILLOW_LOGS, 30, 99),
         MAPLE(GLib.getItemName(ItemID.MAPLE_LOGS), ItemID.MAPLE_LOGS, 45, 60),
         YEW(GLib.getItemName(ItemID.YEW_LOGS), ItemID.YEW_LOGS, 60, 75),
         MAGIC(GLib.getItemName(ItemID.MAGIC_LOGS), ItemID.MAGIC_LOGS, 75, 90),

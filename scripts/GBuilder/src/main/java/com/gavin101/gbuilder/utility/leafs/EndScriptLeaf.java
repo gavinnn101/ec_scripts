@@ -17,7 +17,7 @@ public class EndScriptLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.endScript(true, "Build finished, ending script.");
-        MethodProvider.sleep(Calculations.random(10_000, 20_000));
+        MethodProvider.sleep(Calculations.random(15_000, 30_000));
         return ReactionGenerator.getPredictable();
     }
 }

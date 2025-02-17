@@ -146,9 +146,13 @@ public class FatigueTracker {
         if (currentBreakMinutes >= currentBreakDuration) {
             onBreak = false;
             breakTimer.reset();
-            if (isSleepBreak) {
-                startNewSession(); // Reset session after sleep break
-                isSleepBreak = false; // Reset the flag
+            if (!isSleepBreak) {
+                nextBreakInterval = 0;
+                nextBreakDuration = 0;
+                currentBreakDuration = 0;
+            } else {
+                // If sleep break, start a new session
+                startNewSession();
             }
             return true;
         }

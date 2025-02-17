@@ -137,9 +137,10 @@ public class Combat {
         int attackLevel = Skills.getRealLevel(Skill.ATTACK);
         int strengthLevel = Skills.getRealLevel(Skill.STRENGTH);
         int defenseLevel = Skills.getRealLevel(Skill.DEFENCE);
-        return (attackLevel >= monsterTier.getMinLevel()
-                && strengthLevel >= monsterTier.getMinLevel()
-                && defenseLevel >= monsterTier.getMinLevel()
+        int monsterMinLevel = monsterTier.getMinLevel();
+        return (attackLevel >= monsterMinLevel
+                && strengthLevel >= monsterMinLevel
+                && defenseLevel >= monsterMinLevel
         );
     }
 }
