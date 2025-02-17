@@ -6,6 +6,7 @@ import lombok.Getter;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.Timer;
+import net.eternalclient.api.utilities.math.Calculations;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +55,8 @@ public class ActivityManager {
         for (Activity activity : registeredActivities) {
             if (activity.isValid()) {
                 Log.info("Setting current activity to: " + activity.getName());
+                // We want a new max duration each time a new activity activates
+                activity.setMaxDurationMinutes(Calculations.random(30, 60));
                 Log.info("Current activity max duration (minutes): " + activity.getMaxDurationMinutes());
                 currentActivity = activity;
                 // Reset our time tracking

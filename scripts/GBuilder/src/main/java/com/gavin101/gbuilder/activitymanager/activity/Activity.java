@@ -4,6 +4,7 @@ import com.gavin101.gbuilder.utility.constants.Common;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
@@ -32,7 +33,8 @@ public abstract class Activity {
     @Builder.Default
     private final InventoryLoadout inventoryLoadout = Common.EMPTY_INVENTORY_LOADOUT;
     @Builder.Default
-    private final long maxDurationMinutes = Calculations.random(30, 60);
+    @Setter
+    private long maxDurationMinutes = Calculations.random(30, 60);
 
     // Sub-class implements function
     public abstract String getDetailedString();
