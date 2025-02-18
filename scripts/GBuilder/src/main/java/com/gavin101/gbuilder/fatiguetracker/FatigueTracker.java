@@ -87,54 +87,48 @@ public class FatigueTracker {
         long timePlayedMinutes = GLib.msToMinutes(timer.elapsed());
         long timeSinceLastBreak = GLib.msToMinutes(breakTimer.elapsed());
 
-        // Always check if the session length is reached
-        if (timePlayedMinutes >= targetSessionLength) {
-            nextBreakDuration = SLEEP_BREAK_DURATION[0]
-                    + Math.round(Calculations.random(0, SLEEP_BREAK_DURATION[1] - SLEEP_BREAK_DURATION[0]));
-            isSleepBreak = true;
-            Log.info("Session length reached (" + timePlayedMinutes + " minutes), initiating sleep break");
-            return true;
-        }
-
-        // If we haven't calculated a normal break interval yet, do so now.
+        // Only calculate next break interval if we haven't yet
         if (nextBreakInterval == 0) {
-            long[] intervalRange = getIntervalRange(timePlayedMinutes);
-            nextBreakInterval = intervalRange[0]
-                    + Math.round(Calculations.random(0, intervalRange[1] - intervalRange[0]));
-            Log.info("Next break in: " + getFormattedNextBreakIn());
+            // Check if we've reached our target session length
+            if (timePlayedMinutes >= targetSessionLength) {
+                nextBreakDuration = SLEEP_BREAK_DURATION[0] + Math.round(Calculations.random(0, SLEEP_BREAK_DURATION[1] - SLEEP_BREAK_DURATION[0]));
+                isSleepBreak = true;
+                Log.info("Session length reached (" + timePlayedMinutes + " minutes), initiating sleep break");
+                return true;
+            }
 
-            long[] durationRange = getDurationRange(timePlayedMinutes);
-            nextBreakDuration = durationRange[0]
-                    + Math.round(Calculations.random(0, durationRange[1] - durationRange[0]));
-            Log.info("Next break duration: " + getFormattedNextBreakDuration());
+            // Normal break calculations
+            long[] intervalRange;
+            if (timePlayedMinutes <= 120) {
+                intervalRange = EARLY_BREAK_INTERVAL;
+            } else if (timePlayedMinutes <= 240) {
+                intervalRange = MID_BREAK_INTERVAL;
+            } else if (timePlayedMinutes <= 360) {
+                intervalRange = LATE_BREAK_INTERVAL;
+            } else {
+                intervalRange = EXTENDED_BREAK_INTERVAL;
+            }
+
+            nextBreakInterval = intervalRange[0] + Math.round(Calculations.random(0, intervalRange[1] - intervalRange[0]));
+            Log.info("Next break in: " +getFormattedNextBreakIn());
+
+            // Calculate next break duration
+            long[] durationRange;
+            if (timePlayedMinutes <= 120) {
+                durationRange = EARLY_BREAK_DURATION;
+            } else if (timePlayedMinutes <= 240) {
+                durationRange = MID_BREAK_DURATION;
+            } else if (timePlayedMinutes <= 360) {
+                durationRange = LATE_BREAK_DURATION;
+            } else {
+                durationRange = EXTENDED_BREAK_DURATION;
+            }
+            nextBreakDuration = durationRange[0] + Math.round(Calculations.random(0, durationRange[1] - durationRange[0]));
+            Log.info("Next break duration: " +getFormattedNextBreakDuration());
             isSleepBreak = false;
         }
 
         return timeSinceLastBreak >= nextBreakInterval;
-    }
-
-    private static long[] getIntervalRange(long timePlayedMinutes) {
-        if (timePlayedMinutes <= 120) {
-            return EARLY_BREAK_INTERVAL;
-        } else if (timePlayedMinutes <= 240) {
-            return MID_BREAK_INTERVAL;
-        } else if (timePlayedMinutes <= 360) {
-            return LATE_BREAK_INTERVAL;
-        } else {
-            return EXTENDED_BREAK_INTERVAL;
-        }
-    }
-
-    private static long[] getDurationRange(long timePlayedMinutes) {
-        if (timePlayedMinutes <= 120) {
-            return EARLY_BREAK_DURATION;
-        } else if (timePlayedMinutes <= 240) {
-            return MID_BREAK_DURATION;
-        } else if (timePlayedMinutes <= 360) {
-            return LATE_BREAK_DURATION;
-        } else {
-            return EXTENDED_BREAK_DURATION;
-        }
     }
 
     public static void startBreak() {

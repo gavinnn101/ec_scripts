@@ -155,7 +155,7 @@ public class Main extends AbstractScript implements Painter {
     }
 
     private long calculateExpPerHour(Skill skill) {
-        long timeRan = ActivityManager.getActivityTimer().elapsed();
+        long timeRan = ActivityManager.getTotalActiveTime();
         long expGained = SkillTracker.getGainedExperience(skill);
 
         if (timeRan == 0 || expGained == 0) {
