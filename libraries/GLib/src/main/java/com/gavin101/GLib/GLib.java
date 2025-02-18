@@ -114,9 +114,13 @@ public final class GLib {
                 .execute();
     }
 
-    public static void endScript(boolean shouldLogout, String endMsg) {
+    public static void endScript(boolean shouldLogout, String endMsg, Boolean delayLogout) {
         Log.info(endMsg);
         if (shouldLogout && Client.isLoggedIn()) {
+            if (delayLogout) {
+                Log.debug("Sleeping 15 - 30 seconds before logging out.");
+                MethodProvider.sleep(15_000, 30_000);
+            }
             Log.debug("Logging out before ending script.");
             RandomManager.setAutoLoginEnabled(false);
             new LogoutEvent().setEventCompleteCondition(

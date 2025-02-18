@@ -42,6 +42,7 @@ import net.eternalclient.api.internal.InteractionMode;
 import net.eternalclient.api.listeners.Notify;
 import net.eternalclient.api.listeners.Painter;
 import net.eternalclient.api.listeners.message.ChatMessageEvent;
+import net.eternalclient.api.listeners.skill.SkillTracker;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
 import net.eternalclient.api.script.ScriptManifest;
@@ -49,6 +50,7 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 import net.eternalclient.api.utilities.paint.PaintLocations;
+import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -132,8 +134,10 @@ public class Main extends AbstractScript implements Painter {
                     add("Current activity: " + currentActivity.getName());
                     if (currentActivity.getType().equals(Activity.ActivityType.SKILL)) {
                         SkillActivity currentSkillActivity = (SkillActivity) currentActivity;
-                        add("Current activity skill: " +currentSkillActivity.getActivitySkill());
+                        Skill currentSkill = currentSkillActivity.getActivitySkill();
+                        add("Current activity skill: " +currentSkill);
                         add("Current activity skill level: " +Skills.getRealLevel(currentSkillActivity.getActivitySkill()));
+                        add("Current activity skill xp/hr: " +calculateExpPerHour(currentSkill));
                     }
                     add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
                 }
@@ -148,6 +152,20 @@ public class Main extends AbstractScript implements Painter {
     @Override
     public void onPaint(Graphics2D g) {
         paint.paint(g);
+    }
+
+    private long calculateExpPerHour(Skill skill) {
+        long timeRan = ActivityManager.getTotalActiveTime();
+        long expGained = SkillTracker.getGainedExperience(skill);
+
+        if (timeRan == 0 || expGained == 0) {
+            return 0;
+        }
+
+        double hoursElapsed = timeRan / 3600000.0;
+        double expPerHour = expGained / hoursElapsed;
+
+        return Math.round(expPerHour);
     }
 
     private void registerActivities() {

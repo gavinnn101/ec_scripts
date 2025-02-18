@@ -4,6 +4,7 @@ import com.gavin101.GLib.GLib;
 import com.gavin101.gbuilder.activitymanager.activity.Activity;
 import lombok.Getter;
 import net.eternalclient.api.frameworks.tree.Branch;
+import net.eternalclient.api.listeners.skill.SkillTracker;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.math.Calculations;
@@ -24,6 +25,7 @@ public class ActivityManager {
     private static Activity currentActivity;
 
     private static long activityStartTime = 0;
+    @Getter
     private static long totalActiveTime = 0;
     private static boolean isPaused = false;
 
@@ -64,6 +66,9 @@ public class ActivityManager {
                 totalActiveTime = 0;
                 isPaused = false;
                 activityTimer.reset();
+                // Reset exp gained for the next activity so we get accurate xp/hr.
+                SkillTracker.deregister();
+                SkillTracker.start();
                 break;
             }
         }
