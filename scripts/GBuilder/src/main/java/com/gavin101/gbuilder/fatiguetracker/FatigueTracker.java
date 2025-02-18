@@ -10,48 +10,48 @@ import net.eternalclient.api.utilities.math.Calculations;
 
 @Data
 public class FatigueTracker {
-    private static Timer timer = new Timer();
+    private static Timer sessionTimer = new Timer();
     private static Timer breakTimer = new Timer();
     @Getter private static boolean onBreak = false;
 
-    private static final long[] EARLY_BREAK_DURATION = {3, 15};
-    private static final long[] MID_BREAK_DURATION = {8, 20};
-    private static final long[] LATE_BREAK_DURATION = {10, 25};
-    private static final long[] EXTENDED_BREAK_DURATION = {18, 30};
-    private static final long[] SLEEP_BREAK_DURATION = {360, 540};
+    // Define break durations and intervals in minutes (as ranges)
+    private static final long[] EARLY_BREAK_DURATION_MIN = {3, 15};
+    private static final long[] MID_BREAK_DURATION_MIN   = {8, 20};
+    private static final long[] LATE_BREAK_DURATION_MIN  = {10, 25};
+    private static final long[] EXTENDED_BREAK_DURATION_MIN = {18, 30};
+    private static final long[] SLEEP_BREAK_DURATION_MIN    = {360, 540};
 
-    private static final long[] EARLY_BREAK_INTERVAL = {40, 100};
-    private static final long[] MID_BREAK_INTERVAL = {30, 90};
-    private static final long[] LATE_BREAK_INTERVAL = {30, 75};
-    private static final long[] EXTENDED_BREAK_INTERVAL = {30, 60};
+    private static final long[] EARLY_BREAK_INTERVAL_MIN = {40, 100};
+    private static final long[] MID_BREAK_INTERVAL_MIN   = {30, 90};
+    private static final long[] LATE_BREAK_INTERVAL_MIN  = {30, 75};
+    private static final long[] EXTENDED_BREAK_INTERVAL_MIN = {30, 60};
 
-    private static long currentBreakDuration = 0;  // Current break duration in minutes
-    private static long nextBreakDuration = 0;     // Next break duration in minutes
-    private static long nextBreakInterval = 0;     // Time until next break in minutes
-    private static long targetSessionLength = 480 + (long) Calculations.random(0, 240);
+    // Store all durations in milliseconds
+    private static long currentBreakDurationMs = 0;
+    private static long nextBreakDurationMs = 0;
+    private static long nextBreakIntervalMs = 0;
+    private static long targetSessionLengthMs = GLib.minutesToMs(480 + (long) Calculations.random(0, 240));
 
     private static boolean isSleepBreak;
 
     public static int getCurrentReactionTime() {
-        long timePlayedMinutes = GLib.msToMinutes(timer.elapsed());
+        // Get the elapsed session time in ms then convert to minutes
+        long timePlayedMinutes = GLib.msToMinutes(sessionTimer.elapsed());
+        double predictableChance, normalChance, afkChance;
 
-        double predictableChance;
-        double normalChance;
-        double afkChance;
-
-        if (timePlayedMinutes >= 0 && timePlayedMinutes <= 120) {         // 0-2 hours
+        if (timePlayedMinutes <= 120) {         // 0-2 hours
             predictableChance = 0.40;
             normalChance = 0.50;
             afkChance = 0.10;
-        } else if (timePlayedMinutes >= 120 && timePlayedMinutes <= 240) { // 2-4 hours
+        } else if (timePlayedMinutes <= 240) {    // 2-4 hours
             predictableChance = 0.30;
             normalChance = 0.50;
             afkChance = 0.20;
-        } else if (timePlayedMinutes >= 240 && timePlayedMinutes <= 360) { // 4-6 hours
+        } else if (timePlayedMinutes <= 360) {    // 4-6 hours
             predictableChance = 0.20;
             normalChance = 0.50;
             afkChance = 0.30;
-        } else {                                                           // 6+ hours
+        } else {                                // 6+ hours
             predictableChance = 0.10;
             normalChance = 0.60;
             afkChance = 0.30;
@@ -72,92 +72,95 @@ public class FatigueTracker {
 
     public static void startNewSession() {
         Log.info("Starting fresh fatigue tracker session.");
-        timer.reset();
+        sessionTimer.reset();
         breakTimer.reset();
-        targetSessionLength = 480 + (long) Calculations.random(0, 240);
+        targetSessionLengthMs = GLib.minutesToMs(480 + (long) Calculations.random(0, 240));
         isSleepBreak = false;
-        nextBreakInterval = 0;
-        nextBreakDuration = 0;
-        currentBreakDuration = 0;
+        nextBreakIntervalMs = 0;
+        nextBreakDurationMs = 0;
+        currentBreakDurationMs = 0;
     }
 
     public static boolean shouldTakeBreak() {
         if (onBreak) return false;
 
-        long timePlayedMinutes = GLib.msToMinutes(timer.elapsed());
-        long timeSinceLastBreak = GLib.msToMinutes(breakTimer.elapsed());
+        long timePlayedMs = sessionTimer.elapsed();
+        long timePlayedMinutes = GLib.msToMinutes(timePlayedMs);
+        long timeSinceLastBreakMs = breakTimer.elapsed();
 
         // Always check if the session length is reached
-        if (timePlayedMinutes >= targetSessionLength) {
-            nextBreakDuration = SLEEP_BREAK_DURATION[0]
-                    + Math.round(Calculations.random(0, SLEEP_BREAK_DURATION[1] - SLEEP_BREAK_DURATION[0]));
+        if (timePlayedMs >= targetSessionLengthMs) {
+            // Calculate sleep break duration in minutes then convert to ms
+            long durationMin = SLEEP_BREAK_DURATION_MIN[0] +
+                    Math.round(Calculations.random(0, SLEEP_BREAK_DURATION_MIN[1] - SLEEP_BREAK_DURATION_MIN[0]));
+            nextBreakDurationMs = GLib.minutesToMs(durationMin);
             isSleepBreak = true;
             Log.info("Session length reached (" + timePlayedMinutes + " minutes), initiating sleep break");
             return true;
         }
 
-        // If we haven't calculated a normal break interval yet, do so now.
-        if (nextBreakInterval == 0) {
+        // If the break interval hasn't been set, calculate it
+        if (nextBreakIntervalMs == 0) {
             long[] intervalRange = getIntervalRange(timePlayedMinutes);
-            nextBreakInterval = intervalRange[0]
-                    + Math.round(Calculations.random(0, intervalRange[1] - intervalRange[0]));
+            long intervalMin = intervalRange[0] +
+                    Math.round(Calculations.random(0, intervalRange[1] - intervalRange[0]));
+            nextBreakIntervalMs = GLib.minutesToMs(intervalMin);
             Log.info("Next break in: " + getFormattedNextBreakIn());
 
             long[] durationRange = getDurationRange(timePlayedMinutes);
-            nextBreakDuration = durationRange[0]
-                    + Math.round(Calculations.random(0, durationRange[1] - durationRange[0]));
+            long durationMin = durationRange[0] +
+                    Math.round(Calculations.random(0, durationRange[1] - durationRange[0]));
+            nextBreakDurationMs = GLib.minutesToMs(durationMin);
             Log.info("Next break duration: " + getFormattedNextBreakDuration());
             isSleepBreak = false;
         }
 
-        return timeSinceLastBreak >= nextBreakInterval;
+        return timeSinceLastBreakMs >= nextBreakIntervalMs;
     }
 
     private static long[] getIntervalRange(long timePlayedMinutes) {
         if (timePlayedMinutes <= 120) {
-            return EARLY_BREAK_INTERVAL;
+            return EARLY_BREAK_INTERVAL_MIN;
         } else if (timePlayedMinutes <= 240) {
-            return MID_BREAK_INTERVAL;
+            return MID_BREAK_INTERVAL_MIN;
         } else if (timePlayedMinutes <= 360) {
-            return LATE_BREAK_INTERVAL;
+            return LATE_BREAK_INTERVAL_MIN;
         } else {
-            return EXTENDED_BREAK_INTERVAL;
+            return EXTENDED_BREAK_INTERVAL_MIN;
         }
     }
 
     private static long[] getDurationRange(long timePlayedMinutes) {
         if (timePlayedMinutes <= 120) {
-            return EARLY_BREAK_DURATION;
+            return EARLY_BREAK_DURATION_MIN;
         } else if (timePlayedMinutes <= 240) {
-            return MID_BREAK_DURATION;
+            return MID_BREAK_DURATION_MIN;
         } else if (timePlayedMinutes <= 360) {
-            return LATE_BREAK_DURATION;
+            return LATE_BREAK_DURATION_MIN;
         } else {
-            return EXTENDED_BREAK_DURATION;
+            return EXTENDED_BREAK_DURATION_MIN;
         }
     }
 
     public static void startBreak() {
         onBreak = true;
-        currentBreakDuration = nextBreakDuration;
-        nextBreakInterval = 0; // Reset so new interval will be calculated after break
+        currentBreakDurationMs = nextBreakDurationMs;
+        nextBreakIntervalMs = 0; // Reset so a new interval will be calculated after the break
         breakTimer.reset();
     }
 
     public static boolean isBreakFinished() {
         if (!onBreak) return true;
 
-        long currentBreakMinutes = GLib.msToMinutes(breakTimer.elapsed());
-
-        if (currentBreakMinutes >= currentBreakDuration) {
+        if (breakTimer.elapsed() >= currentBreakDurationMs) {
             onBreak = false;
             breakTimer.reset();
             if (!isSleepBreak) {
-                nextBreakInterval = 0;
-                nextBreakDuration = 0;
-                currentBreakDuration = 0;
+                nextBreakIntervalMs = 0;
+                nextBreakDurationMs = 0;
+                currentBreakDurationMs = 0;
             } else {
-                // If sleep break, start a new session
+                // If it's a sleep break, start a new session
                 startNewSession();
             }
             return true;
@@ -167,21 +170,18 @@ public class FatigueTracker {
 
     public static String getFormattedRemainingBreakTime() {
         if (!onBreak) return "00:00";
-
-        long remainingMs = currentBreakDuration * 60000 - breakTimer.elapsed();
-        return formatTime(Math.max(0, remainingMs));
+        long remainingMs = Math.max(0, currentBreakDurationMs - breakTimer.elapsed());
+        return formatTime(remainingMs);
     }
 
     public static String getFormattedNextBreakIn() {
         if (onBreak) return "00:00";
-
-        // Use the cached nextBreakInterval
-        long remainingMs = nextBreakInterval * 60000 - breakTimer.elapsed();
-        return formatTime(Math.max(0, remainingMs));
+        long remainingMs = Math.max(0, nextBreakIntervalMs - breakTimer.elapsed());
+        return formatTime(remainingMs);
     }
 
     public static String getFormattedNextBreakDuration() {
-        return formatTime(nextBreakDuration * 60000);
+        return formatTime(nextBreakDurationMs);
     }
 
     private static String formatTime(long milliseconds) {
@@ -193,9 +193,7 @@ public class FatigueTracker {
 
     public static String getFormattedRemainingSessionTime() {
         if (isSleepBreak) return "00:00";
-
-        long timePlayedMinutes = GLib.msToMinutes(timer.elapsed());
-        long remainingMinutes = Math.max(0, targetSessionLength - timePlayedMinutes);
-        return formatTime(remainingMinutes * 60000);  // Convert to ms for formatTime
+        long remainingMs = Math.max(0, targetSessionLengthMs - sessionTimer.elapsed());
+        return formatTime(remainingMs);
     }
 }

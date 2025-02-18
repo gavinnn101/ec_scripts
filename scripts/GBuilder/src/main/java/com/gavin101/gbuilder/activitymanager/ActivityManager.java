@@ -13,30 +13,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class ActivityManager {
     private static final List<Activity> registeredActivities = new ArrayList<>();
     @Getter
     private static final List<Branch> activityBranches = new ArrayList<>();
-
-    @Getter
-    private static final Timer activityTimer = new Timer();
     @Getter
     private static Activity currentActivity;
 
-    private static long activityStartTime = 0;
-    @Getter
-    private static long totalActiveTime = 0;
-    private static boolean isPaused = false;
+    // Use Timer to track active time.
+    private static final Timer activityTimer = new Timer();
 
     public static void registerActivity(Activity activity) {
-        Log.info("Registering activity: " +activity.getName());
+        Log.info("Registering activity: " + activity.getName());
         registeredActivities.add(activity);
         activityBranches.add(activity.getBranch());
     }
 
     public static boolean currentActivityIsValid() {
-        // Current activity is valid if it's not null, validator is true, and elapsed time is less than the max duration.
         if (currentActivity == null) {
             Log.info("Current activity is null.");
             return false;
@@ -57,16 +50,12 @@ public class ActivityManager {
         for (Activity activity : registeredActivities) {
             if (activity.isValid()) {
                 Log.info("Setting current activity to: " + activity.getName());
-                // We want a new max duration each time a new activity activates
+                // Set a new max duration each time a new activity is started.
                 activity.setMaxDurationMinutes(Calculations.random(30, 60));
                 Log.info("Current activity max duration (minutes): " + activity.getMaxDurationMinutes());
                 currentActivity = activity;
-                // Reset our time tracking
-                activityStartTime = System.currentTimeMillis();
-                totalActiveTime = 0;
-                isPaused = false;
                 activityTimer.reset();
-                // Reset exp gained for the next activity so we get accurate xp/hr.
+                // Reset XP tracking for an accurate xp/hr calculation.
                 SkillTracker.deregister();
                 SkillTracker.start();
                 break;
@@ -75,34 +64,36 @@ public class ActivityManager {
     }
 
     public static long getCurrentActivityTimeLeftMs() {
-        if (currentActivity == null) {
-            return 0;
-        }
-
+        if (currentActivity == null) return 0;
         long maxDurationMs = GLib.minutesToMs(currentActivity.getMaxDurationMinutes());
-        long currentActiveTime;
-
-        if (isPaused) {
-            currentActiveTime = totalActiveTime;
-        } else {
-            currentActiveTime = totalActiveTime + (System.currentTimeMillis() - activityStartTime);
-        }
-
-        return maxDurationMs - currentActiveTime;
-    }
-
-    private static String formatTime(long milliseconds) {
-        long seconds = milliseconds / 1000;
-        long hours = seconds / 3600;
-        seconds = seconds % 3600;
-        long minutes = seconds / 60;
-        seconds = seconds % 60;
-
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        long elapsed = activityTimer.elapsed();
+        return maxDurationMs - elapsed;
     }
 
     public static String getFormattedTimeLeft() {
         return formatTime(getCurrentActivityTimeLeftMs());
+    }
+
+    public static void pauseActivityTimer() {
+        if (!activityTimer.isPaused()) {
+            activityTimer.pause();
+            Log.debug(String.format("Activity paused. Total active time: %s", formatTime(activityTimer.elapsed())));
+        }
+    }
+
+    public static void resumeActivityTimer() {
+        if (activityTimer.isPaused()) {
+            activityTimer.resume();
+            Log.debug(String.format("Activity resumed. Current total time: %s", formatTime(activityTimer.elapsed())));
+        }
+    }
+
+    private static String formatTime(long milliseconds) {
+        long totalSeconds = milliseconds / 1000;
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public static void listActivities() {
@@ -113,7 +104,7 @@ public class ActivityManager {
     }
 
     public static Activity getActivity(String activityName) {
-        Log.debug("Looking for activity: " +activityName +" in the list of registered activities.");
+        Log.debug("Looking for activity: " + activityName + " in the list of registered activities.");
         for (Activity activity : registeredActivities) {
             if (activity.getName().equals(activityName)) {
                 Log.debug("Found matching activity in list.");
@@ -122,21 +113,5 @@ public class ActivityManager {
         }
         Log.debug("Couldn't find matching activity, returning null.");
         return null;
-    }
-
-    public static void pauseActivityTimer() {
-        if (!isPaused) {
-            isPaused = true;
-            totalActiveTime += (System.currentTimeMillis() - activityStartTime);
-            Log.debug(String.format("Activity paused. Total active time: %s", formatTime(totalActiveTime)));
-        }
-    }
-
-    public static void resumeActivityTimer() {
-        if (isPaused) {
-            isPaused = false;
-            activityStartTime = System.currentTimeMillis();
-            Log.debug(String.format("Activity resumed. Current total time: %s", formatTime(totalActiveTime)));
-        }
     }
 }
