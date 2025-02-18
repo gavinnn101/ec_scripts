@@ -21,6 +21,7 @@ public class ActivityManager {
     private static Activity currentActivity;
 
     // Use Timer to track active time.
+    @Getter
     private static final Timer activityTimer = new Timer();
 
     public static void registerActivity(Activity activity) {
