@@ -20,7 +20,8 @@ public class MineRockLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
-        currentRock = GameObjects.closest(i -> i.hasName(rockToMine) && i.distance() <= 1);
+//        currentRock = GameObjects.closest(i -> i.hasName(rockToMine) && i.distance() <= 1);
+        currentRock = GameObjects.closest(rockToMine);
         return currentRock != null && !Inventory.isFull();
     }
 

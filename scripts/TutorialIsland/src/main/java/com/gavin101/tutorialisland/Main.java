@@ -1,5 +1,6 @@
 package com.gavin101.tutorialisland;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.branches.common.IsAfkBranch;
 import com.gavin101.tutorialisland.branches.*;
 import com.gavin101.tutorialisland.leafs.BankRoomLeafs.*;
@@ -20,6 +21,7 @@ import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.OpenQuestTabLeaf;
 import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.TalkToQuesterLeaf;
 import com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs.*;
 import net.eternalclient.api.Client;
+import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
 import net.eternalclient.api.listeners.Painter;
@@ -50,6 +52,13 @@ public class Main extends AbstractScript implements Painter {
     public void onStart(String[] strings) {
         Log.info("Setting interaction mode to INSTANT_REPLAYED");
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
+
+        GLib.hideRoofs();
+
+        // TODO: Set rendering and fps limit as script args with defaults.
+        GLib.disableRendering();
+        GLib.setFpsLimit(3);
+
         startTimer = new Timer();
         boolean walkToGE = false;
         tree.addBranches(

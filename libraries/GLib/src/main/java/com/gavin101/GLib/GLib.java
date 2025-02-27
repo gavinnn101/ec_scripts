@@ -15,6 +15,7 @@ import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.events.muling.MuleRequestEvent;
 import net.eternalclient.api.events.muling.RequiredItem;
 import net.eternalclient.api.events.random.RandomManager;
+import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.MethodProvider;
@@ -312,5 +313,33 @@ public final class GLib {
             return itemComposite.getName();
         }
         return null;
+    }
+
+    public static void disableRendering() {
+        if (Client.getSettings().isRenderingEnabled()) {
+            Log.info("Disabling rendering");
+            Client.getSettings().setRenderingEnabled(false);
+        }
+    }
+
+    public static void setFpsLimit(int fpsLimit) {
+        if (Client.getSettings().getFpsLimit() != fpsLimit) {
+            Log.info("Setting fps to: " +fpsLimit);
+            Client.getSettings().setFpsLimit(fpsLimit);
+        }
+    }
+
+    public static void hideRoofs() {
+        if (!RandomManager.isToggleRoofEnabled()) {
+            Log.info("Hiding roofs.");
+            RandomManager.setToggleRoofEnabled(true);
+        }
+    }
+
+    public static void waitUntilLoggedIn() {
+        if (!Client.isLoggedIn()) {
+            Log.info("Waiting until we're logged in.");
+            new LoginEvent().setEventCompleteCondition(Client::isLoggedIn).execute();
+        }
     }
 }

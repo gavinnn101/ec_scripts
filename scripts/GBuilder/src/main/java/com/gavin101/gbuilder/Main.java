@@ -1,6 +1,8 @@
 package com.gavin101.gbuilder;
 
+import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.leafs.common.CacheBankLeaf;
+import com.gavin101.GLib.leafs.common.CloseChatLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
 import com.gavin101.gbuilder.activities.quests.goblindiplomacy.GoblinDiplomacy;
@@ -35,6 +37,7 @@ import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
@@ -76,14 +79,13 @@ public class Main extends AbstractScript implements Painter {
         Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
 
         // We'll check skill levels too early if we don't wait until we're logged in.
-        if (!Client.isLoggedIn()) {
-            new LoginEvent().setEventCompleteCondition(Client::isLoggedIn).execute();
-        }
+        GLib.waitUntilLoggedIn();
 
+        GLib.hideRoofs();
 
-//        // Save resources
-        Client.getSettings().setRenderingEnabled(false);
-        Client.getSettings().setFpsLimit(3);
+        // TODO: Set rendering and fps limit as script args with defaults.
+        GLib.disableRendering();
+        GLib.setFpsLimit(3);
 
         timer = new Timer();
         tree = new Tree();
@@ -98,9 +100,10 @@ public class Main extends AbstractScript implements Painter {
         // Create base tree with required branches/leafs.
         tree.addBranches(
                 new EndScriptLeaf(),
-                new TakeBreakLeaf(),
-                new BreakFinishedLeaf(),
-                new LoggedOutLeaf(),
+//                new TakeBreakLeaf(),
+//                new BreakFinishedLeaf(),
+//                new LoggedOutLeaf(),
+                new CloseChatLeaf(),
                 new EnableRunningLeaf(),
                 new HandleDeathLeaf(),
                 new CacheBankLeaf(),
