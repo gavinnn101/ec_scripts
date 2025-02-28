@@ -123,7 +123,7 @@ public final class GLib {
                 MethodProvider.sleep(15_000, 30_000);
             }
             Log.debug("Logging out before ending script.");
-            RandomManager.setAutoLoginEnabled(false);
+            disableAutoLogin();
             new LogoutEvent().setEventCompleteCondition(
                     () -> !Client.isLoggedIn(), Calculations.random(500, 2500)
             ).execute();
@@ -340,6 +340,20 @@ public final class GLib {
         if (!Client.isLoggedIn()) {
             Log.info("Waiting until we're logged in.");
             new LoginEvent().setEventCompleteCondition(Client::isLoggedIn).execute();
+        }
+    }
+
+    public static void disableAutoLogin() {
+        if (RandomManager.isAutoLoginEnabled()) {
+            Log.info("Setting autoLoginEnabled to false");
+            RandomManager.setAutoLoginEnabled(false);
+        }
+    }
+
+    public static void enableAutoLogin() {
+        if (!RandomManager.isAutoLoginEnabled()) {
+            Log.info("Setting autoLoginEnabled to true");
+            RandomManager.setAutoLoginEnabled(true);
         }
     }
 }
