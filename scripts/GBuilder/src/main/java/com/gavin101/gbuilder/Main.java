@@ -5,6 +5,7 @@ import com.gavin101.GLib.leafs.common.CacheBankLeaf;
 import com.gavin101.GLib.leafs.common.CloseChatLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
+import com.gavin101.gbuilder.activities.misc.tanning.Tanning;
 import com.gavin101.gbuilder.activities.quests.goblindiplomacy.GoblinDiplomacy;
 import com.gavin101.gbuilder.activities.quests.impcatcher.ImpCatcher;
 import com.gavin101.gbuilder.activities.quests.restlessghost.RestlessGhost;
@@ -37,6 +38,7 @@ import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.events.WidgetEvent;
 import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.frameworks.tree.Branch;
@@ -131,7 +133,6 @@ public class Main extends AbstractScript implements Painter {
                 add("Runtime: " + timer);
                 add("Current branch: " + Tree.currentBranch);
                 add("Current leaf: " + Tree.currentLeaf);
-
                 if (ActivityManager.getCurrentActivity() != null) {
                     Activity currentActivity = ActivityManager.getCurrentActivity();
                     add("Current activity: " + currentActivity.getName());
@@ -192,6 +193,7 @@ public class Main extends AbstractScript implements Painter {
         ActivityManager.registerActivity(Firemaking.createActivity(Firemaking.LogType.WILLOW));
 
         ActivityManager.registerActivity(Mining.createActivity(Mining.RockType.COPPER));
+        ActivityManager.registerActivity(Mining.createActivity(Mining.RockType.TIN));
         ActivityManager.registerActivity(Mining.createActivity(Mining.RockType.IRON));
 
         ActivityManager.registerActivity(CooksAssistant.ACTIVITY);
@@ -208,6 +210,8 @@ public class Main extends AbstractScript implements Painter {
         Combat.MonsterTier.BARBARIANS.register();
         Combat.MonsterTier.ALKHARIDWARRIORS.register();
         Combat.MonsterTier.FLESHCRAWLERS.register();
+
+        ActivityManager.registerActivity(Tanning.createActivity(Tanning.LeatherType.LEATHER));
     }
 
     @Notify

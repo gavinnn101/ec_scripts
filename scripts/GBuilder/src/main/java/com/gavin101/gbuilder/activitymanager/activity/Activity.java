@@ -18,7 +18,8 @@ import java.util.function.Supplier;
 public abstract class Activity {
     public enum ActivityType {
         SKILL,
-        QUEST
+        QUEST,
+        MISC
     }
 
     @NonNull

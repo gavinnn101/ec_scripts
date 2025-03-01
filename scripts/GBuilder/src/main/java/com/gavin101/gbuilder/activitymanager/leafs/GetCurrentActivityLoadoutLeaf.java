@@ -36,7 +36,8 @@ public class GetCurrentActivityLoadoutLeaf extends Leaf {
                 .addEquipmentLoadout(equipmentLoadout)
                 .setBuyRemainder(buyRemainder)
                 .setEventCompleteCondition(() -> loadoutsFulfilled(equipmentLoadout, inventoryLoadout))
-                .executed();
+                .execute();
+
         return ReactionGenerator.getNormal();
     }
 }

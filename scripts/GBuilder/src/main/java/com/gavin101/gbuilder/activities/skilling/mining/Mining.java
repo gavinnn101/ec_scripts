@@ -22,6 +22,7 @@ public class Mining {
     @RequiredArgsConstructor
     public enum RockType {
         COPPER("Copper rocks", 1, 15),
+        TIN("Tin rocks", 1, 15),
         IRON("Iron rocks", 15, 55);
 
         private final String name;

@@ -19,10 +19,12 @@ import net.eternalclient.api.wrappers.skill.Skill;
 public class FlyFishing {
     private static final String activityName = "Fly fishing";
 
+    private static final int minFeathers = Calculations.random(30, 100);
+
     public static final InventoryLoadout INVENTORY_LOADOUT = new InventoryLoadout()
             .addReq(ItemID.FLY_FISHING_ROD)
             .addReq(ItemID.FEATHER, Calculations.random(1000, 2001)) // Withdraw between 1000-2000 feathers
-            .setEnabled(() -> !Inventory.contains(ItemID.FEATHER))
+            .setStrict(Inventory.count(ItemID.FEATHER) < minFeathers)
             .setRefill(Calculations.random(3000, 4001)) // Buy between 3000-4000 feathers if we don't have enough for our withdraw amount
             .setLoadoutStrict(Inventory::isFull);
 

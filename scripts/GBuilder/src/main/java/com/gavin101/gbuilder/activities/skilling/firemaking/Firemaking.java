@@ -55,8 +55,7 @@ public class Firemaking {
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
                 .addReq(ItemID.TINDERBOX)
                 .addReq(logType.getItemId(), () -> Math.min(OwnedItems.count(logType.getItemId()), 27))
-                .setEnabled(() -> !Inventory.contains(logType.getItemId()))
-                .setStrict(true);
+                .setStrict(() -> !Inventory.contains(logType.getItemId()));
 
         return SkillActivity.builder()
                 .name(activityName)

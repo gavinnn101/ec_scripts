@@ -23,8 +23,7 @@ public class Cooking {
 
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
                 .addReq(rawFoodId, () -> Math.min(OwnedItems.count(rawFoodId), 28))
-                .setEnabled(() -> !Inventory.contains(rawFoodId))
-                .setStrict(true);
+                .setStrict(() -> !Inventory.contains(rawFoodId));
 
         return SkillActivity.builder()
                 .name(activityName)

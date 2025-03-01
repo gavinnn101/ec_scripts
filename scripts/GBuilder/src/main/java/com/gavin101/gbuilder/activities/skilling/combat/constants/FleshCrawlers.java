@@ -14,9 +14,8 @@ import java.util.List;
 public class FleshCrawlers {
     public static final InventoryLoadout FLESH_CRAWLERS_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.LOBSTER, Calculations.random(20, 28)) // Withdraw between 20-28 lobsters
-            .setEnabled(() -> !Inventory.contains(ItemID.LOBSTER))
-            .setRefill(Calculations.random(100, 201)) // Buy between 100-200 lobsters if we run out
-            .setLoadoutStrict(() -> !Inventory.contains(ItemID.LOBSTER));
+            .setStrict(() -> !Inventory.contains(ItemID.LOBSTER))
+            .setRefill(Calculations.random(100, 201)); // Buy between 100-200 lobsters if we run out
 
     public static final List<Area> FLESH_CRAWLERS_AREAS = List.of(
             new RectArea(1987, 5244, 1996, 5232),   // North-east room

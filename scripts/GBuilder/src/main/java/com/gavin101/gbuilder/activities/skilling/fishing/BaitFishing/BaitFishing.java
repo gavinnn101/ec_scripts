@@ -19,10 +19,12 @@ import net.eternalclient.api.wrappers.skill.Skill;
 public class BaitFishing {
     private static final String activityName = "Bait fishing";
 
+    private static final int minBait = Calculations.random(30, 100);
+
     public static final InventoryLoadout INVENTORY_LOADOUT = new InventoryLoadout()
             .addReq(ItemID.FISHING_ROD)
             .addReq(ItemID.FISHING_BAIT, Calculations.random(500, 751)) // Withdraw between 500-751 fishing bait
-            .setEnabled(() -> !Inventory.contains(ItemID.FISHING_BAIT))
+            .setStrict(Inventory.count(ItemID.FISHING_BAIT) < minBait)
             .setRefill(Calculations.random(1000, 2001)) // Buy between 1000-2000 fishing bait if we don't have enough for our withdraw amount
             .setLoadoutStrict(Inventory::isFull);
 

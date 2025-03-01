@@ -13,8 +13,8 @@ import java.util.List;
 public class Cows {
     public static final InventoryLoadout COW_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.HERRING, 4)
-            .setEnabled(() -> !Inventory.contains(ItemID.HERRING))
-            .setLoadoutStrict(() -> !Inventory.contains(ItemID.HERRING) || Inventory.isFull());
+            .setStrict(() -> !Inventory.contains(ItemID.HERRING))
+            .setLoadoutStrict(Inventory::isFull);
 
     public static final int[] COW_LOOT = {
             ItemID.COWHIDE
