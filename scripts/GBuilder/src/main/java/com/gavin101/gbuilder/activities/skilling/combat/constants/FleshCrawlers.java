@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FleshCrawlers {
     public static final InventoryLoadout FLESH_CRAWLERS_INVENTORY = new InventoryLoadout()
-            .addReq(ItemID.LOBSTER, Calculations.random(20, 28)) // Withdraw between 20-28 lobsters
+            .addReq(ItemID.LOBSTER, 28)
             .setStrict(() -> !Inventory.contains(ItemID.LOBSTER))
             .setRefill(Calculations.random(100, 201)); // Buy between 100-200 lobsters if we run out
 

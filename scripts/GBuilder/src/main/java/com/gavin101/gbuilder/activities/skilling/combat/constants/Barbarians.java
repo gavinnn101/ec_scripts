@@ -8,7 +8,7 @@ import net.eternalclient.api.wrappers.map.RectArea;
 
 public class Barbarians {
     public static final InventoryLoadout BARBARIAN_INVENTORY = new InventoryLoadout()
-            .addReq(ItemID.TROUT, Calculations.random(10, 20)) // Withdraw between 10-20 trout
+            .addReq(ItemID.TROUT, 28)
             .setStrict(() -> !Inventory.contains(ItemID.TROUT))
             .setRefill(Calculations.random(80, 100)); // Buy 80-100 trout if we don't have enough
 
