@@ -13,7 +13,8 @@ public class Common {
     public static final int[] EMPTY_LOOT = {};
 
     public static final Map<Integer, Integer> itemsToSell = Map.of(
-            ItemID.COWHIDE, 9999,
+//            ItemID.COWHIDE, 9999,
+            ItemID.LEATHER, 9999,
             ItemID.IRON_ORE, 9999
     );
 }
