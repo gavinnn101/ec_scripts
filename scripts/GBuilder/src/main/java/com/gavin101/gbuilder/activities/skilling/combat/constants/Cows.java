@@ -17,6 +17,7 @@ public class Cows {
             .setLoadoutStrict(Inventory::isFull);
 
     public static final int[] COW_LOOT = {
+            ItemID.BONES,
             ItemID.COWHIDE
     };
 

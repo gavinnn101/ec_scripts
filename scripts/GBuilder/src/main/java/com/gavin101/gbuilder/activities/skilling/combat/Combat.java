@@ -3,10 +3,7 @@ package com.gavin101.gbuilder.activities.skilling.combat;
 import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.branches.common.IsAfkBranch;
 import com.gavin101.gbuilder.activities.skilling.combat.constants.*;
-import com.gavin101.gbuilder.activities.skilling.combat.leafs.EatFoodLeaf;
-import com.gavin101.gbuilder.activities.skilling.combat.leafs.FightMonsterLeaf;
-import com.gavin101.gbuilder.activities.skilling.combat.leafs.SetAttackStyleLeaf;
-import com.gavin101.gbuilder.activities.skilling.combat.leafs.SetBestCombatEquipmentLeaf;
+import com.gavin101.gbuilder.activities.skilling.combat.leafs.*;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
 import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import com.gavin101.gbuilder.activitymanager.branches.ValidateActivityBranch;
@@ -63,7 +60,7 @@ public class Combat {
                 30,
                 Barbarians.BARBARIAN_INVENTORY,
                 ItemID.TROUT,
-                Common.EMPTY_LOOT,
+                Barbarians.BARBARIAN_LOOT,
                 Barbarians.BARBARIAN_AREA
         ),
         ALKHARIDWARRIORS(
@@ -72,7 +69,7 @@ public class Combat {
                 40,
                 AlkharidWarriors.ALKHARID_WARRIOR_INVENTORY,
                 ItemID.TROUT,
-                Common.EMPTY_LOOT,
+                AlkharidWarriors.ALKHARID_WARRIOR_LOOT,
                 AlkharidWarriors.ALKHARID_WARRIOR_AREA
 
         ),
@@ -82,7 +79,7 @@ public class Combat {
                 99,
                 FleshCrawlers.FLESH_CRAWLERS_INVENTORY,
                 ItemID.LOBSTER,
-                Common.EMPTY_LOOT,
+                FleshCrawlers.FLESH_CRAWLER_LOOT,
                 GLib.getRandomArea(FleshCrawlers.FLESH_CRAWLERS_AREAS)
         );
 
@@ -125,6 +122,7 @@ public class Combat {
                         .build(),
                 new EatFoodLeaf(monsterTier.getFoodId()),
                 new IsAfkBranch().addLeafs(
+                        new BuryBonesLeaf(),
                         LootItemsLeaf.builder().itemIds(monsterTier.getLoot()).build(),
                         new SetAttackStyleLeaf(combatType.getAttackStyle()),
                         new FightMonsterLeaf(monsterTier.getName(), monsterTier.getArea())

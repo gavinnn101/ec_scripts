@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Chickens {
     public static final int[] CHICKEN_LOOT = {
+            ItemID.BONES,
             ItemID.FEATHER
     };
 

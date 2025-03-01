@@ -12,5 +12,9 @@ public class Barbarians {
             .setStrict(() -> !Inventory.contains(ItemID.TROUT))
             .setRefill(Calculations.random(80, 100)); // Buy 80-100 trout if we don't have enough
 
+    public static final int[] BARBARIAN_LOOT = {
+            ItemID.BONES,
+    };
+
     public static final RectArea BARBARIAN_AREA = new RectArea(3073, 3426, 3087, 3413, 0);
 }

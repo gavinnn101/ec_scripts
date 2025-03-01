@@ -17,6 +17,10 @@ public class FleshCrawlers {
             .setStrict(() -> !Inventory.contains(ItemID.LOBSTER))
             .setRefill(Calculations.random(100, 201)); // Buy between 100-200 lobsters if we run out
 
+    public static final int[] FLESH_CRAWLER_LOOT = {
+            ItemID.BONES,
+    };
+
     public static final List<Area> FLESH_CRAWLERS_AREAS = List.of(
             new RectArea(1987, 5244, 1996, 5232),   // North-east room
             new RectArea(2000, 5208, 2011, 5197),   // south-east room

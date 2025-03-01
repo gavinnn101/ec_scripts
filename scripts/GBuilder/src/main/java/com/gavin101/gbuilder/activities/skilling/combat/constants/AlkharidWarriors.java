@@ -12,5 +12,9 @@ public class AlkharidWarriors {
             .setStrict(() -> !Inventory.contains(ItemID.TROUT))
             .setRefill(Calculations.random(80, 100));    // Buy between 80-100 trout if we run out;
 
+    public static final int[] ALKHARID_WARRIOR_LOOT = {
+            ItemID.BONES,
+    };
+
     public static final RectArea ALKHARID_WARRIOR_AREA = new RectArea(3281, 3177, 3303, 3159);
 }
