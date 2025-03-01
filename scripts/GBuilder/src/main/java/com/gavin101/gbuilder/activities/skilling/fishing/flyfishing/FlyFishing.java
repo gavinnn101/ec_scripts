@@ -24,10 +24,9 @@ public class FlyFishing {
     public static final InventoryLoadout INVENTORY_LOADOUT = new InventoryLoadout()
             .addReq(ItemID.FLY_FISHING_ROD)
             .addReq(ItemID.FEATHER, Calculations.random(1000, 2001)) // Withdraw between 1000-2000 feathers
-            .setStrict(Inventory.count(ItemID.FEATHER) < minFeathers)
+            .setStrict(() -> Inventory.count(ItemID.FEATHER) < minFeathers)
             .setRefill(Calculations.random(3000, 4001)) // Buy between 3000-4000 feathers if we don't have enough for our withdraw amount
             .setLoadoutStrict(Inventory::isFull);
-
 
     private static Branch createBranch() {
         return new ValidateActivityBranch(

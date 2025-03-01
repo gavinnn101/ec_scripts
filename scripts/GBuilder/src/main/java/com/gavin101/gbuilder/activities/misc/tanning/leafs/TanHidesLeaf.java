@@ -26,7 +26,7 @@ public class TanHidesLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
-        return true;
+        return Inventory.contains(ItemID.COINS_995, leatherType.getRawMaterialId());
     }
 
     @Override

@@ -10,7 +10,7 @@ public class AlkharidWarriors {
     public static final InventoryLoadout ALKHARID_WARRIOR_INVENTORY = new InventoryLoadout()
             .addReq(ItemID.TROUT, 28)
             .setStrict(() -> !Inventory.contains(ItemID.TROUT))
-            .setRefill(Calculations.random(80, 100)); // Buy between 80-100 trout if we run out
+            .setRefill(Calculations.random(80, 100));    // Buy between 80-100 trout if we run out;
 
     public static final RectArea ALKHARID_WARRIOR_AREA = new RectArea(3281, 3177, 3303, 3159);
 }

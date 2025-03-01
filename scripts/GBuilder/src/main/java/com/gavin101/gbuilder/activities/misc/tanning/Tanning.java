@@ -12,7 +12,6 @@ import com.gavin101.gbuilder.activitymanager.branches.ValidateActivityBranch;
 import com.gavin101.gbuilder.activitymanager.leafs.GetCurrentActivityLoadoutLeaf;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
@@ -40,8 +39,7 @@ public class Tanning {
         String activityName = String.format("Tanning material: %s to make: %s", GLib.getItemName(leatherType.getRawMaterialId()), leatherType.getName());
 
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
-                .addReq(ItemID.COINS_995, OwnedItems.count(ItemID.COINS_995))
-                .setStrict(() -> Inventory.count(ItemID.COINS_995) < getTotalTanningCost(leatherType))
+                .addReq(ItemID.COINS_995, () -> getTotalTanningCost(leatherType))
                 .addReq(leatherType.getRawMaterialId(), () -> Math.min(OwnedItems.count(leatherType.getRawMaterialId()), 27));
 
         return MiscActivity.builder()
