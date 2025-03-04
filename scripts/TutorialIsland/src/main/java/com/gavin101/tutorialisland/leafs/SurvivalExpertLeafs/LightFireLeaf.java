@@ -14,6 +14,7 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;
+import net.eternalclient.api.wrappers.item.Item;
 import net.eternalclient.api.wrappers.walking.Walking;
 
 public class LightFireLeaf extends Leaf {
@@ -27,9 +28,10 @@ public class LightFireLeaf extends Leaf {
         Log.info("Lighting a fire.");
         GameObject nearestFire = GameObjects.closest(ObjectID.FIRE_26185);
         if (nearestFire == null || !nearestFire.getWorldTile().equals(Players.localPlayer().getWorldTile())) {
-            if (Inventory.contains(ItemID.TINDERBOX) && Inventory.contains(ItemID.LOGS_2511)) {
-                new InventoryEvent(Inventory.get(ItemID.TINDERBOX)).on(Inventory.get(ItemID.LOGS_2511)
-                ).setEventCompleteCondition(
+            Item tinderbox = Inventory.get(ItemID.TINDERBOX);
+            Item logs = Inventory.get(ItemID.LOGS_2511);
+            if (tinderbox != null && logs != null) {
+                new InventoryEvent(tinderbox).on(logs).setEventCompleteCondition(
                         () -> Players.localPlayer().isAnimating(), Calculations.random(2000, 5000)
                 ).execute();
             }

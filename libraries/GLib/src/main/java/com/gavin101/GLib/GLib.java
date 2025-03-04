@@ -4,7 +4,6 @@ import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.*;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.data.VarPlayer;
 import net.eternalclient.api.events.DialogueEvent;
 import net.eternalclient.api.events.EntityInteractEvent;
@@ -17,8 +16,6 @@ import net.eternalclient.api.events.muling.RequiredItem;
 import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.internal.InteractionMode;
-import net.eternalclient.api.rs.RSNPC;
-import net.eternalclient.api.rs.RSNPCComposition;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.MethodProvider;
@@ -188,7 +185,7 @@ public final class GLib {
         Log.info("Requesting coin amount: " +coinAmount +" from mule.");
         new MuleRequestEvent()
                 .addRequiredItem(new RequiredItem(ItemID.COINS_995, coinAmount))
-                .setEventCompleteCondition(() -> Inventory.get(ItemID.COINS_995).getAmount() >= coinAmount)
+                .setEventCompleteCondition(() -> Inventory.count(ItemID.COINS_995) >= coinAmount)
                 .execute();
     }
 

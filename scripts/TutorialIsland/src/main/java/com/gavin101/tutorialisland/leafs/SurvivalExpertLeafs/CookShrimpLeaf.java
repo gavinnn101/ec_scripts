@@ -12,6 +12,7 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;
+import net.eternalclient.api.wrappers.item.Item;
 
 public class CookShrimpLeaf extends Leaf {
     int rawShrimpID = ItemID.RAW_SHRIMPS_2514;
@@ -25,11 +26,14 @@ public class CookShrimpLeaf extends Leaf {
         Log.info("Cooking shrimps on fire");
         GameObject fire = GameObjects.closest(ObjectID.FIRE_26185);
         if (fire != null && fire.canReach()) {
-            Log.debug("Using shrimps on fire.");
-            new InventoryEvent(Inventory.get(rawShrimpID)).on(fire).setEventCompleteCondition(
-                    () -> !Inventory.contains(rawShrimpID), Calculations.random(2000, 5000)
-            ).execute();
+            Log.debug("Cooking shrimp on fire.");
+            Item shrimp = Inventory.get(rawShrimpID);
+            if (shrimp != null) {
+                new InventoryEvent(shrimp).on(fire).setEventCompleteCondition(
+                        () -> false, Calculations.random(2000, 5000)
+                ).execute();
             }
+        }
         return ReactionGenerator.getNormal();
     }
 }

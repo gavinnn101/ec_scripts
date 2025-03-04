@@ -9,6 +9,7 @@ import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
+import net.eternalclient.api.wrappers.item.Item;
 
 public class MakeDoughLeaf extends Leaf {
     @Override
@@ -19,9 +20,10 @@ public class MakeDoughLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Making bread dough");
-        if (Inventory.contains(ItemID.POT_OF_FLOUR_2516) && Inventory.contains(ItemID.BUCKET_OF_WATER)) {
-            new InventoryEvent(Inventory.get(ItemID.POT_OF_FLOUR_2516)).on(Inventory.get(ItemID.BUCKET_OF_WATER)
-            ).setEventCompleteCondition(
+        Item potOfFlour = Inventory.get(ItemID.POT_OF_FLOUR_2516);
+        Item bucketOfWater = Inventory.get(ItemID.BUCKET_OF_WATER);
+        if (potOfFlour != null && bucketOfWater != null) {
+            new InventoryEvent(potOfFlour).on(bucketOfWater).setEventCompleteCondition(
                     () -> Inventory.contains(ItemID.BREAD_DOUGH), Calculations.random(1500, 3000)
             ).execute();
         }
