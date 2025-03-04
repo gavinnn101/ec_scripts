@@ -1,13 +1,12 @@
 package com.gavin101.gbuilder.activities.quests.doricsquest.leafs;
 
 import com.gavin101.GLib.GLib;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
-import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.RectArea;
 
 public class TalkToDoricLeaf extends Leaf {
-    private static final String DORIC_NAME = "Doric";
     private static final String[] CHAT_OPTIONS = {
             "I wanted to use your anvils.",
             "Yes",
@@ -22,8 +21,7 @@ public class TalkToDoricLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Trying to talk to: " +DORIC_NAME);
-        GLib.talkWithNpc(DORIC_NAME, DORICS_HOUSE_AREA, CHAT_OPTIONS);
+        GLib.talkWithNpc(NpcID.DORIC, DORICS_HOUSE_AREA, CHAT_OPTIONS);
         return ReactionGenerator.getNormal();
     }
 }

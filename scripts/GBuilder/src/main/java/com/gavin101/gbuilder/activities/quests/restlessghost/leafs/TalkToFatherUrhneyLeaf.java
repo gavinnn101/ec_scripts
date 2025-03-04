@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.restlessghost.leafs;
 
 import com.gavin101.GLib.GLib;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.RectArea;
@@ -20,7 +21,7 @@ public class TalkToFatherUrhneyLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Father Urhney", FATHER_URHNEY_AREA, FATHER_URHNEY_CHAT_OPTIONS);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.FATHER_URHNEY, FATHER_URHNEY_AREA, FATHER_URHNEY_CHAT_OPTIONS);
+        return ReactionGenerator.getNormal();
     }
 }

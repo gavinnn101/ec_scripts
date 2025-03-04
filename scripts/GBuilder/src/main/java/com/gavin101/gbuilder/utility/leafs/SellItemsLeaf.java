@@ -8,7 +8,6 @@ import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.container.OwnedItems;
-import net.eternalclient.api.wrappers.item.ItemComposite;
 
 import java.util.ArrayList;
 import java.util.List;

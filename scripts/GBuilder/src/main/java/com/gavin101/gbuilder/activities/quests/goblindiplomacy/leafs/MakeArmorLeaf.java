@@ -1,28 +1,34 @@
 package com.gavin101.gbuilder.activities.quests.goblindiplomacy.leafs;
 
 import net.eternalclient.api.containers.Inventory;
+import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.InventoryEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
+import net.eternalclient.api.wrappers.item.Item;
 
 public class MakeArmorLeaf extends Leaf {
     @Override
     public boolean isValid() {
-        return Inventory.containsAll("Blue dye", "Goblin mail")
-                || Inventory.containsAll("Orange dye", "Goblin mail");
+        return Inventory.containsAll(ItemID.BLUE_DYE, ItemID.GOBLIN_MAIL)
+                || Inventory.containsAll(ItemID.ORANGE_DYE, ItemID.GOBLIN_MAIL);
     }
 
     @Override
     public int onLoop() {
-        if (Inventory.containsAll("Blue dye", "Goblin mail")) {
-            new InventoryEvent(Inventory.get("Blue dye")).on(Inventory.get("Goblin mail")).setEventCompleteCondition(
-                    () -> Inventory.contains("blue goblin mail"), Calculations.random(750, 1500)
+        Item blueDye = Inventory.get(ItemID.BLUE_DYE);
+        Item goblinMail = Inventory.get(ItemID.GOBLIN_MAIL);
+        if (blueDye != null && goblinMail != null) {
+            new InventoryEvent(blueDye).on(goblinMail).setEventCompleteCondition(
+                    () -> Inventory.contains(ItemID.BLUE_GOBLIN_MAIL), Calculations.random(750, 1500)
             ).execute();
         }
-        if (Inventory.containsAll("Orange dye", "Goblin mail")) {
-            new InventoryEvent(Inventory.get("Orange dye")).on(Inventory.get("Goblin mail")).setEventCompleteCondition(
-                    () -> Inventory.contains("orange goblin mail"), Calculations.random(750, 1500)
+        Item orangeDye = Inventory.get(ItemID.ORANGE_DYE);
+        goblinMail = Inventory.get(ItemID.GOBLIN_MAIL);
+        if (orangeDye != null && goblinMail != null) {
+            new InventoryEvent(orangeDye).on(goblinMail).setEventCompleteCondition(
+                    () -> Inventory.contains(ItemID.ORANGE_GOBLIN_MAIL), Calculations.random(750, 1500)
             ).execute();
         }
         return ReactionGenerator.getPredictable();

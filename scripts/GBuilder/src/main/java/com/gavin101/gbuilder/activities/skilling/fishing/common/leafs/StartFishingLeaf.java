@@ -9,7 +9,6 @@ import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
-import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
 
@@ -26,20 +25,20 @@ public class StartFishingLeaf extends Leaf {
     public int onLoop() {
         Log.info("Finding fishing spot to interact with.");
         String[] fishingSpotActions = getFishingTypeActions(fishingType);
-        NPC fishingSpot = NPCs.closest(i -> i.hasAction(fishingSpotActions));
-
-        if (fishingSpot != null && fishingSpot.canReach()) {
-            Log.debug("Clicking fishing spot.");
-            new EntityInteractEvent(fishingSpot, fishingSpotActions).setEventCompleteCondition(
-                    () -> Players.localPlayer().isInteractingWith(fishingSpot), Calculations.random(2500, 5000)
-            ).execute();
+        if (fishingSpotActions != null) {
+            NPC fishingSpot = NPCs.closest(i -> i.hasAction(fishingSpotActions));
+            if (fishingSpot != null && fishingSpot.canReach()) {
+                Log.debug("Clicking fishing spot.");
+                new EntityInteractEvent(fishingSpot, fishingSpotActions).setEventCompleteCondition(
+                        () -> Players.localPlayer().isInteractingWith(fishingSpot), Calculations.random(2500, 5000)
+                ).execute();
+            }
         }
         return FatigueTracker.getCurrentReactionTime();
 //        return ReactionGenerator.getAFK();
     }
 
     private String[] getFishingTypeActions(Fishing.FishingType fishingType) {
-        String[] defaultFishingTypeActions = {};
         switch (fishingType) {
             case SMALL_FISHING_NET:
                 return new String[] {"Net", "Small Net"};
@@ -48,6 +47,6 @@ public class StartFishingLeaf extends Leaf {
             case FLY_FISHING:
                 return new String[] {"Lure"};
         }
-        return defaultFishingTypeActions;
+        return null;
     }
 }

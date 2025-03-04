@@ -9,6 +9,7 @@ import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.data.MenuAction;
 import net.eternalclient.api.data.MenuOpcode;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.events.WidgetEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -47,8 +48,8 @@ public class TanHidesLeaf extends Leaf {
                         ).execute();
             }
         } else {
-            NPC ellis = NPCs.closest("Ellis");
             Log.debug("Looking for Ellis");
+            NPC ellis = NPCs.closest(NpcID.ELLIS);
             if (ellis != null && ellis.canReach()) {
                 Log.debug("Trading Ellis");
                 new EntityInteractEvent(ellis, "Trade").setEventCompleteCondition(

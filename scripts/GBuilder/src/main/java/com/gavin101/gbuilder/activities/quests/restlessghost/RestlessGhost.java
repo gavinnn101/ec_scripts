@@ -39,6 +39,7 @@ public class RestlessGhost {
                         new TalkToFatherAereckLeaf(),
                         new TalkToFatherUrhneyLeaf(),
                         new TalkToGhostBranch().addLeafs(
+                                new GiveSkullLeaf(),
                                 new OpenCoffinLeaf(),
                                 new TalkToGhostLeaf()
                         ),

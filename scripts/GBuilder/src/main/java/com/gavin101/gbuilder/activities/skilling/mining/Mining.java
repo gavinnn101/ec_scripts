@@ -3,7 +3,6 @@ package com.gavin101.gbuilder.activities.skilling.mining;
 import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.branches.common.IsAfkBranch;
 import com.gavin101.GLib.leafs.common.GoToAreaLeaf;
-import com.gavin101.GLib.leafs.common.GoToTileLeaf;
 import com.gavin101.gbuilder.activities.skilling.mining.constants.MiningConstants;
 import com.gavin101.gbuilder.activities.skilling.mining.leafs.MineRockLeaf;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
@@ -60,7 +59,6 @@ public class Mining {
                         .buyRemainder(true)
                         .build(),
                 new IsAfkBranch().addLeafs(
-//                        new GoToTileLeaf(GLib.getRandomTile(MiningConstants.ROCK_TO_TILES_MAP(rockName))),
                         new GoToAreaLeaf(GLib.getRandomArea(MiningConstants.ROCK_TO_AREAS_MAP(rockName))),
                         new MineRockLeaf(rockName)
                 )

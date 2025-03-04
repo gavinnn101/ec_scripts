@@ -21,7 +21,7 @@ public class WitchsPotion {
 
     public static final InventoryLoadout INVENTORY_LOADOUT = new InventoryLoadout()
             .addReq(ItemID.COOKED_MEAT, 1)
-            .setEnabled(() -> !Inventory.contains("Burnt meat") && Quest.WITCHS_POTION.getState() != 2)
+            .setEnabled(() -> !Inventory.contains(ItemID.BURNT_MEAT) && Quest.WITCHS_POTION.getState() != 2)
             .addReq(ItemID.BURNT_MEAT, 1)
             .setEnabled(() -> OwnedItems.contains(ItemID.BURNT_MEAT) && Quest.WITCHS_POTION.getState() == 1)
             .addReq(ItemID.RATS_TAIL, 1)

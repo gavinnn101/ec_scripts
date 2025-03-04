@@ -8,27 +8,29 @@ import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.InventoryEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
-import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
-import net.eternalclient.api.wrappers.item.ItemComposite;
+import net.eternalclient.api.wrappers.item.Item;
 import net.eternalclient.api.wrappers.skill.Skill;
 
 @RequiredArgsConstructor
 public class EatFoodLeaf extends Leaf {
     private final int foodToEatID;
+    private static Item foodToEat;
+    private static int currentHp;
 
     @Override
     public boolean isValid() {
         int healthThreshold = getRandomHealthThreshold(foodToEatID);
-        return Skills.getBoostedLevels(Skill.HITPOINTS) < healthThreshold && Inventory.contains(foodToEatID);
+        foodToEat = Inventory.get(foodToEatID);
+        currentHp = Skills.getBoostedLevels(Skill.HITPOINTS);
+        return currentHp < healthThreshold && foodToEat != null;
     }
 
     @Override
     public int onLoop() {
-        int originalHp = Skills.getBoostedLevels(Skill.HITPOINTS);
-        Log.info("Eating food: " + ItemComposite.getItem(foodToEatID).getName() +" at hp: " +originalHp);
-        new InventoryEvent(foodToEatID, "Eat").setEventCompleteCondition(
-                () -> Skills.getBoostedLevels(Skill.HITPOINTS) > originalHp, Calculations.random(350, 500)
+        Log.info(String.format("Eating food: %s at hp: %s", foodToEat.getName(), currentHp));
+        new InventoryEvent(foodToEat, "Eat").setEventCompleteCondition(
+                () -> foodToEat == null, Calculations.random(350, 1000)
         ).execute();
         return FatigueTracker.getCurrentReactionTime();
 //        return ReactionGenerator.getNormal();

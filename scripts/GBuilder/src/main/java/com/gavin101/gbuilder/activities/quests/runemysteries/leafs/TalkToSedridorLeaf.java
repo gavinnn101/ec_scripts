@@ -24,6 +24,6 @@ public class TalkToSedridorLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Archmage Sedridor", SEDRIDOR_AREA, SEDRIDOR_CHAT_OPTIONS);
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

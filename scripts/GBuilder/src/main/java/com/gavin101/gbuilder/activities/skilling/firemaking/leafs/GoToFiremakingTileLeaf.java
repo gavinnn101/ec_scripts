@@ -9,7 +9,6 @@ import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
-import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.walking.Walking;
 

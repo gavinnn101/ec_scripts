@@ -1,13 +1,12 @@
 package com.gavin101.gbuilder.activities.quests.sheepshearer.leafs;
 
 import com.gavin101.GLib.GLib;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
-import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.RectArea;
 
 public class TalkToFarmerLeaf extends Leaf {
-    private static final String FARMER_NAME = "Fred the Farmer";
     private static final String[] CHAT_OPTIONS = {
             "I'm looking for a quest.",
             "Yes."
@@ -21,8 +20,7 @@ public class TalkToFarmerLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Trying to talk to: " +FARMER_NAME);
-        GLib.talkWithNpc(FARMER_NAME, FARMER_AREA, CHAT_OPTIONS);
+        GLib.talkWithNpc(NpcID.FRED_THE_FARMER, FARMER_AREA, CHAT_OPTIONS);
         return ReactionGenerator.getNormal();
     }
 }

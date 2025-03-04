@@ -7,7 +7,6 @@ import net.eternalclient.api.accessors.Combat;
 import net.eternalclient.api.events.combat.SetAttackStyleEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
-import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 
 @RequiredArgsConstructor

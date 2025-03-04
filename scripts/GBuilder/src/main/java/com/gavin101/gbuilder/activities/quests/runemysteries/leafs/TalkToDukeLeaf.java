@@ -21,6 +21,6 @@ public class TalkToDukeLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Duke Horacio", DUKE_AREA, DUKE_CHAT_OPTIONS);
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

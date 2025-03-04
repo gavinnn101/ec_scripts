@@ -2,12 +2,12 @@ package com.gavin101.gbuilder.activities.quests.goblindiplomacy.leafs;
 
 import com.gavin101.GLib.GLib;
 import net.eternalclient.api.frameworks.tree.Leaf;
-import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
+import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.map.RectArea;
 
 public class TalkToGeneralLeaf extends Leaf {
-    private static final String GENERAL_NAME = "General Bentnoze";
+    private static final String[] GENERALS = {"General Bentnoze", "General Wartface"};
     private static final String[] CHAT_OPTIONS = {
             "Do you want me to pick an armour colour for you?",
             "What about a different colour?",
@@ -24,8 +24,9 @@ public class TalkToGeneralLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Trying to talk to: " +GENERAL_NAME);
-        GLib.talkWithNpc(GENERAL_NAME, GOBLIN_GENERALS_HUT_AREA, CHAT_OPTIONS);
+        int generalIndex = Calculations.random(0, 1);
+        String general = GENERALS[generalIndex];
+        GLib.talkWithNpc(general, GOBLIN_GENERALS_HUT_AREA, CHAT_OPTIONS);
         return ReactionGenerator.getNormal();
     }
 }

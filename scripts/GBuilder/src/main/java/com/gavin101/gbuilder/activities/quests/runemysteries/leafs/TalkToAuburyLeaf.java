@@ -29,6 +29,6 @@ public class TalkToAuburyLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Aubury", AUBURY_AREA, AUBURY_CHAT_OPTIONS);
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

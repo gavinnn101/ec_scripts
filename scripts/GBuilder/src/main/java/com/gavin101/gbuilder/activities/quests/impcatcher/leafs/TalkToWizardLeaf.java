@@ -2,12 +2,10 @@ package com.gavin101.gbuilder.activities.quests.impcatcher.leafs;
 
 import com.gavin101.GLib.GLib;
 import net.eternalclient.api.frameworks.tree.Leaf;
-import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.RectArea;
 
 public class TalkToWizardLeaf extends Leaf {
-    private static final String WIZARD_NAME = "Wizard Mizgog";
     private static final String[] CHAT_OPTIONS = {
             "Give me a quest please.",
             "Yes."
@@ -22,8 +20,7 @@ public class TalkToWizardLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Log.info("Trying to talk to: " +WIZARD_NAME);
-        GLib.talkWithNpc(WIZARD_NAME, WIZARD_AREA, CHAT_OPTIONS);
+        GLib.talkWithNpc("Wizard Mizgog", WIZARD_AREA, CHAT_OPTIONS);
         return ReactionGenerator.getNormal();
     }
 }

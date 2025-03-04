@@ -1,7 +1,7 @@
 package com.gavin101.gbuilder.activitymanager.leafs;
 
-import com.gavin101.gbuilder.activitymanager.activity.Activity;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
+import com.gavin101.gbuilder.activitymanager.activity.Activity;
 import lombok.Builder;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.InventoryLoadout;

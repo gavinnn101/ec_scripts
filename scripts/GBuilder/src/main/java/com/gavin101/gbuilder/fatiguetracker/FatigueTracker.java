@@ -1,6 +1,5 @@
 package com.gavin101.gbuilder.fatiguetracker;
 
-import com.gavin101.GLib.GLib;
 import lombok.Data;
 import lombok.Getter;
 import net.eternalclient.api.utilities.Log;
