@@ -22,7 +22,7 @@ public class TakeBreakLeaf extends Leaf {
     public int onLoop() {
         Log.info("Logging out for break");
         FatigueTracker.startBreak();
-        ActivityManager.pauseActivityTimer();
+        ActivityManager.getActivityTimer().pause();
         RandomManager.setAutoLoginEnabled(false);
         new LogoutEvent().setEventCompleteCondition(() -> !Client.isLoggedIn()).execute();
         return ReactionGenerator.getAFK();

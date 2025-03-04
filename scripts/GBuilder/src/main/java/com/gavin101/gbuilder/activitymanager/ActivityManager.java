@@ -2,12 +2,14 @@ package com.gavin101.gbuilder.activitymanager;
 
 import com.gavin101.GLib.GLib;
 import com.gavin101.gbuilder.activitymanager.activity.Activity;
+import com.gavin101.gbuilder.activitymanager.activity.SkillActivity;
 import lombok.Getter;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.listeners.skill.SkillTracker;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.math.Calculations;
+import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,15 +26,16 @@ public class ActivityManager {
     @Getter
     private static Activity currentActivity;
 
-    private static long activityStartTime = 0;
-    @Getter
-    private static long totalActiveTime = 0;
-    private static boolean isPaused = false;
-
     public static void registerActivity(Activity activity) {
-        Log.info("Registering activity: " +activity.getName());
+//        Log.info("Registering activity: " +activity.getName());
         registeredActivities.add(activity);
         activityBranches.add(activity.getBranch());
+    }
+
+    public static void deregisterActivity(Activity activity) {
+        Log.info("Deregistering activity: " +activity.getName());
+        registeredActivities.remove(activity);
+        activityBranches.remove(activity.getBranch());
     }
 
     public static boolean currentActivityIsValid() {
@@ -57,18 +60,20 @@ public class ActivityManager {
         for (Activity activity : registeredActivities) {
             if (activity.isValid()) {
                 Log.info("Setting current activity to: " + activity.getName());
-                // We want a new max duration each time a new activity activates
-                activity.setMaxDurationMinutes(Calculations.random(30, 60));
-                Log.info("Current activity max duration (minutes): " + activity.getMaxDurationMinutes());
                 currentActivity = activity;
+                // We want a new max duration each time a new activity activates
+                int randomDuration = Calculations.random(30, 60);
+                activity.setMaxDurationMinutes(randomDuration);
+                Log.info("Current activity max duration (minutes): " +randomDuration);
                 // Reset our time tracking
-                activityStartTime = System.currentTimeMillis();
-                totalActiveTime = 0;
-                isPaused = false;
                 activityTimer.reset();
-                // Reset exp gained for the next activity so we get accurate xp/hr.
-                SkillTracker.deregister();
-                SkillTracker.start();
+                if (currentActivity.getType().equals(Activity.ActivityType.SKILL)) {
+                    // Reset exp gained for the next activity so we get accurate xp/hr.
+                    SkillActivity currentSkillActivity = (SkillActivity) currentActivity;
+                    Skill currentSkill = currentSkillActivity.getActivitySkill();
+                    SkillTracker.deregister();
+                    SkillTracker.start(currentSkill);
+                }
                 break;
             }
         }
@@ -78,17 +83,8 @@ public class ActivityManager {
         if (currentActivity == null) {
             return 0;
         }
-
         long maxDurationMs = GLib.minutesToMs(currentActivity.getMaxDurationMinutes());
-        long currentActiveTime;
-
-        if (isPaused) {
-            currentActiveTime = totalActiveTime;
-        } else {
-            currentActiveTime = totalActiveTime + (System.currentTimeMillis() - activityStartTime);
-        }
-
-        return maxDurationMs - currentActiveTime;
+        return maxDurationMs - activityTimer.elapsed();
     }
 
     private static String formatTime(long milliseconds) {
@@ -113,30 +109,14 @@ public class ActivityManager {
     }
 
     public static Activity getActivity(String activityName) {
-        Log.debug("Looking for activity: " +activityName +" in the list of registered activities.");
+//        Log.debug("Looking for activity: " +activityName +" in the list of registered activities.");
         for (Activity activity : registeredActivities) {
             if (activity.getName().equals(activityName)) {
-                Log.debug("Found matching activity in list.");
+//                Log.debug("Found matching activity in list.");
                 return activity;
             }
         }
         Log.debug("Couldn't find matching activity, returning null.");
         return null;
-    }
-
-    public static void pauseActivityTimer() {
-        if (!isPaused) {
-            isPaused = true;
-            totalActiveTime += (System.currentTimeMillis() - activityStartTime);
-            Log.debug(String.format("Activity paused. Total active time: %s", formatTime(totalActiveTime)));
-        }
-    }
-
-    public static void resumeActivityTimer() {
-        if (isPaused) {
-            isPaused = false;
-            activityStartTime = System.currentTimeMillis();
-            Log.debug(String.format("Activity resumed. Current total time: %s", formatTime(totalActiveTime)));
-        }
     }
 }

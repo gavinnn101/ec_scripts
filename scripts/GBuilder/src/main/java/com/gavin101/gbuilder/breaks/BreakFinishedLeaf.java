@@ -16,7 +16,7 @@ public class BreakFinishedLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Break is over, enabling auto login.");
-        ActivityManager.resumeActivityTimer();
+        ActivityManager.getActivityTimer().resume();
         RandomManager.setAutoLoginEnabled(true);
         return ReactionGenerator.getNormal();
     }
