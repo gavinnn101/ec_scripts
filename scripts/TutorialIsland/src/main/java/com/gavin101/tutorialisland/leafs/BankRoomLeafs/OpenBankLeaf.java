@@ -4,6 +4,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.containers.bank.Bank;
+import net.eternalclient.api.data.ObjectID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -20,7 +21,7 @@ public class OpenBankLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Opening bank booth.");
-        GameObject bankBooth = GameObjects.closest("Bank booth");
+        GameObject bankBooth = GameObjects.closest(ObjectID.BANK_BOOTH_10083);
         if (bankBooth != null && bankBooth.canReach()) {
             Log.debug("Interacting with bank booth 'Use'.");
             new EntityInteractEvent(bankBooth, "Use").setEventCompleteCondition(

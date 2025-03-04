@@ -6,6 +6,7 @@ import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.accessors.Widgets;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.events.WidgetEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -27,7 +28,7 @@ public class TalkToCombatInstructorLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Combat Instructor", Constants.COMBAT_INSTRUCTOR_AREA);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.COMBAT_INSTRUCTOR, Constants.COMBAT_INSTRUCTOR_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

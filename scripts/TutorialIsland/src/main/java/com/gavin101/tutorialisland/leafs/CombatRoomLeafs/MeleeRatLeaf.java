@@ -4,6 +4,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -21,7 +22,7 @@ public class MeleeRatLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Fighting a rat with melee.");
-        NPC rat = NPCs.closest(g -> g.hasName("Giant rat")
+        NPC rat = NPCs.closest(g -> g.hasID(NpcID.GIANT_RAT_3313)
                 && g.canReach()
                 && !g.isInCombat()
         );

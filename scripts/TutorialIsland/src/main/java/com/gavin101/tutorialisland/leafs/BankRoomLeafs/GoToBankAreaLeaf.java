@@ -19,6 +19,6 @@ public class GoToBankAreaLeaf extends Leaf {
     public int onLoop() {
         Log.info("Walking to the bank area.");
         Walking.walk(Constants.BANK_AREA.getRandomTile(), () -> Constants.BANK_AREA.contains(Players.localPlayer()));
-        return ReactionGenerator.getPredictable();
+        return ReactionGenerator.getNormal();
     }
 }

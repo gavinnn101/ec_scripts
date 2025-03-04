@@ -3,6 +3,7 @@ package com.gavin101.tutorialisland.leafs.CooksRoomLeafs;
 import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 
@@ -15,7 +16,7 @@ public class TalkToCookLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Master Chef", Constants.COOKS_AREA);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.MASTER_CHEF, Constants.COOKS_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

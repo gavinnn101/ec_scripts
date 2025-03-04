@@ -1,11 +1,12 @@
 package com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs;
 
-import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.containers.Inventory;
+import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.data.ObjectID;
 import net.eternalclient.api.events.InventoryEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.interfaces.Positionable;
@@ -13,7 +14,6 @@ import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;
-import net.eternalclient.api.wrappers.tabs.Tab;
 import net.eternalclient.api.wrappers.walking.Walking;
 
 public class LightFireLeaf extends Leaf {
@@ -25,10 +25,10 @@ public class LightFireLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Lighting a fire.");
-        GameObject nearestFire = GameObjects.closest("Fire");
+        GameObject nearestFire = GameObjects.closest(ObjectID.FIRE_26185);
         if (nearestFire == null || !nearestFire.getWorldTile().equals(Players.localPlayer().getWorldTile())) {
-            if (Inventory.contains("Tinderbox") && Inventory.contains("Logs")) {
-                new InventoryEvent(Inventory.get("Tinderbox")).on(Inventory.get("Logs")
+            if (Inventory.contains(ItemID.TINDERBOX) && Inventory.contains(ItemID.LOGS_2511)) {
+                new InventoryEvent(Inventory.get(ItemID.TINDERBOX)).on(Inventory.get(ItemID.LOGS_2511)
                 ).setEventCompleteCondition(
                         () -> Players.localPlayer().isAnimating(), Calculations.random(2000, 5000)
                 ).execute();

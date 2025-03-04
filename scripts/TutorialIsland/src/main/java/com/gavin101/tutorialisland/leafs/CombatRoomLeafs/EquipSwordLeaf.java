@@ -3,6 +3,7 @@ package com.gavin101.tutorialisland.leafs.CombatRoomLeafs;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.containers.equipment.Equipment;
+import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.events.loadout.EquipmentLoadoutEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -19,9 +20,11 @@ public class EquipSwordLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Equipping sword and shield.");
-        EquipmentLoadout loadout = new EquipmentLoadout().addWeapon(Constants.BRONZE_SWORD_ID).addShield(Constants.WOODEN_SHIELD_ID);
-        new EquipmentLoadoutEvent(loadout).setEventCompleteCondition(
-                () -> Equipment.containsAll(Constants.BRONZE_SWORD_ID, Constants.WOODEN_SHIELD_ID), Calculations.random(1500, 3000)
+        EquipmentLoadout equipmentLoadout = new EquipmentLoadout()
+                .addWeapon(ItemID.BRONZE_SWORD)
+                .addShield(ItemID.WOODEN_SHIELD);
+        new EquipmentLoadoutEvent(equipmentLoadout).setEventCompleteCondition(
+                () -> Equipment.containsAll(equipmentLoadout.getIDs()), Calculations.random(1500, 3000)
         ).execute();
         return ReactionGenerator.getPredictable();
     }

@@ -5,6 +5,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
@@ -25,7 +26,7 @@ public class TalkToExpertLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Survival Expert", Constants.SURVIVAL_EXPERT_AREA);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.SURVIVAL_EXPERT, Constants.SURVIVAL_EXPERT_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

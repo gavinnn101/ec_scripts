@@ -4,6 +4,7 @@ import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
@@ -19,7 +20,7 @@ public class TalkToMinerLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Mining Instructor", Constants.MINING_INSTRUCTOR_AREA);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.MINING_INSTRUCTOR, Constants.MINING_INSTRUCTOR_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

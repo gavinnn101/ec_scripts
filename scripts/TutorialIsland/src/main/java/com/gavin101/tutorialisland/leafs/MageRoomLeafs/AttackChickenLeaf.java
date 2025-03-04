@@ -4,6 +4,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.MethodProvider;
@@ -46,7 +47,7 @@ public class AttackChickenLeaf extends Leaf {
     }
 
     public static NPC getChicken() {
-        return NPCs.closest(g -> g.hasName("Chicken")
+        return NPCs.closest(g -> g.hasID(NpcID.CHICKEN_3316)
                 && Players.localPlayer().hasLineOfSightTo(g)
                 && !g.isInCombat()
         );

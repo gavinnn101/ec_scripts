@@ -5,6 +5,7 @@ import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.containers.equipment.Equipment;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -17,7 +18,7 @@ public class RangeRatLeaf extends Leaf {
     @Override
     public boolean isValid() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
-        return (tutorialProgress == 480 && Equipment.contains("Shortbow", "Bronze arrow"))
+        return (tutorialProgress == 480 && Equipment.contains(Constants.rangeRatEquipmentLoadout.getIDs()))
                 || tutorialProgress == 490
                 && !Players.localPlayer().isInCombat();
     }
@@ -25,7 +26,7 @@ public class RangeRatLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Fighting a rat with range.");
-        NPC rat = NPCs.closest(g -> g.hasName("Giant rat")
+        NPC rat = NPCs.closest(g -> g.hasID(NpcID.GIANT_RAT_3313)
                 && Players.localPlayer().hasLineOfSightTo(g)
                 && !g.isInCombat()
         );

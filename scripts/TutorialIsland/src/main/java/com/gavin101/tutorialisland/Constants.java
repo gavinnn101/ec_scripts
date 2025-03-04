@@ -1,5 +1,7 @@
 package com.gavin101.tutorialisland;
 
+import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.events.loadout.EquipmentLoadout;
 import net.eternalclient.api.wrappers.map.PolyArea;
 import net.eternalclient.api.wrappers.map.RectArea;
 import net.eternalclient.api.wrappers.map.WorldTile;
@@ -48,11 +50,9 @@ public class Constants {
     public static final int EQUIPMENT_INTERFACE_CHILD_ID = 3;
     public static final int EQUIPMENT_INTERFACE_X_BUTTON_ID = 11;
 
-    public static final int BRONZE_SWORD_ID = 1277;
-    public static final int WOODEN_SHIELD_ID = 1171;
-
-    public static final int SHORTBOW_ID = 841;
-    public static final int BRONZE_ARROW_ID = 882;
+    public static final EquipmentLoadout rangeRatEquipmentLoadout = new EquipmentLoadout()
+            .addWeapon(ItemID.SHORTBOW)
+            .addAmmo(ItemID.BRONZE_ARROW);
 
     public static final RectArea BANK_AREA = new RectArea(3122, 3120, 3121, 3123);
 

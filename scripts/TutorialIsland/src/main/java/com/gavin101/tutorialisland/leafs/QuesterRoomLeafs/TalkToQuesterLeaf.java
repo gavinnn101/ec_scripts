@@ -5,6 +5,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -31,7 +32,7 @@ public class TalkToQuesterLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Quest Guide", Constants.QUEST_GUIDE_AREA);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.QUEST_GUIDE, Constants.QUEST_GUIDE_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

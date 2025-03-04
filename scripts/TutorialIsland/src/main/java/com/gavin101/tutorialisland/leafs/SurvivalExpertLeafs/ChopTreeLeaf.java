@@ -4,12 +4,14 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.data.ObjectID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.GameObject;
+import net.eternalclient.api.wrappers.item.ItemComposite;
 
 public class ChopTreeLeaf extends Leaf {
     @Override
@@ -20,7 +22,7 @@ public class ChopTreeLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Chopping tree");
-        GameObject tree = GameObjects.closest("Tree");
+        GameObject tree = GameObjects.closest(ObjectID.TREE_9730);
         if (tree != null && tree.canReach()) {
             Log.debug("Interacting with tree 'Chop down'.");
             new EntityInteractEvent(tree, "Chop down").setEventCompleteCondition(

@@ -4,6 +4,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.data.ObjectID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -23,18 +24,18 @@ public class MineRocksLeaf extends Leaf {
     public int onLoop() {
         int tutorialProgress = PlayerSettings.getConfig(Constants.TUTORIAL_PROGRESS_VAR);
         if (tutorialProgress == 300) {
-            mineRock("Tin rocks");
+            mineRock(ObjectID.TIN_ROCKS);
         } else if (tutorialProgress == 310) {
-            mineRock("Copper rocks");
+            mineRock(ObjectID.COPPER_ROCKS);
         }
         return ReactionGenerator.getNormal();
     }
 
-    public void mineRock(String rockName) {
-        Log.info("Mining: " +rockName);
-        GameObject rock = GameObjects.closest(rockName);
+    public void mineRock(Integer rockId) {
+        Log.info("Mining rock with id: " +rockId);
+        GameObject rock = GameObjects.closest(rockId);
         if (rock != null && rock.canReach()) {
-            Log.debug("Selecting 'Mine' on " +rockName);
+            Log.debug("Selecting 'Mine' on " +rock.getName());
             new EntityInteractEvent(rock, "Mine").setEventCompleteCondition(
                     () -> Players.localPlayer().isAnimating(), Calculations.random(2500, 5000)
             ).execute();

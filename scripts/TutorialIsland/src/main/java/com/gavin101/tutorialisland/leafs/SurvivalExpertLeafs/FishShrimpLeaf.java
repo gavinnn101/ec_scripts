@@ -4,6 +4,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Players;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -20,7 +21,7 @@ public class FishShrimpLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Interacting with fishing spot.");
-        NPC netFishingSpot = NPCs.closest("Fishing spot");
+        NPC netFishingSpot = NPCs.closest(NpcID.FISHING_SPOT_3317);
         if (netFishingSpot != null && netFishingSpot.canReach()) {
             Log.debug("Clicking fishing spot.");
             new EntityInteractEvent(netFishingSpot, "Net").setEventCompleteCondition(

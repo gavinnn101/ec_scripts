@@ -3,6 +3,7 @@ package com.gavin101.tutorialisland.leafs.BankRoomLeafs;
 import com.gavin101.GLib.GLib;
 import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.PlayerSettings;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 
@@ -15,7 +16,7 @@ public class TalkToAccountGuideLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        GLib.talkWithNpc("Account Guide", Constants.ACCOUNT_GUIDE_AREA);
-        return ReactionGenerator.getPredictable();
+        GLib.talkWithNpc(NpcID.ACCOUNT_GUIDE, Constants.ACCOUNT_GUIDE_AREA);
+        return ReactionGenerator.getNormal();
     }
 }

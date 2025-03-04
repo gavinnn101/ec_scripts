@@ -4,7 +4,7 @@ import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.*;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.data.VarClientInt;
+import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.data.VarPlayer;
 import net.eternalclient.api.events.DialogueEvent;
 import net.eternalclient.api.events.EntityInteractEvent;
@@ -16,10 +16,12 @@ import net.eternalclient.api.events.muling.MuleRequestEvent;
 import net.eternalclient.api.events.muling.RequiredItem;
 import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.events.random.events.LoginEvent;
+import net.eternalclient.api.internal.InteractionMode;
+import net.eternalclient.api.rs.RSNPC;
+import net.eternalclient.api.rs.RSNPCComposition;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.MethodProvider;
-import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.math.Calculations;
 import net.eternalclient.api.wrappers.interactives.NPC;
 import net.eternalclient.api.wrappers.item.ItemComposite;
@@ -34,12 +36,87 @@ import net.eternalclient.api.wrappers.widgets.WidgetChild;
 import net.eternalfarm.client.EternalFarmClient;
 import net.eternalfarm.client.entities.EFAccount;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class GLib {
+    public static void talkWithNpc(Integer npcId) {
+        NPC npc = NPCs.closest(npcId);
+        if (npc == null) {
+            Log.warn(String.format("NPC with ID: %s is null", npcId));
+            return;
+        }
+        String npcName = npc.getName();
+
+        if (!Dialogues.inDialogue()) {
+            Log.debug("Starting talk with: " +npcName);
+            Log.debug("Selecting 'Talk-to' on npc: " +npcName);
+            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
+                    Dialogues::inDialogue, Calculations.random(1500, 3000)
+            ).execute();
+        }
+
+        if (Dialogues.inDialogue()) {
+            Log.debug("Finishing dialogue with: " +npcName);
+            new DialogueEvent().setEventCompleteCondition(
+                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
+            ).execute();
+        }
+    }
+
+    public static void talkWithNpc(Integer npcId, Area npcArea) {
+        NPC npc = NPCs.closest(npcId);
+        if (npc == null || !npc.canReach()) {
+            Log.warn(String.format("NPC with ID: %s is null, walking to their area.", npcId));
+            Walking.walk(npcArea.getRandomTile(),
+                    () -> npcArea.contains(Players.localPlayer())
+            );
+            return;
+        }
+        String npcName = npc.getName();
+
+        if (!Dialogues.inDialogue()) {
+            Log.debug("Starting talk with: " +npcName);
+            Log.debug("Selecting 'Talk-to' on npc: " +npcName);
+            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
+                    Dialogues::inDialogue, Calculations.random(1500, 3000)
+            ).execute();
+        }
+
+        if (Dialogues.inDialogue()) {
+            Log.debug("Finishing dialogue with: " +npcName);
+            new DialogueEvent().setEventCompleteCondition(
+                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
+            ).execute();
+        }
+    }
+
+    public static void talkWithNpc(Integer npcId, Area npcArea, String... chatOptions) {
+        NPC npc = NPCs.closest(npcId);
+        if (npc == null || !npc.canReach()) {
+            Log.warn(String.format("NPC with ID: %s is null, walking to their area.", npcId));
+            Walking.walk(npcArea.getRandomTile(),
+                    () -> npcArea.contains(Players.localPlayer())
+            );
+            return;
+        }
+        String npcName = npc.getName();
+
+        if (!Dialogues.inDialogue()) {
+            Log.debug("Starting talk with: " +npcName);
+            Log.debug("Selecting 'Talk-to' on npc: " +npcName);
+            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
+                    Dialogues::inDialogue, Calculations.random(1500, 3000)
+            ).execute();
+        }
+
+        if (Dialogues.inDialogue()) {
+            Log.debug(String.format("Finishing dialogue with: %s with chat options: %s", npcName, Arrays.toString(chatOptions)));
+            new DialogueEvent(chatOptions).setEventCompleteCondition(
+                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
+            ).execute();
+        }
+    }
+
     public static void talkWithNpc(String npcName) {
         Log.info("Talking to: " +npcName);
         if (Dialogues.inDialogue()) {
@@ -354,6 +431,33 @@ public final class GLib {
         if (!RandomManager.isAutoLoginEnabled()) {
             Log.info("Setting autoLoginEnabled to true");
             RandomManager.setAutoLoginEnabled(true);
+        }
+    }
+
+    public static Map<String, String> parseArgs(String... rawArgs) {
+        // Example args field in EF:
+        // disableRendering:true;fpsLimit:3
+        // Example consuming args:
+        // parsedArgs = GLib.parseArgs(args);
+        // int efAccountId = Integer.parseInt(parsedArgs.get("ef_account_id"));
+        // String efApiKey = parsedArgs.get("ef_api_key");
+        Map<String, String> args = new HashMap<>();
+        if (rawArgs.length > 0) {
+            String[] splitArgs = rawArgs[0].split(";");
+            for (String splitArg : splitArgs) {
+                String[] params = splitArg.split(":");
+                if (params.length == 2) {
+                    args.put(params[0], params[1]);
+                }
+            }
+        }
+        return args;
+    }
+
+    public static void setInteractionMode(InteractionMode interactionMode) {
+        if (!Client.getSettings().getInteractionMode().equals(interactionMode)) {
+            Log.info("Setting interaction mode to: " +interactionMode.toString());
+            Client.getSettings().setInteractionMode(interactionMode);
         }
     }
 }

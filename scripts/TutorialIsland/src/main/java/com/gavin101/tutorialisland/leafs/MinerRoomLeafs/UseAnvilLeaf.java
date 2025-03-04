@@ -5,6 +5,7 @@ import com.gavin101.tutorialisland.Constants;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.PlayerSettings;
 import net.eternalclient.api.accessors.Widgets;
+import net.eternalclient.api.data.ObjectID;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.Log;
@@ -23,7 +24,7 @@ public class UseAnvilLeaf extends Leaf {
     @Override
     public int onLoop() {
         Log.info("Opening anvil menu.");
-        GameObject anvil = GameObjects.closest("Anvil");
+        GameObject anvil = GameObjects.closest(ObjectID.ANVIL_2097);
         if (anvil != null && anvil.canReach()) {
             Log.debug("Clicking 'Smith' on anvil.");
             new EntityInteractEvent(anvil, "Smith").setEventCompleteCondition(
