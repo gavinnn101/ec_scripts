@@ -20,15 +20,12 @@ import com.gavin101.tutorialisland.leafs.PrayerRoomLeafs.TalkToBrotherLeaf;
 import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.OpenQuestTabLeaf;
 import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.TalkToQuesterLeaf;
 import com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs.*;
-import net.eternalclient.api.Client;
-import net.eternalclient.api.events.random.RandomManager;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
 import net.eternalclient.api.listeners.Painter;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
 import net.eternalclient.api.script.ScriptManifest;
-import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.Timer;
 import net.eternalclient.api.utilities.paint.CustomPaint;
 import net.eternalclient.api.utilities.paint.PaintLocations;
@@ -50,14 +47,9 @@ public class Main extends AbstractScript implements Painter {
 
     @Override
     public void onStart(String[] strings) {
-        Log.info("Setting interaction mode to INSTANT_REPLAYED");
-        Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
+        GLib.setInteractionMode(InteractionMode.INSTANT_REPLAYED);
 
         GLib.hideRoofs();
-
-        // TODO: Set rendering and fps limit as script args with defaults.
-        GLib.disableRendering();
-        GLib.setFpsLimit(3);
 
         startTimer = new Timer();
         boolean walkToGE = false;
