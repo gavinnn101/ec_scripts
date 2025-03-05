@@ -36,148 +36,62 @@ import net.eternalfarm.client.entities.EFAccount;
 import java.util.*;
 
 public final class GLib {
-    public static void talkWithNpc(Integer npcId) {
-        NPC npc = NPCs.closest(npcId);
-        if (npc == null) {
-            Log.warn(String.format("NPC with ID: %s is null", npcId));
-            return;
-        }
-        String npcName = npc.getName();
-
-        if (!Dialogues.inDialogue()) {
-            Log.debug("Starting talk with: " +npcName);
-            Log.debug("Selecting 'Talk-to' on npc: " +npcName);
-            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
-                    Dialogues::inDialogue, Calculations.random(1500, 3000)
-            ).execute();
-        }
-
-        if (Dialogues.inDialogue()) {
-            Log.debug("Finishing dialogue with: " +npcName);
-            new DialogueEvent().setEventCompleteCondition(
-                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
-            ).execute();
-        }
+    public static void talkWithNpc(Object npcIdentifier) {
+        talkWithNpc(npcIdentifier, null, new String[0]);
     }
 
-    public static void talkWithNpc(Integer npcId, Area npcArea) {
-        NPC npc = NPCs.closest(npcId);
-        if (npc == null || !npc.canReach()) {
-            Log.warn(String.format("NPC with ID: %s is null, walking to their area.", npcId));
-            Walking.walk(npcArea.getRandomTile(),
-                    () -> npcArea.contains(Players.localPlayer())
-            );
-            return;
-        }
-        String npcName = npc.getName();
-
-        if (!Dialogues.inDialogue()) {
-            Log.debug("Starting talk with: " +npcName);
-            Log.debug("Selecting 'Talk-to' on npc: " +npcName);
-            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
-                    Dialogues::inDialogue, Calculations.random(1500, 3000)
-            ).execute();
-        }
-
-        if (Dialogues.inDialogue()) {
-            Log.debug("Finishing dialogue with: " +npcName);
-            new DialogueEvent().setEventCompleteCondition(
-                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
-            ).execute();
-        }
+    public static void talkWithNpc(Object npcIdentifier, Area npcArea) {
+        talkWithNpc(npcIdentifier, npcArea, new String[0]);
     }
 
-    public static void talkWithNpc(Integer npcId, Area npcArea, String... chatOptions) {
-        NPC npc = NPCs.closest(npcId);
-        if (npc == null || !npc.canReach()) {
-            Log.warn(String.format("NPC with ID: %s is null, walking to their area.", npcId));
-            Walking.walk(npcArea.getRandomTile(),
-                    () -> npcArea.contains(Players.localPlayer())
-            );
-            return;
-        }
-        String npcName = npc.getName();
+    public static void talkWithNpc(Object npcIdentifier, Area npcArea, String... chatOptions) {
+        NPC npc;
+        String npcName = "Unknown";
 
-        if (!Dialogues.inDialogue()) {
-            Log.debug("Starting talk with: " +npcName);
-            Log.debug("Selecting 'Talk-to' on npc: " +npcName);
-            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
-                    Dialogues::inDialogue, Calculations.random(1500, 3000)
-            ).execute();
-        }
-
-        if (Dialogues.inDialogue()) {
-            Log.debug(String.format("Finishing dialogue with: %s with chat options: %s", npcName, Arrays.toString(chatOptions)));
-            new DialogueEvent(chatOptions).setEventCompleteCondition(
-                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
-            ).execute();
-        }
-    }
-
-    public static void talkWithNpc(String npcName) {
-        Log.info("Talking to: " +npcName);
-        if (Dialogues.inDialogue()) {
-            Log.debug("Finishing dialogue with: " +npcName);
-            new DialogueEvent().setEventCompleteCondition(
-                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
-            ).execute();
-        } else {
-            Log.debug("Starting talk with: " +npcName);
-            NPC npc = NPCs.closest(npcName);
-            if (npc != null && npc.canReach()) {
-                Log.debug("Selecting 'Talk-to' on npc: " +npcName);
-                new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
-                        Dialogues::inDialogue, Calculations.random(1500, 3000)
-                ).execute();
-            }
-        }
-    }
-
-    public static void talkWithNpc(String npcName, Area npcArea) {
-        Log.info("Talking to: " +npcName);
-        if (Dialogues.inDialogue()) {
-            Log.debug("Finishing dialogue with: " +npcName);
-            new DialogueEvent().setEventCompleteCondition(
-                    () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
-            ).execute();
-        } else {
-            Log.debug("Starting talk with: " +npcName);
-            NPC npc = NPCs.closest(npcName);
-            if (npc != null && npc.canReach()) {
-                Log.debug("Selecting 'Talk-to' on npc: " +npcName);
-                new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
-                        Dialogues::inDialogue, Calculations.random(1500, 3000)
-                ).execute();
+        if (npcIdentifier instanceof Integer) {
+            Integer npcId = (Integer) npcIdentifier;
+            npc = NPCs.closest(npcId);
+            if (npc != null) {
+                npcName = npc.getName();
             } else {
-                Log.debug("Can't reach NPC, walking to them.");
+                Log.warn(String.format("NPC with ID: %s is null", npcId));
+            }
+        } else if (npcIdentifier instanceof String) {
+            npcName = (String) npcIdentifier;
+            npc = NPCs.closest(npcName);
+        } else {
+            Log.error("Invalid NPC identifier type. Must be Integer (ID) or String (name).");
+            return;
+        }
+
+        if (npc == null || !npc.canReach()) {
+            if (npcArea != null) {
+                Log.debug(String.format("NPC %s is null or unreachable, walking to their area.", npcName));
                 Walking.walk(npcArea.getRandomTile(),
                         () -> npcArea.contains(Players.localPlayer())
                 );
+                return;
+            } else {
+                Log.error("Could not find NPC: " + npcName);
+                return;
             }
         }
-    }
 
-    public static void talkWithNpc(String npcName, Area npcArea, String... chatOptions) {
-        Log.info("Talking to: " +npcName);
-        if (Dialogues.inDialogue()) {
-            Log.debug("Finishing dialogue with: " +npcName + " with chat options: " + Arrays.toString(chatOptions));
+        if (!Dialogues.inDialogue()) {
+            Log.debug("Starting talk with: " + npcName);
+            new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
+                    Dialogues::inDialogue, Calculations.random(1500, 3000)
+            ).execute();
+        } else {
+            // Handle dialogue options if in dialogue
+            String logMessage = chatOptions.length > 0
+                    ? String.format("Finishing dialogue with: %s with chat options: %s", npcName, Arrays.toString(chatOptions))
+                    : "Finishing dialogue with: " + npcName;
+
+            Log.debug(logMessage);
             new DialogueEvent(chatOptions).setEventCompleteCondition(
                     () -> !Dialogues.inDialogue(), Calculations.random(2500, 5000)
             ).execute();
-        } else {
-            Log.debug("Starting talk with: " +npcName);
-            NPC npc = NPCs.closest(npcName);
-            if (npc != null && npc.canReach()) {
-                Log.debug("Selecting 'Talk-to' on npc: " +npcName);
-                new EntityInteractEvent(npc, "Talk-to").setEventCompleteCondition(
-                        Dialogues::inDialogue, Calculations.random(1500, 3000)
-                ).execute();
-            } else {
-                Log.debug("Can't reach NPC, walking to them.");
-                Walking.walk(npcArea.getRandomTile(),
-                        () -> npcArea.contains(Players.localPlayer())
-                );
-            }
         }
     }
 
