@@ -1,11 +1,14 @@
 package com.gavin101.gbuilder;
 
+import com.gavin101.ConfigHelper.ConfigHelper;
 import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.leafs.common.CacheBankLeaf;
 import com.gavin101.GLib.leafs.common.CloseChatLeaf;
 import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
 import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
 import com.gavin101.gbuilder.activities.misc.tanning.Tanning;
+import com.gavin101.gbuilder.activities.quests.cooksassistant.CooksAssistant;
+import com.gavin101.gbuilder.activities.quests.doricsquest.DoricsQuest;
 import com.gavin101.gbuilder.activities.quests.goblindiplomacy.GoblinDiplomacy;
 import com.gavin101.gbuilder.activities.quests.impcatcher.ImpCatcher;
 import com.gavin101.gbuilder.activities.quests.restlessghost.RestlessGhost;
@@ -18,8 +21,6 @@ import com.gavin101.gbuilder.activities.skilling.firemaking.Firemaking;
 import com.gavin101.gbuilder.activities.skilling.fishing.BaitFishing.BaitFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.flyfishing.FlyFishing;
 import com.gavin101.gbuilder.activities.skilling.fishing.shrimp.ShrimpFishing;
-import com.gavin101.gbuilder.activities.quests.cooksassistant.CooksAssistant;
-import com.gavin101.gbuilder.activities.quests.doricsquest.DoricsQuest;
 import com.gavin101.gbuilder.activities.skilling.mining.Mining;
 import com.gavin101.gbuilder.activities.skilling.woodcutting.Woodcutting;
 import com.gavin101.gbuilder.activitymanager.ActivityManager;
@@ -35,12 +36,8 @@ import com.gavin101.gbuilder.utility.constants.Common;
 import com.gavin101.gbuilder.utility.leafs.EndScriptLeaf;
 import com.gavin101.gbuilder.utility.leafs.HandleDeathLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
-import net.eternalclient.api.Client;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.events.WidgetEvent;
-import net.eternalclient.api.events.random.RandomManager;
-import net.eternalclient.api.events.random.events.LoginEvent;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.internal.InteractionMode;
@@ -59,6 +56,8 @@ import net.eternalclient.api.wrappers.skill.Skill;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @ScriptManifest(
         name = "GBuilder",
@@ -67,58 +66,32 @@ import java.util.ArrayList;
         category = ScriptCategory.OTHER,
         version = 1.0
 )
-
 public class Main extends AbstractScript implements Painter {
     private Timer timer;
     private Tree tree;
+
+    private static Map<String, String> parsedArgs = new HashMap<>();
 
     public static boolean needToChangeFiremakingTile = false;
 
     public static boolean died = false;
 
     public void onStart(String[] args) {
-        Log.info("Setting interaction mode to INSTANT_REPLAYED");
-        Client.getSettings().setInteractionMode(InteractionMode.INSTANT_REPLAYED);
+        parsedArgs = GLib.parseArgs(args);
+        Log.info(String.format("Starting script: %s with args: %s", AbstractScript.getScriptName(), parsedArgs.toString()));
 
         // We'll check skill levels too early if we don't wait until we're logged in.
         GLib.waitUntilLoggedIn();
 
         GLib.hideRoofs();
 
-        // TODO: Set rendering and fps limit as script args with defaults.
-        GLib.disableRendering();
-        GLib.setFpsLimit(3);
-
         timer = new Timer();
         tree = new Tree();
 
-        // Wrapper function to register all activities for the script
-        // TODO: Add a way to optionally add certain activities up to different levels and different quests to allow the creation of different account builds.
-        registerActivities();
+        setupScript();
 
         // List registered activities once on start for debugging
         ActivityManager.listActivities();
-
-        // Create base tree with required branches/leafs.
-        tree.addBranches(
-                new EndScriptLeaf(),
-//                new TakeBreakLeaf(),
-//                new BreakFinishedLeaf(),
-//                new LoggedOutLeaf(),
-                new CloseChatLeaf(),
-                new EnableRunningLeaf(),
-                new HandleDeathLeaf(),
-                new CacheBankLeaf(),
-                new SetActivityLeaf(),
-                new NeedLoadoutMoneyBranch().addLeafs(
-                        new SellItemsLeaf(Common.itemsToSell),
-                        RequestMuleLeaf.builder().build()
-                )
-        );
-        // Add registered task branches to tree.
-        for (Branch activityBranch : ActivityManager.getActivityBranches()) {
-            tree.addBranches(activityBranch);
-        }
     }
 
     @Override
@@ -140,7 +113,7 @@ public class Main extends AbstractScript implements Painter {
                         SkillActivity currentSkillActivity = (SkillActivity) currentActivity;
                         Skill currentSkill = currentSkillActivity.getActivitySkill();
                         add("Current activity skill: " +currentSkill);
-                        add("Current activity skill level: " +Skills.getRealLevel(currentSkillActivity.getActivitySkill()));
+                        add("Current activity skill level: " +Skills.getRealLevel(currentSkill));
                         add("Current activity skill xp/hr: " +calculateExpPerHour(currentSkill));
                     }
                     add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
@@ -170,6 +143,36 @@ public class Main extends AbstractScript implements Painter {
         double expPerHour = expGained / hoursElapsed;
 
         return Math.round(expPerHour);
+    }
+
+    private void setupScript() {
+        ConfigHelper<Config> configHelper = new ConfigHelper<>(parsedArgs, Config.class);
+        configHelper.initialize();
+        Config config = configHelper.getConfig();
+        Log.info("Config: " + config);
+
+        tree.addBranches(new EndScriptLeaf());
+        if (config.isEnableBreaks()) {
+            Log.debug("Breaks enabled.");
+            tree.addBranches(
+                new TakeBreakLeaf(),
+                new BreakFinishedLeaf(),
+                new LoggedOutLeaf()
+            );
+        }
+        tree.addBranches(
+            new CloseChatLeaf(),
+            new EnableRunningLeaf(),
+            new HandleDeathLeaf(),
+            new CacheBankLeaf(),
+            new SetActivityLeaf(),
+            new NeedLoadoutMoneyBranch().addLeafs(
+                    new SellItemsLeaf(Common.itemsToSell),
+                    RequestMuleLeaf.builder().build()
+            )
+        );
+
+        registerActivities();
     }
 
     private void registerActivities() {

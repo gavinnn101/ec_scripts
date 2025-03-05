@@ -25,6 +25,8 @@ subprojects {
 
         compileOnly("org.projectlombok:lombok:1.18.24")
 
+        compileOnly("com.google.code.gson:gson:2.12.1")
+
         compileOnly(files("${userHomeDir}/EternalClient/Data/EternalClient.jar"))
     }
 
