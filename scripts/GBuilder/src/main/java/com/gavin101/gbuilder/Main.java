@@ -35,6 +35,7 @@ import com.gavin101.gbuilder.utility.leafs.HandleDeathLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
+import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
 import net.eternalclient.api.listeners.Notify;
 import net.eternalclient.api.listeners.Painter;
@@ -168,6 +169,11 @@ public class Main extends AbstractScript implements Painter {
         );
 
         registerActivities();
+
+        // Add registered task branches to tree.
+        for (Branch activityBranch : ActivityManager.getActivityBranches()) {
+            tree.addBranches(activityBranch);
+        }
     }
 
     private void registerActivities() {
