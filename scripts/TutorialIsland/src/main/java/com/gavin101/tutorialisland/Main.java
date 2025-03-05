@@ -21,7 +21,6 @@ import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.OpenQuestTabLeaf;
 import com.gavin101.tutorialisland.leafs.QuesterRoomLeafs.TalkToQuesterLeaf;
 import com.gavin101.tutorialisland.leafs.SurvivalExpertLeafs.*;
 import net.eternalclient.api.frameworks.tree.Tree;
-import net.eternalclient.api.internal.InteractionMode;
 import net.eternalclient.api.listeners.Painter;
 import net.eternalclient.api.script.AbstractScript;
 import net.eternalclient.api.script.ScriptCategory;
@@ -47,8 +46,6 @@ public class Main extends AbstractScript implements Painter {
 
     @Override
     public void onStart(String[] strings) {
-        GLib.setInteractionMode(InteractionMode.INSTANT_REPLAYED);
-
         GLib.hideRoofs();
 
         startTimer = new Timer();
