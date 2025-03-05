@@ -2,10 +2,7 @@ package com.gavin101.gbuilder;
 
 import com.gavin101.ConfigHelper.ConfigHelper;
 import com.gavin101.GLib.GLib;
-import com.gavin101.GLib.leafs.common.CacheBankLeaf;
-import com.gavin101.GLib.leafs.common.CloseChatLeaf;
-import com.gavin101.GLib.leafs.common.EnableRunningLeaf;
-import com.gavin101.GLib.leafs.common.RequestMuleLeaf;
+import com.gavin101.GLib.leafs.common.*;
 import com.gavin101.gbuilder.activities.misc.tanning.Tanning;
 import com.gavin101.gbuilder.activities.quests.cooksassistant.CooksAssistant;
 import com.gavin101.gbuilder.activities.quests.doricsquest.DoricsQuest;
@@ -38,9 +35,7 @@ import com.gavin101.gbuilder.utility.leafs.HandleDeathLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
-import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.frameworks.tree.Tree;
-import net.eternalclient.api.internal.InteractionMode;
 import net.eternalclient.api.listeners.Notify;
 import net.eternalclient.api.listeners.Painter;
 import net.eternalclient.api.listeners.message.ChatMessageEvent;
@@ -161,7 +156,7 @@ public class Main extends AbstractScript implements Painter {
             );
         }
         tree.addBranches(
-            new CloseChatLeaf(),
+            new TurnOffChatLeaf(),
             new EnableRunningLeaf(),
             new HandleDeathLeaf(),
             new CacheBankLeaf(),
