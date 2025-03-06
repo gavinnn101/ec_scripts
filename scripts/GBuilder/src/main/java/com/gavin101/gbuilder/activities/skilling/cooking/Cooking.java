@@ -13,6 +13,7 @@ import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
+import net.eternalclient.api.utilities.Log;
 import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.wrappers.quest.Quest;
 import net.eternalclient.api.wrappers.skill.Skill;
@@ -21,9 +22,14 @@ public class Cooking {
     public static SkillActivity createActivity(int rawFoodId) {
         String activityName = String.format("Cooking food: %s", GLib.getItemName(rawFoodId));
 
+        String cookedFoodName = rawToCookedName(rawFoodId);
+        Log.debug("Cooked food name: " +cookedFoodName);
+
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
                 .addReq(rawFoodId, () -> Math.min(OwnedItems.count(rawFoodId), 28))
-                .setStrict(() -> !Inventory.contains(rawFoodId));
+                .setStrict(() -> !Inventory.contains(rawFoodId))
+                // Only allow the food we're cooking and the cooked equivalent
+                .setLoadoutStrict(() -> Inventory.onlyContains(i -> !i.containsName(cookedFoodName)));
 
         return SkillActivity.builder()
                 .name(activityName)
@@ -85,5 +91,16 @@ public class Cooking {
                 // Should probably throw exception or something instead..
                 return 0;
         }
+    }
+
+    private static String rawToCookedName(int rawFoodId) {
+        String rawFoodName = GLib.getItemName(rawFoodId);
+        String cookedFoodName = rawFoodName;    // Returning the raw food name if not found might be better than null..
+        if (rawFoodName != null) {
+            if (rawFoodName.contains("Raw ")) {
+                cookedFoodName = rawFoodName.replace("Raw", "").strip();
+            }
+        }
+        return cookedFoodName;
     }
 }

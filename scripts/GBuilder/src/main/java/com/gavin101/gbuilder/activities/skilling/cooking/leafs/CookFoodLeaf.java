@@ -33,7 +33,7 @@ public class CookFoodLeaf extends Leaf {
             String cookedFoodName = GLib.getItemName(rawFoodID);
             if (cookedFoodName != null) {
                 cookedFoodName = cookedFoodName.replace("Raw ", "");
-                if (Production.interact(cookedFoodName)) {
+                if (Production.interact(rawFoodID)) {
                     Log.debug("Interacted with production, waiting for food to be cooked.");
                     MethodProvider.sleepUntil(() -> getFoodCount(rawFoodID) < initialFoodCount, Calculations.random(500, 2500));
                 }
