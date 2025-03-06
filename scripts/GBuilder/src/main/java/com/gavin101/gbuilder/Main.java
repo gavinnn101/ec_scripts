@@ -147,7 +147,10 @@ public class Main extends AbstractScript implements Painter {
         Config config = configHelper.getConfig();
         Log.info("Config: " + config);
 
-        tree.addBranches(new EndScriptLeaf());
+        if (!config.isDebug()) {
+            tree.addBranches(new EndScriptLeaf());
+        }
+
         if (config.isEnableBreaks()) {
             Log.debug("Breaks enabled.");
             tree.addBranches(
@@ -156,6 +159,7 @@ public class Main extends AbstractScript implements Painter {
                 new LoggedOutLeaf()
             );
         }
+
         tree.addBranches(
             new TurnOffChatLeaf(),
             new EnableRunningLeaf(),
