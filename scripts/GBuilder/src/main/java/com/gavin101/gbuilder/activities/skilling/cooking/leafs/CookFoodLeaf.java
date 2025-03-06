@@ -30,9 +30,13 @@ public class CookFoodLeaf extends Leaf {
         if (Production.isOpen()) {
             Log.debug("Production is open, cooking all food.");
             int initialFoodCount = getFoodCount(rawFoodID);
-            if (Production.interact(rawFoodID)) {
-                Log.debug("Interacted with production, waiting for food to be cooked.");
-                MethodProvider.sleepUntil(() -> getFoodCount(rawFoodID) < initialFoodCount, Calculations.random(500, 2500));
+            String cookedFoodName = GLib.getItemName(rawFoodID);
+            if (cookedFoodName != null) {
+                cookedFoodName = cookedFoodName.replace("Raw ", "");
+                if (Production.interact(cookedFoodName)) {
+                    Log.debug("Interacted with production, waiting for food to be cooked.");
+                    MethodProvider.sleepUntil(() -> getFoodCount(rawFoodID) < initialFoodCount, Calculations.random(500, 2500));
+                }
             }
         } else {
             GameObject cookingObject = GameObjects.closest(cookingObjectName);

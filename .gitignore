@@ -1,3 +1,4 @@
 .gradle
 .idea
 build
+scripts/Test/src/main/java/com/gavin101/test/
