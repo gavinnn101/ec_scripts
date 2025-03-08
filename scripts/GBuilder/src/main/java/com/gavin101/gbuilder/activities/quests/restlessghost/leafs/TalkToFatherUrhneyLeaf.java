@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.restlessghost.leafs;
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
@@ -22,6 +23,7 @@ public class TalkToFatherUrhneyLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc(NpcID.FATHER_URHNEY, FATHER_URHNEY_AREA, FATHER_URHNEY_CHAT_OPTIONS);
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

@@ -2,6 +2,7 @@ package com.gavin101.gbuilder.activities.quests.witchspotion.leafs;
 
 import com.gavin101.GLib.GLib;
 import com.gavin101.gbuilder.activities.quests.witchspotion.constants.Constants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.data.NpcID;
@@ -22,6 +23,7 @@ public class TalkToWitchLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc(NpcID.HETTY, Constants.WITCHS_POTION_AREA, chatOptions);
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

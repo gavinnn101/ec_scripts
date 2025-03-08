@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.cooksassistant.leafs;
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.RectArea;
@@ -20,6 +21,7 @@ public class TalkToCookLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Cook", COOK_KITCHEN_AREA, CHAT_OPTIONS);
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

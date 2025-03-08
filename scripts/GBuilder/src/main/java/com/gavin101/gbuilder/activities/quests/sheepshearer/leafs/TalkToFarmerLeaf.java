@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.sheepshearer.leafs;
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.data.NpcID;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
@@ -21,6 +22,7 @@ public class TalkToFarmerLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc(NpcID.FRED_THE_FARMER, FARMER_AREA, CHAT_OPTIONS);
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

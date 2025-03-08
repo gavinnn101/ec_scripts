@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.restlessghost.leafs;
 
 import com.gavin101.gbuilder.activities.quests.restlessghost.Constants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.events.EntityInteractEvent;
 import net.eternalclient.api.frameworks.tree.Leaf;
@@ -33,6 +34,7 @@ public class OpenCoffinLeaf extends Leaf {
             Log.info("Couldn't find coffin, walking to its area.");
             Walking.walk(Constants.GRAVEYARD_COFFIN_AREA.getRandomTile());
         }
-        return ReactionGenerator.getPredictable();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getPredictable();
     }
 }

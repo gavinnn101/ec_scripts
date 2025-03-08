@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.witchspotion.leafs;
 
 import com.gavin101.gbuilder.activities.quests.witchspotion.constants.Constants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
@@ -33,6 +34,7 @@ public class BurnMeatLeaf extends Leaf {
             Log.debug("Walking to range to burn meat.");
             Walking.walk(Constants.RANGE_TILE, () -> GameObjects.closest("Range") != null);
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

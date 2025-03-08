@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.goblindiplomacy.leafs;
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.utilities.math.Calculations;
@@ -27,6 +28,7 @@ public class TalkToGeneralLeaf extends Leaf {
         int generalIndex = Calculations.random(0, 1);
         String general = GENERALS[generalIndex];
         GLib.talkWithNpc(general, GOBLIN_GENERALS_HUT_AREA, CHAT_OPTIONS);
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

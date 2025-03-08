@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.witchspotion.leafs;
 
 import com.gavin101.gbuilder.activities.quests.witchspotion.constants.Constants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.accessors.Dialogues;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.accessors.Players;
@@ -43,6 +44,7 @@ public class DrinkFromCauldronLeaf extends Leaf {
                 );
             }
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

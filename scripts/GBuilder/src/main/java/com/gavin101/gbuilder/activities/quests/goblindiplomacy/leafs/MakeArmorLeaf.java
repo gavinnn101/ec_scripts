@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.quests.goblindiplomacy.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.InventoryEvent;
@@ -17,20 +18,24 @@ public class MakeArmorLeaf extends Leaf {
 
     @Override
     public int onLoop() {
-        Item blueDye = Inventory.get(ItemID.BLUE_DYE);
         Item goblinMail = Inventory.get(ItemID.GOBLIN_MAIL);
+
+        Item blueDye = Inventory.get(ItemID.BLUE_DYE);
         if (blueDye != null && goblinMail != null) {
             new InventoryEvent(blueDye).on(goblinMail).setEventCompleteCondition(
                     () -> Inventory.contains(ItemID.BLUE_GOBLIN_MAIL), Calculations.random(750, 1500)
             ).execute();
+            return FatigueTracker.getCurrentReactionTime();
+//            ReactionGenerator.getPredictable()
         }
+
         Item orangeDye = Inventory.get(ItemID.ORANGE_DYE);
-        goblinMail = Inventory.get(ItemID.GOBLIN_MAIL);
         if (orangeDye != null && goblinMail != null) {
             new InventoryEvent(orangeDye).on(goblinMail).setEventCompleteCondition(
                     () -> Inventory.contains(ItemID.ORANGE_GOBLIN_MAIL), Calculations.random(750, 1500)
             ).execute();
         }
-        return ReactionGenerator.getPredictable();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getPredictable();
     }
 }

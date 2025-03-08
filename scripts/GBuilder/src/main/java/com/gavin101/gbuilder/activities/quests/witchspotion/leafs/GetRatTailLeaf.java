@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.witchspotion.leafs;
 
 import com.gavin101.gbuilder.activities.quests.witchspotion.constants.Constants;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.accessors.GroundItems;
 import net.eternalclient.api.accessors.NPCs;
 import net.eternalclient.api.accessors.Players;
@@ -29,7 +30,7 @@ public class GetRatTailLeaf extends Leaf {
     public int onLoop() {
         Log.info("Getting rat's tail");
         GroundItem ratTail = GroundItems.closest(ItemID.RATS_TAIL);
-        if (ratTail != null) {
+        if (ratTail != null && ratTail.canReach()) {
             Log.debug("Looting rat's tail.");
             new EntityInteractEvent(ratTail, "Take").setEventCompleteCondition(
                     () -> Inventory.contains(ItemID.RATS_TAIL), Calculations.random(1500, 3000)
@@ -48,6 +49,7 @@ public class GetRatTailLeaf extends Leaf {
                 );
             }
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

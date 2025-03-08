@@ -1,6 +1,7 @@
 package com.gavin101.gbuilder.activities.quests.runemysteries.leafs;
 
 import com.gavin101.GLib.GLib;
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.frameworks.tree.Leaf;
 import net.eternalclient.api.utilities.ReactionGenerator;
 import net.eternalclient.api.wrappers.map.PolyArea;
@@ -29,6 +30,7 @@ public class TalkToAuburyLeaf extends Leaf {
     @Override
     public int onLoop() {
         GLib.talkWithNpc("Aubury", AUBURY_AREA, AUBURY_CHAT_OPTIONS);
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }

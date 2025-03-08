@@ -1,5 +1,6 @@
 package com.gavin101.gbuilder.activities.quests.restlessghost.leafs;
 
+import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import net.eternalclient.api.accessors.GameObjects;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
@@ -38,6 +39,7 @@ public class GetSkullLeaf extends Leaf {
             Log.debug("Couldn't find the altar to search, going to the altar area.");
             Walking.walk(ALTAR_AREA.getRandomTile());
         }
-        return ReactionGenerator.getNormal();
+        return FatigueTracker.getCurrentReactionTime();
+//        return ReactionGenerator.getNormal();
     }
 }
