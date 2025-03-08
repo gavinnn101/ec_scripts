@@ -1,6 +1,6 @@
 package com.gavin101.gbuilder.activities.skilling.firemaking.leafs;
 
-import com.gavin101.gbuilder.activities.skilling.firemaking.constants.FiremakingConstants;
+import com.gavin101.gbuilder.activities.skilling.firemaking.Firemaking;
 import com.gavin101.gbuilder.fatiguetracker.FatigueTracker;
 import lombok.RequiredArgsConstructor;
 import net.eternalclient.api.accessors.GameObjects;
@@ -22,7 +22,7 @@ public class LightLogsLeaf extends Leaf {
 
     @Override
     public boolean isValid() {
-        return Inventory.containsAll(ItemID.TINDERBOX, logID) && FiremakingConstants.atValidFiremakingTile();
+        return Inventory.containsAll(ItemID.TINDERBOX, logID) && Firemaking.atValidFiremakingTile();
     }
 
     @Override
@@ -34,8 +34,10 @@ public class LightLogsLeaf extends Leaf {
         if (tinderbox != null && logs != null) {
             new InventoryEvent(tinderbox).on(logs).setEventCompleteCondition(
                     () -> {
-                        GameObject nearestFire = GameObjects.closest("Fire");
-                        return nearestFire != null && nearestFire.getWorldTile().equals(originalPlayerTile);
+                        GameObject playerTileFire = GameObjects.closest(i -> i.hasName("Fire")
+                                && i.getWorldTile().equals(originalPlayerTile)
+                        );
+                        return playerTileFire != null;
                     }, Calculations.random(2000, 7000)
             ).execute();
         }

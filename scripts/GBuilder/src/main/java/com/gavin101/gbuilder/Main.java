@@ -32,6 +32,7 @@ import com.gavin101.gbuilder.utility.branches.NeedLoadoutMoneyBranch;
 import com.gavin101.gbuilder.utility.constants.Common;
 import com.gavin101.gbuilder.utility.leafs.EndScriptLeaf;
 import com.gavin101.gbuilder.utility.leafs.HandleDeathLeaf;
+import com.gavin101.gbuilder.utility.leafs.HopWorldsLeaf;
 import com.gavin101.gbuilder.utility.leafs.SellItemsLeaf;
 import net.eternalclient.api.accessors.Skills;
 import net.eternalclient.api.data.ItemID;
@@ -63,6 +64,8 @@ import java.util.Map;
         version = 1.0
 )
 public class Main extends AbstractScript implements Painter {
+    public static Config config;
+
     private Timer timer;
     private Tree tree;
 
@@ -72,9 +75,15 @@ public class Main extends AbstractScript implements Painter {
 
     public static boolean died = false;
 
+    public static boolean needToHopWorlds = false;
+
     public void onStart(String[] args) {
         parsedArgs = GLib.parseArgs(args);
         Log.info(String.format("Starting script: %s with args: %s", AbstractScript.getScriptName(), parsedArgs.toString()));
+
+        ConfigHelper<Config> configHelper = new ConfigHelper<>(parsedArgs, Config.class);
+        configHelper.initialize();
+        config = configHelper.getConfig();
 
         // We'll check skill levels too early if we don't wait until we're logged in.
         GLib.waitUntilLoggedIn();
@@ -84,7 +93,7 @@ public class Main extends AbstractScript implements Painter {
         timer = new Timer();
         tree = new Tree();
 
-        setupScript();
+        setupScript(config);
 
         // List registered activities once on start for debugging
         ActivityManager.listActivities();
@@ -114,11 +123,13 @@ public class Main extends AbstractScript implements Painter {
                     }
                     add("Current activity time left: " + ActivityManager.getFormattedTimeLeft());
                 }
-                if (FatigueTracker.isOnBreak()) {
-                    add("Current break duration: " +FatigueTracker.getFormattedRemainingBreakTime());
-                } else {
-                    add("Next break in: " +FatigueTracker.getFormattedNextBreakIn());
-                    add("Next break duration: " +FatigueTracker.getFormattedNextBreakDuration());
+                if (config.isEnableBreaks()) {
+                    if (FatigueTracker.isOnBreak()) {
+                        add("Current break duration: " +FatigueTracker.getFormattedRemainingBreakTime());
+                    } else {
+                        add("Next break in: " +FatigueTracker.getFormattedNextBreakIn());
+                        add("Next break duration: " +FatigueTracker.getFormattedNextBreakDuration());
+                    }
                 }
             }}.toArray(new String[0]));
 
@@ -141,10 +152,7 @@ public class Main extends AbstractScript implements Painter {
         return Math.round(expPerHour);
     }
 
-    private void setupScript() {
-        ConfigHelper<Config> configHelper = new ConfigHelper<>(parsedArgs, Config.class);
-        configHelper.initialize();
-        Config config = configHelper.getConfig();
+    private void setupScript(Config config) {
         Log.info("Config: " + config);
 
         if (!config.isDebug()) {
@@ -162,6 +170,7 @@ public class Main extends AbstractScript implements Painter {
 
         tree.addBranches(
             new TurnOffChatLeaf(),
+            new HopWorldsLeaf(),
             new EnableRunningLeaf(),
             new HandleDeathLeaf(),
             new CacheBankLeaf(),

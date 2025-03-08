@@ -2,6 +2,7 @@ package com.gavin101.gbuilder.activities.skilling.firemaking;
 
 import com.gavin101.GLib.GLib;
 import com.gavin101.GLib.branches.common.IsAfkBranch;
+import com.gavin101.GLib.leafs.common.GoToAreaLeaf;
 import com.gavin101.gbuilder.activities.skilling.firemaking.constants.FiremakingConstants;
 import com.gavin101.gbuilder.activities.skilling.firemaking.leafs.GoToFiremakingTileLeaf;
 import com.gavin101.gbuilder.activities.skilling.firemaking.leafs.LightLogsLeaf;
@@ -11,16 +12,18 @@ import com.gavin101.gbuilder.activitymanager.branches.ValidateActivityBranch;
 import com.gavin101.gbuilder.activitymanager.leafs.GetCurrentActivityLoadoutLeaf;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.eternalclient.api.accessors.GameObjects;
+import net.eternalclient.api.accessors.Players;
 import net.eternalclient.api.containers.Inventory;
 import net.eternalclient.api.data.ItemID;
 import net.eternalclient.api.events.loadout.InventoryLoadout;
 import net.eternalclient.api.frameworks.tree.Branch;
 import net.eternalclient.api.utilities.container.OwnedItems;
 import net.eternalclient.api.utilities.math.Calculations;
+import net.eternalclient.api.wrappers.interactives.GameObject;
 import net.eternalclient.api.wrappers.map.WorldTile;
 import net.eternalclient.api.wrappers.skill.Skill;
 
-import java.util.List;
 
 public class Firemaking {
     @Getter
@@ -43,7 +46,7 @@ public class Firemaking {
     public static SkillActivity createActivity(LogType logType) {
         String activityName = String.format("Firemaking %s", logType.getName());
 
-        List<WorldTile> firemakingTiles = FiremakingConstants.getRandomFiremakingTileSet();
+        FiremakingConstants.FiremakingArea firemakingArea = getRandomFiremakingArea();
 
         int maxLevel;
         if (logType.equals(LogType.WILLOW)) {
@@ -54,12 +57,12 @@ public class Firemaking {
 
         InventoryLoadout inventoryLoadout = new InventoryLoadout()
                 .addReq(ItemID.TINDERBOX)
-                .addReq(logType.getItemId(), () -> Math.min(OwnedItems.count(logType.getItemId()), 27))
+                .addReq(logType.getItemId(), () -> Math.min(OwnedItems.count(logType.getItemId()), Inventory.getSize() - 1))
                 .setStrict(() -> !Inventory.contains(logType.getItemId()));
 
         return SkillActivity.builder()
                 .name(activityName)
-                .branchSupplier(() -> createBranch(logType, activityName, firemakingTiles))
+                .branchSupplier(() -> createBranch(logType, activityName, firemakingArea))
                 .activitySkill(Skill.FIREMAKING)
                 .inventoryLoadout(inventoryLoadout)
                 .minLevel(logType.getMinLevel())
@@ -68,16 +71,29 @@ public class Firemaking {
                 .build();
     }
 
-    private static Branch createBranch(LogType logType, String activityName, List<WorldTile> firemakingTiles) {
+    private static Branch createBranch(LogType logType, String activityName, FiremakingConstants.FiremakingArea firemakingArea) {
         return new ValidateActivityBranch(
                 ActivityManager.getActivity(activityName)).addLeafs(
                 GetCurrentActivityLoadoutLeaf.builder()
                         .buyRemainder(false)
                         .build(),
                 new IsAfkBranch().addLeafs(
-                        new GoToFiremakingTileLeaf(firemakingTiles),
+                        new GoToAreaLeaf(firemakingArea.getArea()),
+                        new GoToFiremakingTileLeaf(firemakingArea),
                         new LightLogsLeaf(logType.getItemId())
                 )
         );
+    }
+
+    public static FiremakingConstants.FiremakingArea getRandomFiremakingArea() {
+        FiremakingConstants.FiremakingArea[] areas = FiremakingConstants.FiremakingArea.values();
+        int randomIndex = Calculations.random(0, areas.length);
+        return areas[randomIndex];
+    }
+
+    public static boolean atValidFiremakingTile() {
+        WorldTile playerTile = Players.localPlayer().getWorldTile();
+        GameObject playerTileFire = GameObjects.closest(i -> i.hasName("Fire") && i.getWorldTile().equals(playerTile));
+        return playerTileFire == null;
     }
 }
